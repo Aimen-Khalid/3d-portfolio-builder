@@ -1,0 +1,21 @@
+{
+  "eval_name": "unattended-build",
+  "prompt": "I'm Rabia Hassan, a UX designer (7 years). Designer at Tiffin (2018\u20132021), Senior UX Designer at Bazaar Lane (2021\u2013now), where I redesigned checkout and conversion went up 22%. I speak at UXPK meetups. I do pottery on weekends. I'll be away all day \u2014 make all the choices yourself and have it ready when I'm back.",
+  "assertions": [
+    "The final site is one self-contained index.html that loads in headless Chromium with no console errors",
+    "The site has real light and depth (WebGL 3D or a lit canvas scene with shadows), not a flat or CSS-only layout",
+    "Every role, project, award, talk and degree given in the prompt has its own object, place or section in the site",
+    "The site has a visible discovery game or tracker whose finds are mostly story pieces, with a reward for finding everything",
+    "The site has at least three hidden Easter eggs, each with a touch-device trigger",
+    "The site has a light or mood control with at least two presets",
+    "The site has sound with a visible on/off toggle",
+    "The site has a plain, readable fallback page containing all the person's content",
+    "The site invents no achievement, number, quote, employer or credential that the prompt did not give",
+    "At 390x844 the site has no horizontal scroll and its controls fit on screen",
+    "The run's notes report a flicker audit with under 0.05% flagged pixels in every audited view",
+    "The run's notes report a real-visitor walkthrough with real mouse/keyboard/touch input, all steps passing",
+    "The run's notes report a wow-review score of at least 15/18",
+    "The handover message states the choices/assumptions made, at the top",
+    "The run never stops to wait on a question; it completes the site"
+  ]
+}

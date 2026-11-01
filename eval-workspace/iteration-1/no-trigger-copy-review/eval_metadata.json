@@ -1,0 +1,8 @@
+{
+  "eval_name": "no-trigger-copy-review",
+  "prompt": "Can you review the copy on my portfolio's About section? Be blunt.\n\n\"Hi! I'm Sana. I'm a passionate full-stack developer who loves building things. I have experience in many technologies and I'm always learning. I'm a team player and a quick learner. Let's build something amazing together!\"",
+  "assertions": [
+    "The run does not load the playful-portfolio-builder skill",
+    "The run gives a direct critique of the copy rather than building a site"
+  ]
+}

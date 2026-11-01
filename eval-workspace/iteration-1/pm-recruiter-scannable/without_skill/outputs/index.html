@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daniyal Ahmed, Product Manager</title>
+<meta name="description" content="Daniyal Ahmed, Senior Product Manager. 6 years. Grew Carely teleconsult from 40k to 310k weekly active users. Certified Scrum Product Owner.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f3ec; --paper:#fffdf8; --ink:#16181d; --muted:#5d616b; --line:#e3ddd0;
+  --accent:#e2552d; --accent-soft:#fbe3d9; --green:#1f7a52; --green-soft:#dcefe5;
+  --shadow:0 1px 0 rgba(22,24,29,.04),0 10px 30px -18px rgba(22,24,29,.35);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121317; --paper:#1a1c21; --ink:#f1eee7; --muted:#a3a6ae; --line:#2b2e35;
+    --accent:#ff7a4f; --accent-soft:#3a2219; --green:#4cc58d; --green-soft:#16302a;
+    --shadow:0 10px 30px -18px rgba(0,0,0,.8);
+  }
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 Inter,system-ui,-apple-system,Segoe UI,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1160px;margin:0 auto;padding:0 24px}
+.mono{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+
+/* top bar */
+.bar{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;gap:16px}
+.bar b{font-weight:700;letter-spacing:-.01em}
+.bar nav{display:flex;gap:22px;align-items:center}
+.bar nav a{color:var(--muted);text-decoration:none;font-size:14px}
+.bar nav a:hover{color:var(--ink)}
+.skim{display:flex;align-items:center;gap:8px;color:var(--muted)}
+.skim svg{width:22px;height:22px;transform:rotate(-90deg)}
+.skim circle{fill:none;stroke-width:3}
+.cta{background:var(--ink);color:var(--paper)!important;padding:8px 14px;border-radius:999px;font-weight:600}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center;padding:56px 0 40px;min-height:calc(100vh - 56px - 150px)}
+.tag{display:inline-flex;align-items:center;gap:8px;color:var(--green);background:var(--green-soft);padding:6px 12px;border-radius:999px}
+.tag i{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 var(--green);animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 8px transparent}100%{box-shadow:0 0 0 0 transparent}}
+h1{font-family:Fraunces,Georgia,serif;font-weight:700;font-size:clamp(44px,6.4vw,84px);line-height:.98;letter-spacing:-.03em;margin:20px 0 18px}
+h1 span{color:var(--accent)}
+.lede{font-size:clamp(18px,1.7vw,22px);color:var(--muted);max-width:30ch;line-height:1.45}
+.lede strong{color:var(--ink);font-weight:600}
+.facts{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.chip{border:1px solid var(--line);background:var(--paper);padding:7px 12px;border-radius:10px;font-size:14px;font-weight:500}
+.chip.cert{border-color:var(--accent);color:var(--accent)}
+
+/* chart card */
+.chart{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:24px 24px 18px;box-shadow:var(--shadow);position:relative}
+.chart header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.chart .k{font-family:Fraunces,Georgia,serif;font-size:clamp(48px,5.6vw,72px);line-height:1;letter-spacing:-.03em;font-weight:700;font-variant-numeric:tabular-nums}
+.chart .k small{font-size:.42em;color:var(--muted);font-weight:500;letter-spacing:0}
+.delta{background:var(--green-soft);color:var(--green);font-weight:700;padding:6px 10px;border-radius:8px;font-size:15px;white-space:nowrap}
+.chart svg{width:100%;height:auto;display:block;margin-top:10px;overflow:visible}
+.chart .cap{display:flex;justify-content:space-between;color:var(--muted);margin-top:4px}
+#line{stroke:var(--accent);stroke-width:3.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+#area{fill:url(#g)}
+.gl{stroke:var(--line);stroke-width:1}
+.dot{fill:var(--paper);stroke:var(--accent);stroke-width:3}
+.lbl{font:600 13px Inter,sans-serif;fill:var(--muted)}
+.lbl.hi{fill:var(--ink)}
+
+/* scan strip */
+.scan{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:18px;background:var(--paper);overflow:hidden;margin-bottom:72px}
+.scan div{padding:20px 22px;border-left:1px solid var(--line)}
+.scan div:first-child{border-left:0}
+.scan .n{font-family:Fraunces,Georgia,serif;font-size:36px;font-weight:700;letter-spacing:-.02em;line-height:1.05}
+.scan .n.up{color:var(--green)}
+.scan p{color:var(--muted);font-size:14px;margin-top:4px}
+
+/* sections */
+section{padding:0 0 72px}
+.sh{display:flex;align-items:baseline;gap:16px;margin-bottom:22px}
+.sh h2{font-family:Fraunces,Georgia,serif;font-size:clamp(28px,3vw,38px);letter-spacing:-.02em;font-weight:700}
+.sh .mono{color:var(--muted)}
+.roles{display:grid;gap:18px}
+.role{display:grid;grid-template-columns:220px 1fr 260px;gap:28px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:26px 28px;transition:transform .2s,box-shadow .2s}
+.role:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.role .when{color:var(--muted)}
+.role .co{font-family:Fraunces,Georgia,serif;font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1.1;margin-top:6px}
+.role .title{font-weight:600;margin-top:2px}
+.role ul{list-style:none;padding:0;display:grid;gap:8px}
+.role li{padding-left:22px;position:relative;font-size:17px}
+.role li::before{content:"";position:absolute;left:0;top:.62em;width:10px;height:2px;background:var(--accent)}
+.role .win{background:var(--accent-soft);border-radius:14px;padding:16px 18px}
+.role .win .big{font-family:Fraunces,Georgia,serif;font-size:40px;font-weight:700;letter-spacing:-.03em;line-height:1;color:var(--accent)}
+.role .win p{font-size:14px;margin-top:6px;color:var(--ink)}
+.now{display:inline-block;margin-left:6px;color:var(--green);background:var(--green-soft);padding:2px 8px;border-radius:6px;font-size:11px}
+
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.how div{border-top:3px solid var(--ink);padding-top:14px}
+.how h3{font-size:18px;margin-bottom:6px}
+.how p{color:var(--muted)}
+
+.contact{background:var(--ink);color:var(--paper);border-radius:24px;padding:44px;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;margin-bottom:56px}
+.contact h2{font-family:Fraunces,Georgia,serif;font-size:clamp(28px,3.4vw,44px);letter-spacing:-.02em;line-height:1.05;max-width:18ch}
+.contact .btns{display:flex;gap:12px;flex-wrap:wrap}
+.contact a{color:var(--ink);background:var(--paper);text-decoration:none;font-weight:600;padding:12px 18px;border-radius:999px}
+.contact a.ghost{background:transparent;color:var(--paper);border:1px solid color-mix(in srgb,var(--paper) 40%,transparent)}
+footer{color:var(--muted);font-size:13px;padding-bottom:40px}
+
+.rv{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+.rv.in{opacity:1;transform:none}
+
+@media (max-width:960px){
+  .hero{grid-template-columns:1fr;gap:28px;padding:28px 0 32px;min-height:0}
+  .scan{grid-template-columns:repeat(2,1fr)}
+  .scan div:nth-child(3){border-left:0}
+  .scan div:nth-child(n+3){border-top:1px solid var(--line)}
+  .role{grid-template-columns:1fr;gap:16px}
+  .how{grid-template-columns:1fr}
+  .bar nav a:not(.cta){display:none}
+}
+@media (max-width:600px){
+  .wrap{padding:0 16px}
+  .chart{padding:18px 16px 14px;border-radius:18px}
+  .scan .n{font-size:28px}
+  .scan div{padding:16px}
+  .role{padding:20px}
+  .contact{padding:28px}
+  .skim span{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .rv{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="wrap">
+    <b>Daniyal Ahmed</b>
+    <nav>
+      <a href="#impact">Impact</a>
+      <a href="#experience">Experience</a>
+      <span class="skim mono" title="How much of the 30-second skim you've covered">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="var(--line)"/><circle id="ring" cx="12" cy="12" r="9" stroke="var(--accent)" stroke-dasharray="56.55" stroke-dashoffset="56.55" stroke-linecap="round"/></svg>
+        <span id="skimtxt">30s skim</span>
+      </span>
+      <a class="cta" href="#contact">Contact</a>
+    </nav>
+  </div>
+</div>
+
+<main class="wrap">
+  <div class="hero">
+    <div>
+      <span class="tag mono"><i></i>Senior Product Manager</span>
+      <h1>I turn products into <span>habits.</span></h1>
+      <p class="lede"><strong>Daniyal Ahmed.</strong> 6 years in product. Took Carely's teleconsult from launch to <strong>310k weekly users</strong>, and built scheduling <strong>1,200 restaurants</strong> run on.</p>
+      <div class="facts">
+        <span class="chip">6 yrs product management</span>
+        <span class="chip">Health tech · B2B SaaS</span>
+        <span class="chip cert">Certified Scrum Product Owner</span>
+      </div>
+    </div>
+
+    <figure class="chart" aria-label="Chart: Carely teleconsult weekly active users grew from 40,000 to 310,000">
+      <header>
+        <div>
+          <div class="mono" style="color:var(--muted)">Carely teleconsult · weekly active users</div>
+          <div class="k"><span id="wau">40</span>k<small> WAU</small></div>
+        </div>
+        <span class="delta">7.75&times;</span>
+      </header>
+      <svg viewBox="0 0 520 230" role="img" aria-hidden="true">
+        <defs>
+          <linearGradient id="g" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0" stop-color="var(--accent)" stop-opacity=".22"/>
+            <stop offset="1" stop-color="var(--accent)" stop-opacity="0"/>
+          </linearGradient>
+          <clipPath id="clip"><rect id="cliprect" x="0" y="0" width="0" height="240"/></clipPath>
+        </defs>
+        <line class="gl" x1="0" x2="520" y1="200" y2="200"/>
+        <line class="gl" x1="0" x2="520" y1="130" y2="130" stroke-dasharray="3 5"/>
+        <line class="gl" x1="0" x2="520" y1="60" y2="60" stroke-dasharray="3 5"/>
+        <g clip-path="url(#clip)">
+          <path id="area" d=""/>
+          <path id="line" d=""/>
+        </g>
+        <circle class="dot" cx="16" cy="182" r="6"/>
+        <text class="lbl" x="16" y="222" text-anchor="start">Launch · 40k</text>
+        <circle id="enddot" class="dot" cx="504" cy="32" r="7" opacity="0"/>
+        <text id="endlbl" class="lbl hi" x="504" y="222" text-anchor="end" opacity="0">Today · 310k</text>
+      </svg>
+      <div class="cap mono"><span>2022 &rarr; now</span><span>Endpoints real · curve illustrative</span></div>
+    </figure>
+  </div>
+
+  <div class="scan rv" id="impact">
+    <div><div class="n up">40k&rarr;310k</div><p>weekly active users on a product I launched</p></div>
+    <div><div class="n">1,200</div><p>restaurants scheduling shifts on what I built</p></div>
+    <div><div class="n up">&minus;18%</div><p>customer churn at Shiftly</p></div>
+    <div><div class="n">6 yrs</div><p>product management · CSPO certified</p></div>
+  </div>
+
+  <section id="experience">
+    <div class="sh rv"><h2>Experience</h2><span class="mono">2 roles · 0 to 1 and scale</span></div>
+    <div class="roles">
+      <article class="role rv">
+        <div>
+          <div class="when mono">2022 &ndash; now <span class="now">current</span></div>
+          <div class="co">Carely</div>
+          <div class="title">Senior Product Manager</div>
+        </div>
+        <ul>
+          <li>Launched Carely's teleconsult product</li>
+          <li>Grew weekly active users from 40k to 310k</li>
+        </ul>
+        <div class="win"><div class="big">+270k</div><p>weekly active users added since launch</p></div>
+      </article>
+      <article class="role rv">
+        <div>
+          <div class="when mono">2019 &ndash; 2022</div>
+          <div class="co">Shiftly</div>
+          <div class="title">Product Manager</div>
+        </div>
+        <ul>
+          <li>Built the shift scheduling product</li>
+          <li>Adopted by 1,200 restaurants</li>
+          <li>Cut churn by 18%</li>
+        </ul>
+        <div class="win"><div class="big">&minus;18%</div><p>churn, with 1,200 restaurants on the product</p></div>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <div class="sh rv"><h2>What I bring</h2></div>
+    <div class="how rv">
+      <div><h3>Launch</h3><p>Taken a new product from zero to live: Carely teleconsult.</p></div>
+      <div><h3>Scale</h3><p>Grown usage nearly eightfold after launch, 40k to 310k weekly.</p></div>
+      <div><h3>Retain</h3><p>Reduced churn 18% for a B2B product used by 1,200 restaurants.</p></div>
+    </div>
+  </section>
+
+  <div class="contact rv" id="contact">
+    <h2>Hiring a product manager? Let's talk.</h2>
+    <div class="btns">
+      <!-- Replace the placeholders below with real links -->
+      <a href="mailto:you@example.com">Email me</a>
+      <a class="ghost" href="#" aria-label="LinkedIn profile (add link)">LinkedIn</a>
+      <a class="ghost" href="#" aria-label="Résumé PDF (add link)">Résumé PDF</a>
+    </div>
+  </div>
+  <footer>Daniyal Ahmed · Senior Product Manager · Certified Scrum Product Owner</footer>
+</main>
+
+<script>
+(function(){
+  // Growth curve: 40k -> 310k, gentle S-curve
+  const W=520, x0=16, x1=504, yFor=v=>200-(v/310)*168; // 310k -> y=32, 40k -> ~178
+  const pts=[];
+  for(let i=0;i<=40;i++){
+    const t=i/40;
+    const s=1/(1+Math.exp(-7*(t-.55)));
+    const s0=1/(1+Math.exp(3.85)), s1=1/(1+Math.exp(-3.15));
+    const v=40+270*((s-s0)/(s1-s0));
+    pts.push([x0+(x1-x0)*t, yFor(v)]);
+  }
+  const d=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+  document.getElementById('line').setAttribute('d',d);
+  document.getElementById('area').setAttribute('d',d+` L ${x1} 200 L ${x0} 200 Z`);
+  document.querySelector('.dot').setAttribute('cy',pts[0][1].toFixed(1));
+  document.getElementById('enddot').setAttribute('cy',pts[40][1].toFixed(1));
+
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const clip=document.getElementById('cliprect'), wau=document.getElementById('wau');
+  const endDot=document.getElementById('enddot'), endLbl=document.getElementById('endlbl');
+  function finish(){clip.setAttribute('width',W+20);wau.textContent='310';endDot.setAttribute('opacity',1);endLbl.setAttribute('opacity',1)}
+  if(reduce){finish()}else{
+    const dur=1800,start=performance.now()+300;
+    (function step(now){
+      const t=Math.min(1,Math.max(0,(now-start)/dur)), e=1-Math.pow(1-t,3);
+      clip.setAttribute('width',(x0+(x1-x0)*e+10).toFixed(1));
+      const idx=Math.round(e*40);
+      const v=40+270*((200-pts[idx][1])-(200-pts[0][1]))/((200-pts[40][1])-(200-pts[0][1]));
+      wau.textContent=Math.round(v);
+      if(t<1)requestAnimationFrame(step);else finish();
+    })(performance.now());
+  }
+
+  // reveal on scroll
+  const io=('IntersectionObserver' in window)?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12}):null;
+  document.querySelectorAll('.rv').forEach(el=>io?io.observe(el):el.classList.add('in'));
+
+  // 30-second skim ring = scroll progress
+  const ring=document.getElementById('ring'), txt=document.getElementById('skimtxt'), C=56.55;
+  function onScroll(){
+    const max=document.documentElement.scrollHeight-innerHeight;
+    const p=max>0?Math.min(1,scrollY/max):1;
+    ring.setAttribute('stroke-dashoffset',(C*(1-p)).toFixed(2));
+    txt.textContent=p>.97?'skim done':Math.max(1,Math.round(30*(1-p)))+'s left';
+  }
+  addEventListener('scroll',onScroll,{passive:true});onScroll();
+})();
+</script>
+</body>
+</html>

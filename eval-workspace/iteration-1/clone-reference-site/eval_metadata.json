@@ -1,0 +1,21 @@
+{
+  "eval_name": "clone-reference-site",
+  "prompt": "Make me a portfolio exactly like Bruno Simon's site (bruno-simon.com), the one where you drive a little car around the 3D world and knock things over. I'm Omar Javed, frontend engineer at Pixelwell for 4 years; I built their design system, now used by 30 engineers across 5 products. Before that I was a junior dev at Webnest (2019\u20132021). I make my own cold brew and keep a sourdough starter called Gerald.",
+  "assertions": [
+    "The final site is one self-contained index.html that loads in headless Chromium with no console errors",
+    "The site has real light and depth (WebGL 3D or a lit canvas scene with shadows), not a flat or CSS-only layout",
+    "Every role, project, award, talk and degree given in the prompt has its own object, place or section in the site",
+    "The site has a visible discovery game or tracker whose finds are mostly story pieces, with a reward for finding everything",
+    "The site has at least three hidden Easter eggs, each with a touch-device trigger",
+    "The site has a light or mood control with at least two presets",
+    "The site has sound with a visible on/off toggle",
+    "The site has a plain, readable fallback page containing all the person's content",
+    "The site invents no achievement, number, quote, employer or credential that the prompt did not give",
+    "At 390x844 the site has no horizontal scroll and its controls fit on screen",
+    "The run's notes report a flicker audit with under 0.05% flagged pixels in every audited view",
+    "The run's notes report a real-visitor walkthrough with real mouse/keyboard/touch input, all steps passing",
+    "The run's notes report a wow-review score of at least 15/18",
+    "The run tells the user it will borrow techniques or feelings from the reference rather than copy it",
+    "The site's main mechanic is not driving a vehicle around an open 3D playground"
+  ]
+}

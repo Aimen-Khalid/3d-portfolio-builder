@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hamza Siddiqui — Backend, Idempotently</title>
+<meta name="description" content="Hamza Siddiqui, senior backend engineer in Karachi. Press a key, get a receipt.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --desk:#2b211b; --desk2:#3a2c23; --mat:#1d2326; --mat-edge:#121618;
+  --cap:#e9e4d8; --cap-side:#b9b1a0; --cap-ink:#3a352d;
+  --accent:#f2a33a; --accent-side:#b86f12; --accent2:#4fb7a8; --accent2-side:#2a7d72;
+  --paper:#fbf8f1; --paper-ink:#24211d; --muted:#8b857a;
+  --sky1:#0b1730; --sky2:#1d2c55; --sea:#163a4f; --sun:#ffcf7a;
+  --mono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;
+  --sans:'Space Grotesk',system-ui,-apple-system,Segoe UI,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;background:var(--desk);color:#f3eee4;font-family:var(--sans)}
+button{font:inherit;color:inherit}
+/* ---------- window onto Sea View ---------- */
+#window{position:absolute;inset:0 0 auto 0;height:38vh;overflow:hidden;background:linear-gradient(180deg,var(--sky1),var(--sky2));transition:background 1s}
+#window::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 49.6%,#1a130f 49.6%,#1a130f 50.4%,transparent 50.4%);pointer-events:none;opacity:.85}
+#sun{position:absolute;width:70px;height:70px;border-radius:50%;background:radial-gradient(circle,#fff6d8 0,var(--sun) 45%,rgba(255,180,90,0) 70%);transform:translate(-50%,-50%);transition:left 1s,top 1s,opacity 1s}
+#sea{position:absolute;left:0;right:0;bottom:0;height:34%;background:linear-gradient(180deg,var(--sea),#0b2230)}
+#sea i{position:absolute;height:2px;background:rgba(255,255,255,.25);border-radius:2px;animation:wave 6s ease-in-out infinite}
+@keyframes wave{50%{transform:translateX(18px);opacity:.4}}
+#prom{position:absolute;left:0;right:0;bottom:34%;height:5px;background:#3b3128}
+#rider{position:absolute;bottom:calc(34% + 4px);left:-80px;width:56px;height:40px}
+#rider.go{animation:ride 22s linear infinite}
+@keyframes ride{to{left:calc(100% + 80px)}}
+#rider svg{width:100%;height:100%}
+#rider .wheel{transform-origin:center;transform-box:fill-box;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#clock{position:absolute;right:16px;top:12px;font:12px var(--mono);color:rgba(255,255,255,.75);text-align:right;z-index:2}
+/* ---------- desk ---------- */
+#desk{position:absolute;inset:38vh 0 0 0;background:radial-gradient(ellipse at 50% 0%,var(--desk2),var(--desk) 70%);}
+#desk::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(92deg,rgba(255,255,255,.018) 0 3px,transparent 3px 11px)}
+#stage{position:absolute;inset:0;perspective:1300px;perspective-origin:50% -10%;display:flex;align-items:center;justify-content:center}
+#mat{position:relative;transform:rotateX(38deg) translateY(-2vh);transform-style:preserve-3d;background:var(--mat);border-radius:22px;padding:34px 40px 46px;box-shadow:0 30px 60px rgba(0,0,0,.5),inset 0 0 0 2px var(--mat-edge)}
+#mat .print{position:absolute;left:40px;bottom:12px;font:11px var(--mono);letter-spacing:.2em;color:#4a5458;text-transform:uppercase}
+#kb{background:#2d3336;border-radius:14px;padding:14px;box-shadow:0 14px 0 #171b1d,0 26px 40px rgba(0,0,0,.45);display:flex;flex-direction:column;gap:7px}
+.row{display:flex;gap:7px}
+#kb .row.hotrow{display:none}
+.key{--w:1;width:calc(var(--w)*52px + (var(--w) - 1)*7px);height:52px;border:0;border-radius:8px;background:linear-gradient(180deg,#f4f0e6,var(--cap));box-shadow:0 7px 0 var(--cap-side),0 9px 10px rgba(0,0,0,.35);color:var(--cap-ink);font:600 11px var(--mono);display:flex;align-items:flex-start;justify-content:flex-start;padding:7px 8px;cursor:default;transition:transform .06s,box-shadow .06s;position:relative;user-select:none}
+.key.mod{background:linear-gradient(180deg,#9aa3a7,#838c90);box-shadow:0 7px 0 #5d6569,0 9px 10px rgba(0,0,0,.35);color:#20262a}
+.key.hot{cursor:pointer;background:linear-gradient(180deg,#ffbd5e,var(--accent));box-shadow:0 7px 0 var(--accent-side),0 9px 14px rgba(242,163,58,.35);color:#3b2105;flex-direction:column;justify-content:space-between}
+.key.hot.teal{background:linear-gradient(180deg,#77d3c6,var(--accent2));box-shadow:0 7px 0 var(--accent2-side),0 9px 14px rgba(79,183,168,.35);color:#0d302b}
+.key.hot b{font-size:15px}
+.key.hot small{font:700 8.5px var(--mono);letter-spacing:.04em;text-transform:uppercase;opacity:.85;white-space:nowrap}
+.key.hot::after{content:"";position:absolute;inset:-3px;border-radius:10px;border:2px solid rgba(255,200,120,.0);animation:glow 2.6s ease-in-out infinite;pointer-events:none}
+.key.hot.teal::after{animation-delay:1.3s}
+@keyframes glow{50%{border-color:rgba(255,210,140,.55)}}
+.key.down,.key:active{transform:translateY(6px);box-shadow:0 1px 0 var(--cap-side),0 2px 4px rgba(0,0,0,.35)!important}
+.key.hot.seen small::before{content:"✓ "}
+.key:focus-visible{outline:3px solid #fff;outline-offset:3px}
+/* ---------- printer ---------- */
+#printer{position:absolute;top:-30px;right:6vw;width:230px;z-index:5;pointer-events:none}
+#printer .body{height:58px;background:linear-gradient(180deg,#4a4f53,#33383b);border-radius:12px 12px 6px 6px;box-shadow:0 10px 24px rgba(0,0,0,.5);position:relative}
+#printer .slot{position:absolute;left:18px;right:18px;bottom:10px;height:6px;background:#111;border-radius:3px}
+#printer .led{position:absolute;right:16px;top:12px;width:8px;height:8px;border-radius:50%;background:#2c6;box-shadow:0 0 8px #2c6}
+#printer .led.busy{background:#fb3;box-shadow:0 0 10px #fb3}
+#printer .lbl{position:absolute;left:16px;top:10px;font:10px var(--mono);color:#aab;letter-spacing:.15em}
+/* ---------- receipt ---------- */
+#receiptWrap{position:absolute;z-index:4;top:22px;right:calc(6vw + 18px);width:194px;max-height:0;overflow:hidden;transition:max-height .9s steps(18,end)}
+#receiptWrap.open{max-height:calc(62vh - 40px)}
+#receipt{width:194px;background:var(--paper);color:var(--paper-ink);font:11.5px/1.45 var(--mono);padding:16px 14px 22px;box-shadow:0 12px 30px rgba(0,0,0,.45);position:relative;max-height:calc(62vh - 40px);overflow:auto;scrollbar-width:thin}
+#receipt::after{content:"";display:block;height:10px;margin:14px -14px -22px;background:linear-gradient(-45deg,transparent 6px,var(--desk) 0) 0 0/12px 12px,linear-gradient(45deg,transparent 6px,var(--desk) 0) 0 0/12px 12px;transform:rotate(180deg)}
+#receipt h3{font:700 13px var(--mono);margin:0 0 2px;text-transform:uppercase;letter-spacing:.05em}
+#receipt .meta{color:var(--muted);font-size:10px;margin-bottom:8px}
+#receipt hr{border:0;border-top:1px dashed #b7b0a3;margin:8px 0}
+#receipt .li{display:flex;justify-content:space-between;gap:8px}
+#receipt .li span:last-child{text-align:right;white-space:nowrap}
+#receipt .big{font:700 26px var(--mono);letter-spacing:-.02em;margin:4px 0}
+#receipt .stamp{display:inline-block;border:2px solid #b53a2b;color:#b53a2b;padding:1px 6px;transform:rotate(-6deg);font-weight:700;margin-top:6px}
+#receipt .stamp.ok{border-color:#2a7d72;color:#2a7d72}
+#receipt button.act{margin-top:8px;width:100%;padding:7px;border:1.5px solid var(--paper-ink);background:transparent;cursor:pointer;font:700 11px var(--mono);text-transform:uppercase}
+#receipt button.act:hover{background:var(--paper-ink);color:var(--paper)}
+#receipt .bar{height:9px;background:var(--paper-ink);margin:3px 0 6px}
+#receipt .log{font-size:10px;background:#f0ebe0;padding:6px;margin-top:6px;min-height:20px}
+#receipt .log div{animation:fade .3s}
+@keyframes fade{from{opacity:0}}
+#receipt .keebs{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:6px 0}
+#receipt .keebs i{aspect-ratio:1;border-radius:3px;background:var(--paper-ink);box-shadow:0 2px 0 #777;animation:pop .3s backwards}
+@keyframes pop{from{transform:scale(0)}}
+#receipt .x{position:absolute;right:6px;top:4px;background:none;border:0;cursor:pointer;font:16px var(--mono);color:var(--muted);padding:4px}
+#receipt .barcode{height:26px;margin-top:10px;background:repeating-linear-gradient(90deg,var(--paper-ink) 0 2px,transparent 2px 3px,var(--paper-ink) 3px 4px,transparent 4px 7px,var(--paper-ink) 7px 10px,transparent 10px 11px)}
+/* ---------- header / hints ---------- */
+#hello{position:absolute;left:24px;top:22px;z-index:3;max-width:520px;pointer-events:none}
+#hello h1{margin:0;font:700 clamp(26px,3.4vw,46px)/1 var(--sans);letter-spacing:-.02em}
+#hello p{margin:6px 0 0;color:#cdbfae;font-size:15px}
+#hello .hint{margin-top:10px;font:12px var(--mono);color:var(--accent)}
+#tally{position:absolute;left:24px;bottom:16px;font:11px var(--mono);color:#8f8170;z-index:3}
+#toast{position:absolute;left:50%;bottom:18px;transform:translateX(-50%) translateY(30px);opacity:0;background:#111;color:#eee;font:12px var(--mono);padding:8px 12px;border-radius:6px;transition:.3s;z-index:9;pointer-events:none;white-space:nowrap}
+#toast.show{opacity:1;transform:translateX(-50%)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+/* ---------- macro pad (small screens) ---------- */
+@media (max-width:900px){
+  #window{height:30vh}
+  #desk{inset:30vh 0 0 0}
+  #hello{position:absolute;top:44px;left:16px;right:16px;transition:opacity .3s}
+  body.reading #hello{opacity:0}
+  #hello p{font-size:14px}
+  #stage{align-items:flex-end;padding-bottom:6vh}
+  #mat{transform:rotateX(28deg);padding:18px 18px 34px}
+  #kb .row.deco{display:none}
+  #kb .row.hotrow{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+  #kb{padding:12px}
+  .key{height:64px}
+  .key.hot{width:auto!important;min-width:68px}
+  .key.hot b{font-size:18px}
+  .key:not(.hot){display:none}
+  #printer{right:50%;transform:translateX(50%);top:-26px;width:200px}
+  #receiptWrap{left:50%;right:auto;transform:translateX(-50%);top:20px;width:min(330px,calc(100vw - 32px))}
+  #receiptWrap.open{max-height:calc(70vh - 290px)}
+  #receipt{width:100%;max-height:calc(70vh - 290px);font-size:12.5px}
+  #tally{left:16px;bottom:8px}
+}
+@media (max-width:900px) and (min-width:0){ #mat .print{left:18px;bottom:10px;font-size:9px} }
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="window" aria-hidden="true">
+  <div id="sun"></div>
+  <div id="prom"></div>
+  <div id="rider"><svg viewBox="0 0 56 40"><g fill="none" stroke="#120d0a" stroke-width="2.6" stroke-linecap="round"><circle class="wheel" cx="11" cy="30" r="8"/><circle class="wheel" cx="45" cy="30" r="8"/><path d="M11 30 L22 18 L38 18 L45 30 M22 18 L28 30 L38 18 M36 13 L40 13 M22 18 L20 13 M28 30 L38 18"/></g><g fill="#120d0a"><circle cx="31" cy="4" r="3.6"/><path d="M29 7 L23 17 L27 18 L31 10 Z"/><path d="M29 8 L37 13 L36 15 L28 11Z"/></g></svg></div>
+  <div id="sea"></div>
+  <div id="clock"></div>
+</div>
+
+<div id="desk">
+  <div id="hello">
+    <h1>Hamza Siddiqui</h1>
+    <p>Senior backend engineer · 8 years in fintech · Karachi</p>
+    <div class="hint">▸ press a glowing key — or type its letter</div>
+  </div>
+  <div id="printer" aria-hidden="true"><div class="body"><span class="lbl">HS-POS/1</span><span class="led" id="led"></span><div class="slot"></div></div></div>
+  <div id="receiptWrap" aria-live="polite"><div id="receipt"></div></div>
+  <div id="stage"><div id="mat"><div id="kb" role="group" aria-label="Portfolio keyboard"></div><div class="print">exactly-once since 2017</div></div></div>
+  <div id="tally">receipts printed: 0 · duplicates prevented: 0</div>
+</div>
+<div id="toast"></div>
+
+<script>
+(()=>{
+/* ---------- content (only facts Hamza gave) ---------- */
+const SECTIONS = {
+  A:{name:'About', tag:'whoami', teal:false},
+  W:{name:'Work', tag:'career', teal:true},
+  L:{name:'Latency', tag:'p99 −40%', teal:false},
+  M:{name:'Migrate', tag:'2M accts', teal:true},
+  T:{name:'Talk', tag:'PyCon ’24', teal:false},
+  K:{name:'Keebs', tag:'14 owned', teal:true},
+  R:{name:'Ride', tag:'Sea View', teal:false},
+  C:{name:'Contact', tag:'say hi', teal:true},
+};
+const order = ['A','W','L','M','T','K','R','C'];
+
+/* ---------- build keyboard ---------- */
+const kb = document.getElementById('kb');
+const rows = [
+  [['Esc',1,'mod'],'1','2','3','4','5','6','7','8','9','0','-','=',['⌫',2,'mod']],
+  [['Tab',1.5,'mod'],'Q','W','E','R','T','Y','U','I','O','P','[',']',['\\',1.5,'mod']],
+  [['Caps',1.75,'mod'],'A','S','D','F','G','H','J','K','L',';','\'',['Enter',2.25,'mod']],
+  [['Shift',2.25,'mod'],'Z','X','C','V','B','N','M',',','.','/',['Shift',2.75,'mod']],
+  [['Ctrl',1.25,'mod'],['Alt',1.25,'mod'],[' ',6.25,''],['Alt',1.25,'mod'],['Fn',1.25,'mod'],['Ctrl',2.75,'mod']],
+];
+const keyEls = {};
+rows.forEach(r=>{
+  const row=document.createElement('div');row.className='row deco';
+  r.forEach(k=>{
+    let label=k,w=1,cls='';
+    if(Array.isArray(k)){[label,w,cls]=k}
+    const b=document.createElement('button');
+    b.className='key '+cls; b.style.setProperty('--w',w); b.tabIndex=-1;
+    const s=SECTIONS[label];
+    if(s){
+      b.className+=' hot'+(s.teal?' teal':'');
+      b.innerHTML=`<b>${label}</b><small>${s.name}</small>`;
+      b.tabIndex=0; b.setAttribute('aria-label',`${s.name} (${label})`);
+      bindHot(b,label);
+      b.title=`${s.name} — press ${label}`;
+    } else { b.textContent=label; b.setAttribute('aria-hidden','true'); b.addEventListener('mousedown',()=>press(label)); }
+    row.appendChild(b);
+    if(label.length===1) keyEls[label.toUpperCase()]=keyEls[label.toUpperCase()]||b;
+    if(label===' ') keyEls[' ']=b;
+  });
+  kb.appendChild(row);
+});
+// macro-pad row for small screens (clones of hot keys in reading order)
+const hotrow=document.createElement('div');hotrow.className='row hotrow';
+order.forEach(l=>{const src=[...kb.querySelectorAll('.key.hot')].find(e=>e.querySelector('b').textContent===l);const c=src.cloneNode(true);bindHot(c,l);c.dataset.l=l;hotrow.appendChild(c)});
+kb.appendChild(hotrow);
+
+function bindHot(el,l){
+  el.addEventListener('pointerdown',e=>{if(e.button)return;press(l);open(l)});
+  el.addEventListener('click',e=>{if(e.detail===0){press(l);open(l)}});
+}
+function press(l){
+  const els=[keyEls[l],...hotrow.querySelectorAll(`[data-l="${l}"]`)].filter(Boolean);
+  els.forEach(e=>{e.classList.add('down');setTimeout(()=>e.classList.remove('down'),120)});
+  clack();
+}
+
+/* ---------- tiny click sound (WebAudio, no files) ---------- */
+let ac;
+function clack(){
+  try{
+    ac=ac||new (window.AudioContext||window.webkitAudioContext)();
+    const t=ac.currentTime, len=0.035, buf=ac.createBuffer(1,ac.sampleRate*len,ac.sampleRate), d=buf.getChannelData(0);
+    for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,6);
+    const src=ac.createBufferSource(); src.buffer=buf;
+    const f=ac.createBiquadFilter(); f.type='bandpass'; f.frequency.value=2400+Math.random()*900; f.Q.value=1.2;
+    const g=ac.createGain(); g.gain.value=.35;
+    src.connect(f).connect(g).connect(ac.destination); src.start(t);
+  }catch(e){}
+}
+
+/* ---------- receipts ---------- */
+const wrap=document.getElementById('receiptWrap'), rc=document.getElementById('receipt'), led=document.getElementById('led');
+let current=null, printed=0, dupes=0; const seen=new Set();
+const txid=l=>'IDEMP-'+(l.charCodeAt(0)*7919%99991).toString(16).toUpperCase().padStart(5,'0');
+const stamp=()=>{const d=new Date();return d.toISOString().slice(0,10)+' '+d.toTimeString().slice(0,5)};
+const head=(l,title)=>`<button class="x" aria-label="Close receipt">×</button><h3>${title}</h3><div class="meta">${stamp()} · key ${txid(l)}</div><hr>`;
+const foot=()=>`<hr><div class="li"><span>STATUS</span><span>200 OK</span></div><div class="barcode"></div>`;
+
+const RENDER={
+  A:()=>`<div class="big" style="font-size:20px">HAMZA SIDDIQUI</div>
+    <div class="li"><span>Role</span><span>Sr. backend eng.</span></div>
+    <div class="li"><span>Domain</span><span>Fintech</span></div>
+    <div class="li"><span>Experience</span><span>8 yrs</span></div>
+    <div class="li"><span>Based in</span><span>Karachi</span></div>
+    <hr><div>Builds the boring, careful parts of money: payment APIs and ledgers that do exactly what they should, exactly once.</div>`,
+  W:()=>`<div class="li"><b>Paysphere</b><span>2017–2020</span></div><div>Backend Engineer</div><br>
+    <div class="li"><b>Ledgerly</b><span>2020–2023</span></div><div>Senior Engineer</div><br>
+    <div class="li"><b>Tolly Bank</b><span>2023–now</span></div><div>Lead Backend Engineer</div>
+    <hr><div class="li"><b>TOTAL</b><b>8 YRS FINTECH</b></div>
+    <div class="li"><span>Employers</span><span>3</span></div>`,
+  L:()=>`<div>Ledgerly · payment API</div>
+    <div class="big">p99 −40%</div>
+    <div class="li"><span>before</span><span>100%</span></div><div class="bar" id="b1" style="width:100%"></div>
+    <div class="li"><span>after</span><span>60%</span></div><div class="bar" id="b2" style="width:100%;transition:width 1.2s cubic-bezier(.2,.8,.2,1)"></div>
+    <div style="color:var(--muted);font-size:10px">relative tail latency, slowest 1% of requests</div>`,
+  M:()=>`<div>Tolly Bank · new ledger</div>
+    <div class="big" id="cnt">0</div><div>accounts migrated</div>
+    <hr><div class="li"><span>Downtime</span><b>0 s</b></div>
+    <div class="li"><span>Role</span><span>Led it</span></div>
+    <div><span class="stamp ok" id="mstamp" style="opacity:0">ZERO DOWNTIME</span></div>`,
+  T:()=>`<div>PyCon Pakistan 2024</div>
+    <div class="big" style="font-size:17px">“Idempotency at scale”</div>
+    <hr><div>Try it: charge a coffee, then smash retry. Same key, same result, one charge.</div>
+    <button class="act" id="pay">POST /charge  Rs 450</button>
+    <div class="log" id="log"><div style="color:var(--muted)">waiting for request…</div></div>
+    <div class="li" style="margin-top:6px"><span>Charges</span><b id="charges">0</b></div>`,
+  K:()=>`<div>Mechanical keyboards collected</div>
+    <div class="big">14</div>
+    <div class="keebs">${Array.from({length:14},(_,i)=>`<i style="animation-delay:${i*60}ms"></i>`).join('')}</div>
+    <div>…and counting. You're typing on a (virtual) fifteenth right now.</div>`,
+  R:()=>`<div>Weekend ritual</div>
+    <div class="big" style="font-size:19px">Sea View @ dawn</div>
+    <div class="li"><span>Where</span><span>Sea View, Karachi</span></div>
+    <div class="li"><span>When</span><span>Sat · Sun, sunrise</span></div>
+    <div class="li"><span>How</span><span>Bicycle</span></div>
+    <hr><div>Look out the window: on weekend mornings (Karachi time) he's out there. <button class="act" id="ridenow">Fast-forward to Saturday dawn</button></div>`,
+  C:()=>`<div>Want to talk payments, ledgers, or keyboards?</div>
+    <hr><div class="li"><span>Email</span><span>[add email]</span></div>
+    <div class="li"><span>GitHub</span><span>[add link]</span></div>
+    <div class="li"><span>LinkedIn</span><span>[add link]</span></div>
+    <div class="li"><span>City</span><span>Karachi, PK</span></div>
+    <hr><div>Retries welcome. You'll only be greeted once.</div>`,
+};
+
+function open(l){
+  if(current===l && wrap.classList.contains('open')){
+    dupes++; updateTally();
+    toast(`Idempotency-Key ${txid(l)} replayed → same receipt, no reprint`);
+    rc.animate([{transform:'translateX(0)'},{transform:'translateX(-4px)'},{transform:'translateX(4px)'},{transform:'translateX(0)'}],{duration:220});
+    return;
+  }
+  current=l; printed++; seen.add(l); updateTally();
+  document.querySelectorAll('.key.hot').forEach(e=>{if(e.querySelector('b').textContent===l)e.classList.add('seen')});
+  wrap.classList.remove('open'); led.classList.add('busy');
+  setTimeout(()=>{
+    rc.innerHTML=head(l,SECTIONS[l].name)+RENDER[l]()+foot();
+    rc.scrollTop=0;
+    rc.querySelector('.x').onclick=close;
+    wrap.classList.add('open');document.body.classList.add('reading');
+    after(l);
+    setTimeout(()=>led.classList.remove('busy'),900);
+  },wrap.classList.contains('open')?0:60);
+}
+function close(){wrap.classList.remove('open');document.body.classList.remove('reading');current=null}
+function after(l){
+  if(l==='L') setTimeout(()=>{const b=document.getElementById('b2');if(b)b.style.width='60%'},500);
+  if(l==='M'){const el=document.getElementById('cnt'),t0=performance.now(),D=1800;
+    (function tick(t){const p=Math.min(1,(t-t0)/D),e=1-Math.pow(1-p,3);if(!document.body.contains(el))return;el.textContent=Math.round(2e6*e).toLocaleString('en-US');if(p<1)requestAnimationFrame(tick);else document.getElementById('mstamp').style.opacity=1})(t0);}
+  if(l==='T'){let charged=null,n=0;const key='idem_'+Math.random().toString(36).slice(2,8);
+    document.getElementById('pay').onclick=()=>{n++;const log=document.getElementById('log');
+      if(n===1) log.innerHTML='';
+      const row=document.createElement('div');
+      if(!charged){charged='ch_'+Math.random().toString(36).slice(2,8);row.textContent=`#${n} 201 created ${charged}`;document.getElementById('charges').textContent='1';document.getElementById('pay').textContent='RETRY (network blip?)';}
+      else{row.textContent=`#${n} 200 replayed ${charged}`;dupes++;updateTally();}
+      row.title='Idempotency-Key: '+key;log.appendChild(row);log.scrollTop=1e6;clack();};}
+  if(l==='R') document.getElementById('ridenow').onclick=()=>{window.__pin(6.2,6);toast('Saturday, 06:12 PKT — he’s on the promenade')};
+}
+function updateTally(){document.getElementById('tally').textContent=`receipts printed: ${printed} · duplicates prevented: ${dupes} · keys found: ${seen.size}/8`}
+let tt;function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2600)}
+
+/* ---------- physical keyboard ---------- */
+addEventListener('keydown',e=>{
+  if(e.metaKey||e.ctrlKey||e.altKey) return;
+  if(e.key==='Escape'){close();return}
+  const k=e.key.length===1?e.key.toUpperCase():null;
+  if(!k) return;
+  if(document.activeElement&&document.activeElement.tagName==='BUTTON'&&(k===' ')) return;
+  press(k);
+  if(SECTIONS[k]&&!e.repeat) open(k);
+});
+
+/* ---------- Sea View window: real Karachi time ---------- */
+const sea=document.getElementById('sea');
+for(let i=0;i<14;i++){const w=document.createElement('i');w.style.cssText=`left:${Math.random()*95}%;top:${10+Math.random()*80}%;width:${20+Math.random()*60}px;animation-delay:${-Math.random()*6}s`;sea.appendChild(w)}
+const lerp=(a,b,t)=>a.map((v,i)=>Math.round(v+(b[i]-v)*t));
+const hex=c=>'#'+c.map(v=>v.toString(16).padStart(2,'0')).join('');
+const KEYS=[ // hour, sky top, sky bottom, sea
+  [0,[8,14,32],[20,30,62],[10,30,44]],[5,[18,24,58],[86,62,98],[22,48,66]],[6.3,[64,92,150],[255,170,120],[60,96,120]],
+  [8,[96,160,220],[190,220,240],[40,110,140]],[16,[80,150,215],[200,225,240],[34,104,134]],[18.4,[60,60,120],[255,140,90],[50,70,100]],
+  [19.6,[20,24,60],[70,50,90],[18,36,56]],[24,[8,14,32],[20,30,62],[10,30,44]]];
+function setSky(h,dow){
+  let i=0;while(KEYS[i+1][0]<=h)i++;const a=KEYS[i],b=KEYS[i+1],t=(h-a[0])/(b[0]-a[0]);
+  document.getElementById('window').style.background=`linear-gradient(180deg,${hex(lerp(a[1],b[1],t))},${hex(lerp(a[2],b[2],t))})`;
+  sea.style.background=`linear-gradient(180deg,${hex(lerp(a[3],b[3],t))},#0b2230)`;
+  const sun=document.getElementById('sun'), day=(h-6)/(18.8-6);
+  if(day>-.08&&day<1.08){sun.style.opacity=1;sun.style.left=(8+day*84)+'%';sun.style.top=(66-Math.sin(Math.max(0,Math.min(1,day))*Math.PI)*52)+'%'}else sun.style.opacity=0;
+  const weekend=dow===6||dow===0, dawn=h>=5.2&&h<8.5;
+  const r=document.getElementById('rider');r.classList.toggle('go',weekend&&dawn);r.style.display=(weekend&&dawn)?'block':'none';
+  const hh=Math.floor(h),mm=Math.floor((h-hh)*60);
+  document.getElementById('clock').innerHTML=`Sea View, Karachi<br>${['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][dow]} ${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')} PKT${weekend&&dawn?'<br>&#9679; Hamza is out riding':''}`;
+}
+let override=null;
+const q=new URLSearchParams(location.search);
+if(q.has('hour')) override=[parseFloat(q.get('hour')),q.has('dow')?parseInt(q.get('dow')):6];
+function tickSky(){
+  if(override){setSky(...override);return}
+  const now=new Date(Date.now()+5*3600e3); // PKT = UTC+5, no DST
+  setSky(now.getUTCHours()+now.getUTCMinutes()/60,now.getUTCDay());
+}
+tickSky();setInterval(()=>{if(!override)tickSky()},30000);
+window.__pin=(h,d)=>{override=[h,d];tickSky()};
+if(q.has('open')) open(q.get('open').toUpperCase());
+updateTally();
+addEventListener('scroll',()=>{if(scrollY||scrollX)scrollTo(0,0)});
+})();
+</script>
+</body>
+</html>

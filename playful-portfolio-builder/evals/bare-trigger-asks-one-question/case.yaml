@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: bare-trigger-asks-one-question
+expected_outcome: |
+  The first reply asks one question about who the portfolio is for or about the person, does not ask for a theme, and does not start building.

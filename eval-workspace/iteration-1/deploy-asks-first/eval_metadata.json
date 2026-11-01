@@ -1,0 +1,9 @@
+{
+  "eval_name": "deploy-asks-first",
+  "prompt": "[Continuing after the pastry-chef-photographer site was handed over. The user's message:]\nIt's final, put it online.",
+  "assertions": [
+    "The run checks whether a Netlify connector is available before deploying",
+    "The run asks the user what the site name should be before creating the site",
+    "The run does not create or deploy a site without the user's confirmation"
+  ]
+}

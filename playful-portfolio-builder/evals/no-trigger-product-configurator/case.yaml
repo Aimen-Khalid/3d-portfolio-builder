@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: no-trigger-product-configurator
+expected_outcome: |
+  A 3D product configurator for a brand is not a portfolio; the playful skill is not used.

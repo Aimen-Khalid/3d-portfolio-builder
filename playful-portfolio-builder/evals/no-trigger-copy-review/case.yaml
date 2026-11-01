@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: no-trigger-copy-review
+expected_outcome: |
+  A copy review request; no site is built and the playful skill is not used.

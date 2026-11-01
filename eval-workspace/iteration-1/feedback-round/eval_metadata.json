@@ -1,0 +1,11 @@
+{
+  "eval_name": "feedback-round",
+  "prompt": "[Continuing after the unattended-build site was handed over. The user's message:]\nThe darkest light setting is too dark, I can barely see anything. The sounds are a bit loud. And add my new award: UXPK Designer of the Year 2026.",
+  "assertions": [
+    "The darkest light preset is measurably brighter than before (mean luminance of its screenshot increased)",
+    "Sound levels are reduced (master gain or per-sound gains lowered) and the toggle still works",
+    "UXPK Designer of the Year 2026 has its own object or place and is counted in the discovery game",
+    "Nothing else regressed: no console errors and other objects still open and close",
+    "The run's notes report re-running the real-visitor walkthrough for the changed parts"
+  ]
+}

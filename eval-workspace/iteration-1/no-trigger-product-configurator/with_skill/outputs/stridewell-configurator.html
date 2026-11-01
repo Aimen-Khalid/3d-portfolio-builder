@@ -1,0 +1,911 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stridewell Configurator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --chalk: #E4E7E0;
+    --chalk-2: #D5D9D0;
+    --ink: #1F2A24;
+    --ink-soft: #56625A;
+    --line: #BFC5BA;
+    --ultra: #3346C9;
+    --paper: #F3F4F0;
+    --shadow-floor: rgba(31, 42, 36, .22);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --chalk: #1A211D;
+      --chalk-2: #232B26;
+      --ink: #E6EAE3;
+      --ink-soft: #9BA79F;
+      --line: #36413A;
+      --ultra: #8794FF;
+      --paper: #202823;
+      --shadow-floor: rgba(0, 0, 0, .5);
+    }
+  }
+  :root[data-theme="dark"] {
+    --chalk: #1A211D;
+    --chalk-2: #232B26;
+    --ink: #E6EAE3;
+    --ink-soft: #9BA79F;
+    --line: #36413A;
+    --ultra: #8794FF;
+    --paper: #202823;
+    --shadow-floor: rgba(0, 0, 0, .5);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--chalk);
+    color: var(--ink);
+    font-family: "Archivo", system-ui, sans-serif;
+    font-variation-settings: "wdth" 100;
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .app {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 400px;
+    min-height: 100vh;
+  }
+
+  /* ---------- Stage ---------- */
+  .stage {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+    cursor: grab;
+    touch-action: none;
+  }
+  .stage:active { cursor: grabbing; }
+  .stage canvas { display: block; width: 100%; height: 100%; position: absolute; inset: 0; }
+
+  .wordmark {
+    position: absolute;
+    top: 24px; left: 28px;
+    margin: 0;
+    font-size: 20px;
+    font-weight: 800;
+    font-variation-settings: "wdth" 125;
+    letter-spacing: -0.01em;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .model-name {
+    position: absolute;
+    left: 28px; bottom: 22px;
+    margin: 0;
+    z-index: 2;
+    pointer-events: none;
+    font-weight: 900;
+    font-variation-settings: "wdth" 125;
+    font-size: clamp(56px, 10vw, 148px);
+    line-height: .82;
+    letter-spacing: -0.035em;
+    color: var(--ink);
+    opacity: .1;
+  }
+  .hint {
+    position: absolute;
+    right: 24px; top: 26px;
+    z-index: 2;
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink-soft);
+    pointer-events: none;
+    transition: opacity .6s;
+  }
+  .hint.gone { opacity: 0; }
+
+  .view-controls {
+    position: absolute;
+    right: 24px; bottom: 24px;
+    z-index: 3;
+    display: flex;
+    gap: 6px;
+  }
+  .view-controls button {
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 8px 14px;
+    cursor: pointer;
+  }
+  .view-controls button[aria-pressed="true"] {
+    background: var(--ink);
+    color: var(--chalk);
+    border-color: var(--ink);
+  }
+
+  /* ---------- Panel ---------- */
+  .panel {
+    background: var(--paper);
+    border-left: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    max-height: 100vh;
+    position: sticky;
+    top: 0;
+  }
+  .panel-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 32px 28px 8px;
+  }
+  .panel h2 {
+    margin: 0 0 4px;
+    font-size: 30px;
+    line-height: 1.1;
+    font-weight: 800;
+    font-variation-settings: "wdth" 112;
+    letter-spacing: -0.02em;
+  }
+  .lede {
+    margin: 0 0 28px;
+    color: var(--ink-soft);
+    font-size: 15px;
+    max-width: 34ch;
+  }
+
+  fieldset {
+    border: 0;
+    padding: 0;
+    margin: 0 0 28px;
+  }
+  legend {
+    padding: 0;
+    margin-bottom: 12px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-weight: 700;
+    font-size: 16px;
+  }
+  legend .chosen {
+    font-weight: 400;
+    color: var(--ink-soft);
+    font-size: 14px;
+  }
+
+  .swatches {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+  }
+  .swatch { position: relative; }
+  .swatch input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    margin: 0;
+  }
+  .swatch label {
+    display: block;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    cursor: pointer;
+    background: var(--c);
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.14);
+    transition: transform .15s;
+    position: relative;
+  }
+  .swatch label.split {
+    background: linear-gradient(135deg, var(--c) 50%, var(--c2) 50%);
+  }
+  .swatch label.clear {
+    background:
+      repeating-linear-gradient(45deg, rgba(255,255,255,.55) 0 3px, transparent 3px 7px),
+      var(--c);
+  }
+  .swatch input:checked + label {
+    box-shadow: 0 0 0 2px var(--paper), 0 0 0 4px var(--ink);
+  }
+  .swatch input:focus-visible + label {
+    outline: 3px solid var(--ultra);
+    outline-offset: 5px;
+  }
+  .swatch label:hover { transform: scale(1.06); }
+  .swatch .tag {
+    position: absolute;
+    top: -6px; right: -6px;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    background: var(--ultra);
+    color: #fff;
+    border-radius: 999px;
+    padding: 3px 5px;
+    pointer-events: none;
+  }
+
+  .sizes {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+  }
+  .sizes .opt { position: relative; }
+  .sizes input { position: absolute; opacity: 0; inset: 0; margin: 0; }
+  .sizes label {
+    display: block;
+    text-align: center;
+    padding: 9px 0;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-size: 15px;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+  }
+  .sizes input:checked + label {
+    background: var(--ink);
+    color: var(--chalk);
+    border-color: var(--ink);
+  }
+  .sizes input:focus-visible + label {
+    outline: 3px solid var(--ultra);
+    outline-offset: 2px;
+  }
+
+  .breakdown {
+    margin: 4px 0 20px;
+    padding: 0;
+    list-style: none;
+    font-size: 14px;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .breakdown li {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-top: 1px solid var(--line);
+  }
+
+  /* ---------- Price bar ---------- */
+  .buy {
+    border-top: 1px solid var(--line);
+    padding: 18px 28px 22px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--paper);
+  }
+  .price {
+    flex: 1;
+    min-width: 0;
+  }
+  .price-label {
+    display: block;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .price-value {
+    display: block;
+    font-weight: 900;
+    font-variation-settings: "wdth" 125;
+    font-size: 40px;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+  }
+  .price-value.bump { animation: bump .45s cubic-bezier(.3,1.6,.5,1); }
+  @keyframes bump {
+    0% { transform: translateY(0); }
+    35% { transform: translateY(-5px); color: var(--ultra); }
+    100% { transform: translateY(0); }
+  }
+  .add {
+    font: inherit;
+    font-weight: 700;
+    font-size: 16px;
+    background: var(--ultra);
+    color: #fff;
+    border: 0;
+    border-radius: 999px;
+    padding: 15px 22px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .add:focus-visible, .view-controls button:focus-visible {
+    outline: 3px solid var(--ultra);
+    outline-offset: 3px;
+  }
+  .toast {
+    position: fixed;
+    left: 50%; bottom: 28px;
+    transform: translate(-50%, 20px);
+    background: var(--ink);
+    color: var(--chalk);
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-size: 15px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s, transform .25s;
+    z-index: 10;
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  .fallback {
+    position: absolute; inset: 0;
+    display: none;
+    align-items: center; justify-content: center;
+    padding: 24px;
+    text-align: center;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 860px) {
+    .app { grid-template-columns: 1fr; }
+    .stage { min-height: 58vh; height: 58vh; }
+    .panel { position: static; max-height: none; border-left: 0; border-top: 1px solid var(--line); }
+    .panel-scroll { padding: 24px 16px 4px; }
+    .buy { position: sticky; bottom: 0; padding: 14px 16px 16px; }
+    .wordmark { left: 16px; top: 16px; }
+    .model-name { display: none; }
+    .hint { right: 16px; top: 18px; }
+    .view-controls { right: 16px; bottom: 16px; }
+    .view-controls button { padding: 7px 11px; font-size: 13px; }
+    .price-value { font-size: 34px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .price-value.bump { animation: none; }
+    .swatch label { transition: none; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <section class="stage" id="stage" aria-label="3D view of the Stridewell Lane 01. Drag to rotate, scroll to zoom.">
+    <h1 class="wordmark">Stridewell</h1>
+    <p class="hint" id="hint">Drag to turn the shoe</p>
+    <p class="model-name" aria-hidden="true">Lane 01</p>
+    <div class="view-controls" role="group" aria-label="Camera view">
+      <button type="button" data-view="side" aria-pressed="false">Side</button>
+      <button type="button" data-view="top" aria-pressed="false">Top</button>
+      <button type="button" data-view="sole" aria-pressed="false">Sole</button>
+      <button type="button" id="spin" aria-pressed="true">Spin</button>
+    </div>
+    <div class="fallback" id="fallback">3D preview needs WebGL. Your choices and price still update on the right.</div>
+  </section>
+
+  <aside class="panel">
+    <div class="panel-scroll">
+      <h2>Build your Lane 01</h2>
+      <p class="lede">A daily trainer on a cushioned cupsole. Pick the sole and laces, and we'll make the pair to order.</p>
+
+      <fieldset id="sole-set">
+        <legend>Sole <span class="chosen" id="sole-chosen"></span></legend>
+        <div class="swatches" id="sole-swatches"></div>
+      </fieldset>
+
+      <fieldset id="lace-set">
+        <legend>Laces <span class="chosen" id="lace-chosen"></span></legend>
+        <div class="swatches" id="lace-swatches"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Size (UK) <span class="chosen" id="size-chosen"></span></legend>
+        <div class="sizes" id="sizes"></div>
+      </fieldset>
+
+      <ul class="breakdown" id="breakdown" aria-label="Price breakdown"></ul>
+    </div>
+
+    <div class="buy">
+      <div class="price">
+        <span class="price-label">Your pair</span>
+        <span class="price-value" id="price" aria-live="polite">$128</span>
+      </div>
+      <button class="add" id="add" type="button">Add to bag</button>
+    </div>
+  </aside>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(() => {
+  /* ---------------- Catalogue ---------------- */
+  const BASE = { name: "Lane 01 base", price: 128 };
+  const SOLES = [
+    { id: "chalk",  name: "Chalk white",     color: "#EEEDE6", price: 0 },
+    { id: "gum",    name: "Natural gum",     color: "#B9733A", price: 8 },
+    { id: "ink",    name: "Pitch black",     color: "#26282A", price: 0 },
+    { id: "ultra",  name: "Ultramarine",     color: "#3346C9", price: 6 },
+    { id: "split",  name: "Chalk on gum",    color: "#EEEDE6", outsole: "#B9733A", price: 12, split: true },
+    { id: "ice",    name: "Clear ice",       color: "#BFE3EA", price: 16, clear: true },
+  ];
+  const LACES = [
+    { id: "white",  name: "White cotton",    color: "#F2F1EC", price: 0 },
+    { id: "black",  name: "Black cotton",    color: "#1E2022", price: 0 },
+    { id: "moss",   name: "Moss",            color: "#6E7F4C", price: 0 },
+    { id: "signal", name: "Signal orange",   color: "#F2672E", price: 4 },
+    { id: "ultra",  name: "Ultramarine",     color: "#3346C9", price: 4 },
+    { id: "reflect",name: "3M reflective",   color: "#C9CDD1", price: 9, reflective: true },
+  ];
+  const SIZES = ["6", "7", "8", "9", "10", "11", "12"].flatMap(s => [s, s + ".5"]).slice(0, -1);
+
+  const state = { sole: SOLES[0], lace: LACES[0], size: "8" };
+  const money = n => "$" + n.toFixed(0);
+
+  /* ---------------- UI ---------------- */
+  function buildSwatches(container, list, group, onPick) {
+    list.forEach((o, i) => {
+      const wrap = document.createElement("div");
+      wrap.className = "swatch";
+      const id = `${group}-${o.id}`;
+      wrap.innerHTML = `
+        <input type="radio" name="${group}" id="${id}" value="${o.id}" ${i === 0 ? "checked" : ""}>
+        <label for="${id}" title="${o.name}${o.price ? " (+" + money(o.price) + ")" : ""}"
+          class="${o.split ? "split" : ""} ${o.clear ? "clear" : ""}"
+          style="--c:${o.color}; --c2:${o.outsole || o.color}">
+          <span class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">${o.name}${o.price ? ", adds " + money(o.price) : ""}</span>
+        </label>
+        ${o.price ? `<span class="tag" aria-hidden="true">+${o.price}</span>` : ""}`;
+      wrap.querySelector("input").addEventListener("change", () => onPick(o));
+      container.appendChild(wrap);
+    });
+  }
+  buildSwatches(document.getElementById("sole-swatches"), SOLES, "sole", o => { state.sole = o; update(); applySole(); });
+  buildSwatches(document.getElementById("lace-swatches"), LACES, "lace", o => { state.lace = o; update(); applyLace(); });
+
+  const sizesEl = document.getElementById("sizes");
+  SIZES.forEach(s => {
+    const d = document.createElement("div");
+    d.className = "opt";
+    d.innerHTML = `<input type="radio" name="size" id="size-${s}" value="${s}" ${s === state.size ? "checked" : ""}><label for="size-${s}">${s}</label>`;
+    d.querySelector("input").addEventListener("change", () => { state.size = s; update(); });
+    sizesEl.appendChild(d);
+  });
+
+  const priceEl = document.getElementById("price");
+  let shownPrice = BASE.price;
+  function total() { return BASE.price + state.sole.price + state.lace.price; }
+
+  function update() {
+    document.getElementById("sole-chosen").textContent = state.sole.name;
+    document.getElementById("lace-chosen").textContent = state.lace.name;
+    document.getElementById("size-chosen").textContent = "UK " + state.size;
+    const rows = [
+      [BASE.name, BASE.price],
+      ["Sole: " + state.sole.name, state.sole.price],
+      ["Laces: " + state.lace.name, state.lace.price],
+    ];
+    document.getElementById("breakdown").innerHTML = rows
+      .map(([l, p], i) => `<li><span>${l}</span><span>${i === 0 ? money(p) : p ? "+" + money(p) : "Included"}</span></li>`)
+      .join("");
+    const t = total();
+    if (t !== shownPrice) animatePrice(shownPrice, t);
+  }
+
+  const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function animatePrice(from, to) {
+    shownPrice = to;
+    priceEl.classList.remove("bump");
+    void priceEl.offsetWidth;
+    priceEl.classList.add("bump");
+    if (reduceMotion) { priceEl.textContent = money(to); return; }
+    const start = performance.now(), dur = 380;
+    const step = now => {
+      const k = Math.min(1, (now - start) / dur);
+      const e = 1 - Math.pow(1 - k, 3);
+      priceEl.textContent = money(Math.round(from + (to - from) * e));
+      if (k < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  const toast = document.getElementById("toast");
+  document.getElementById("add").addEventListener("click", () => {
+    toast.textContent = `Added to bag: Lane 01, ${state.sole.name} sole, ${state.lace.name.toLowerCase()} laces, UK ${state.size}. ${money(total())}`;
+    toast.classList.add("show");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => toast.classList.remove("show"), 2600);
+  });
+
+  update();
+
+  /* ---------------- 3D ---------------- */
+  const stage = document.getElementById("stage");
+  let applySole = () => {}, applyLace = () => {};
+  if (!window.THREE) { document.getElementById("fallback").style.display = "flex"; return; }
+
+  let renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+  } catch (e) {
+    document.getElementById("fallback").style.display = "flex";
+    return;
+  }
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  stage.prepend(renderer.domElement);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
+
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x8a9188, 0.75));
+  const key = new THREE.DirectionalLight(0xffffff, 0.9);
+  key.position.set(4, 7, 5);
+  key.castShadow = true;
+  key.shadow.mapSize.set(1024, 1024);
+  key.shadow.camera.left = -4; key.shadow.camera.right = 4;
+  key.shadow.camera.top = 4; key.shadow.camera.bottom = -4;
+  key.shadow.radius = 6;
+  scene.add(key);
+  const rim = new THREE.DirectionalLight(0xdfe6ff, 0.45);
+  rim.position.set(-5, 3, -4);
+  scene.add(rim);
+
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(30, 30), new THREE.ShadowMaterial({ opacity: 0.18 }));
+  floor.rotation.x = -Math.PI / 2;
+  floor.receiveShadow = true;
+  scene.add(floor);
+
+  const shoe = new THREE.Group();
+  scene.add(shoe);
+
+  const c = hex => new THREE.Color(hex).convertSRGBToLinear();
+
+  // ---- Shape functions: one lofted surface drives every part ----
+  // x runs heel (-1.92) to toe (+1.95). W = half width, C = centre offset, H = upper height.
+  const HEEL = -1.92, TOE = 1.95, MID = (HEEL + TOE) / 2, HALF = (TOE - HEEL) / 2;
+  function lut(keys) {
+    const pts = new THREE.SplineCurve(keys.map(([x, v]) => new THREE.Vector2(x, v))).getPoints(500);
+    return x => {
+      if (x <= pts[0].x) return pts[0].y;
+      for (let i = 1; i < pts.length; i++) {
+        if (pts[i].x >= x) {
+          const a = pts[i - 1], b = pts[i];
+          return a.y + (b.y - a.y) * ((x - a.x) / ((b.x - a.x) || 1));
+        }
+      }
+      return pts[pts.length - 1].y;
+    };
+  }
+  const Wb = lut([[-1.92, .44], [-1.5, .47], [-1.0, .46], [-0.4, .47], [0.2, .56], [0.8, .62], [1.4, .58], [1.95, .46]]);
+  const C  = lut([[-1.92, 0], [-1.0, -.01], [0, .02], [0.8, .07], [1.5, .05], [1.95, .02]]);
+  const H  = lut([[-1.92, 1.0], [-1.72, 1.16], [-1.45, 1.14], [-1.15, 1.0], [-0.85, 1.03], [-0.5, 1.02],
+                  [-0.1, 0.9], [0.4, 0.72], [0.95, 0.54], [1.45, 0.42], [1.78, 0.3], [1.95, 0.14]]);
+  function endF(x, k = 6) {
+    const t = THREE.MathUtils.clamp(Math.abs((x - MID) / HALF), 0, 1);
+    return Math.pow(Math.max(0, 1 - Math.pow(t, k)), 0.45);
+  }
+  const W = (x, grow = 0) => Wb(x) * endF(x) + grow * endF(x, 10);
+
+  const SOLE_TOP = 0.36;
+  // Point on the upper: theta 0 = right base (+z), PI/2 = top, PI = left base. s scales outward.
+  function S(x, th, s = 1) {
+    const ct = Math.cos(th), st = Math.sin(th);
+    const z = C(x) + W(x) * s * Math.sign(ct) * Math.pow(Math.abs(ct), 0.75);
+    const y = SOLE_TOP - 0.04 + (H(x) * s + (s - 1) * 0.1) * Math.pow(Math.max(0, st), 0.7);
+    return new THREE.Vector3(x, y, z);
+  }
+  function surface(x0, x1, th0, th1, s, nx = 120, nt = 40) {
+    const pos = [], idx = [];
+    for (let i = 0; i <= nx; i++) {
+      const x = x0 + (x1 - x0) * i / nx;
+      const a0 = typeof th0 === "function" ? th0(x) : th0;
+      const a1 = typeof th1 === "function" ? th1(x) : th1;
+      for (let j = 0; j <= nt; j++) {
+        const p = S(x, a0 + (a1 - a0) * j / nt, s);
+        pos.push(p.x, p.y, p.z);
+      }
+    }
+    for (let i = 0; i < nx; i++) for (let j = 0; j < nt; j++) {
+      const a = i * (nt + 1) + j, b = a + nt + 1;
+      idx.push(a, a + 1, b, a + 1, b + 1, b);
+    }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+    g.setIndex(idx);
+    g.computeVertexNormals();
+    return g;
+  }
+
+  // ---- Sole: midsole + outsole, outlined from the same W/C ----
+  function footprint(grow) {
+    const pts = [];
+    const N = 90;
+    for (let i = 0; i <= N; i++) { const x = HEEL + (TOE - HEEL) * i / N; pts.push(new THREE.Vector2(x, -(C(x) + W(x, grow)))); }
+    for (let i = N; i >= 0; i--) { const x = HEEL + (TOE - HEEL) * i / N; pts.push(new THREE.Vector2(x, -(C(x) - W(x, grow)))); }
+    return new THREE.Shape(pts);
+  }
+  function slab(depth, bevel, grow) {
+    const g = new THREE.ExtrudeGeometry(footprint(grow), {
+      depth, bevelEnabled: true, bevelThickness: bevel, bevelSize: bevel, bevelSegments: 5, curveSegments: 12,
+    });
+    g.rotateX(-Math.PI / 2);
+    return g;
+  }
+  const midMat = new THREE.MeshPhysicalMaterial({ color: c(SOLES[0].color), roughness: 0.55, clearcoat: 0.2 });
+  const outMat = new THREE.MeshStandardMaterial({ color: c(SOLES[0].color), roughness: 0.9 });
+
+  const outsole = new THREE.Mesh(slab(0.05, 0.025, 0.06), outMat);
+  outsole.position.y = 0.025;
+  const midsole = new THREE.Mesh(slab(0.2, 0.05, 0.05), midMat);
+  midsole.position.y = 0.11;
+  [outsole, midsole].forEach(m => { m.castShadow = true; m.receiveShadow = true; shoe.add(m); });
+
+  // ---- Upper ----
+  const upperMat = new THREE.MeshStandardMaterial({ color: c("#E3E5DE"), roughness: 0.82, side: THREE.DoubleSide });
+  const upper = new THREE.Mesh(surface(HEEL, TOE, 0, Math.PI, 1, 160, 48), upperMat);
+  upper.castShadow = true;
+  shoe.add(upper);
+
+  // Toe cap and heel counter: slightly raised panels in a darker tone
+  const panelMat = new THREE.MeshStandardMaterial({ color: c("#CBCFC6"), roughness: 0.75, side: THREE.DoubleSide });
+  shoe.add(new THREE.Mesh(surface(1.25, TOE, 0, Math.PI, 1.012, 40, 48), panelMat));
+  shoe.add(new THREE.Mesh(surface(HEEL, -1.35, 0, Math.PI, 1.012, 40, 48), panelMat));
+
+  // The "lane": Stridewell's side stripe, rising from heel toward the laces on both sides
+  const accentMat = new THREE.MeshStandardMaterial({ color: c("#3346C9"), roughness: 0.5, side: THREE.DoubleSide });
+  const laneLo = x => 0.52 - 0.32 * ((x + 1.3) / 2.3);
+  const laneHi = x => laneLo(x) + 0.2;
+  [[laneLo, laneHi], [x => Math.PI - laneHi(x), x => Math.PI - laneLo(x)]].forEach(([a, b]) => {
+    const m = new THREE.Mesh(surface(-1.3, 1.0, a, b, 1.02, 80, 8), accentMat);
+    m.castShadow = true;
+    shoe.add(m);
+  });
+
+  // Tongue
+  const tongueMat = new THREE.MeshStandardMaterial({ color: c("#C4C9BF"), roughness: 0.92, side: THREE.DoubleSide });
+  shoe.add(new THREE.Mesh(surface(-1.0, 0.95, Math.PI / 2 - 0.42, Math.PI / 2 + 0.42, 1.025, 60, 12), tongueMat));
+
+  // Collar opening (dark padded ring)
+  const collarX = -1.32;
+  const collarY = S(collarX, Math.PI / 2, 1).y;
+  const collar = new THREE.Mesh(
+    new THREE.TorusGeometry(1, 0.06, 12, 64),
+    new THREE.MeshStandardMaterial({ color: c("#2B332E"), roughness: 0.9 })
+  );
+  collar.rotation.x = Math.PI / 2;
+  collar.scale.set(0.42, 0.3, 1);
+  collar.position.set(collarX, collarY + 0.02, C(collarX));
+  shoe.add(collar);
+  const opening = new THREE.Mesh(
+    new THREE.CircleGeometry(1, 48),
+    new THREE.MeshStandardMaterial({ color: c("#3A423D"), roughness: 1 })
+  );
+  opening.rotation.x = -Math.PI / 2;
+  opening.scale.set(0.42, 0.3, 1);
+  opening.position.set(collarX, collarY + 0.025, C(collarX));
+  shoe.add(opening);
+
+  // Heel tab
+  const overlayMat = new THREE.MeshStandardMaterial({ color: c("#1F2A24"), roughness: 0.6 });
+  const heelTab = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.42, 0.16), overlayMat);
+  heelTab.position.set(HEEL - 0.03, SOLE_TOP + 0.85, 0);
+  heelTab.rotation.z = -0.18;
+  shoe.add(heelTab);
+
+  // ---- Laces ----
+  const laceMat = new THREE.MeshPhysicalMaterial({ color: c(LACES[0].color), roughness: 0.75 });
+  const eyeletMat = new THREE.MeshStandardMaterial({ color: c("#8A8F92"), metalness: 0.8, roughness: 0.35 });
+  const laceGroup = new THREE.Group();
+  shoe.add(laceGroup);
+
+  const eyeXs = [-0.62, -0.3, 0.02, 0.34, 0.66];
+  const OFF = 0.5; // theta offset from the top centre
+  const eyes = eyeXs.map(x => ({ L: S(x, Math.PI / 2 + OFF, 1.03), R: S(x, Math.PI / 2 - OFF, 1.03), T: S(x, Math.PI / 2, 1.06) }));
+  eyes.forEach(e => {
+    [e.L, e.R].forEach(p => {
+      const ring = new THREE.Mesh(new THREE.TorusGeometry(0.035, 0.012, 8, 16), eyeletMat);
+      ring.position.copy(p);
+      ring.rotation.x = Math.PI / 2;
+      shoe.add(ring);
+    });
+  });
+  for (let i = 0; i < eyes.length - 1; i++) {
+    const a = eyes[i], b = eyes[i + 1];
+    [[a.L, b.R], [a.R, b.L]].forEach(([pa, pb], k) => {
+      const mid = a.T.clone().lerp(b.T, 0.5); mid.y += 0.03 + k * 0.015;
+      const curve = new THREE.CatmullRomCurve3([pa, mid, pb]);
+      const tube = new THREE.Mesh(new THREE.TubeGeometry(curve, 20, 0.024, 8, false), laceMat);
+      tube.castShadow = true;
+      laceGroup.add(tube);
+    });
+  }
+  // Bar across the first row, then a bow
+  laceGroup.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3([eyes[0].L, eyes[0].T, eyes[0].R]), 16, 0.024, 8, false), laceMat));
+  const top = eyes[0].T.clone(); top.y += 0.02;
+  const V = (dx, dy, dz) => new THREE.Vector3(top.x + dx, top.y + dy, top.z + dz);
+  function loop(dir) {
+    const curve = new THREE.CatmullRomCurve3([V(0, 0, 0), V(-0.1, 0.12, dir * 0.16), V(0.04, 0.2, dir * 0.32), V(0.1, 0.06, dir * 0.12)], true);
+    return new THREE.Mesh(new THREE.TubeGeometry(curve, 40, 0.022, 8, true), laceMat);
+  }
+  function tail(dir) {
+    const curve = new THREE.CatmullRomCurve3([V(0, 0, 0), V(-0.04, -0.04, dir * 0.3), V(0.06, -0.38, dir * 0.5)]);
+    return new THREE.Mesh(new THREE.TubeGeometry(curve, 24, 0.022, 8, false), laceMat);
+  }
+  laceGroup.add(loop(1), loop(-1), tail(1), tail(-1));
+  const knot = new THREE.Mesh(new THREE.SphereGeometry(0.045, 16, 12), laceMat);
+  knot.position.copy(top);
+  laceGroup.add(knot);
+
+  // Center shoe on its group
+  shoe.position.set(0, 0, 0);
+
+  /* ---- Apply options ---- */
+  const tmp = new THREE.Color();
+  function tweenColor(mat, hex, prop = "color") {
+    const from = mat[prop].clone();
+    const to = c(hex);
+    if (reduceMotion) { mat[prop].copy(to); return; }
+    const start = performance.now();
+    const step = now => {
+      const k = Math.min(1, (now - start) / 320);
+      mat[prop].copy(from).lerp(to, k);
+      if (k < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+  applySole = () => {
+    const s = state.sole;
+    tweenColor(midMat, s.color);
+    tweenColor(outMat, s.outsole || s.color);
+    const clear = !!s.clear;
+    midMat.transparent = clear;
+    midMat.opacity = clear ? 0.72 : 1;
+    midMat.transmission = 0;
+    midMat.roughness = clear ? 0.12 : 0.55;
+    midMat.clearcoat = clear ? 1 : 0.2;
+    outMat.transparent = clear;
+    outMat.opacity = clear ? 0.8 : 1;
+    midMat.needsUpdate = outMat.needsUpdate = true;
+    pulse();
+  };
+  applyLace = () => {
+    const l = state.lace;
+    tweenColor(laceMat, l.color);
+    laceMat.metalness = l.reflective ? 0.65 : 0;
+    laceMat.roughness = l.reflective ? 0.28 : 0.75;
+    laceMat.needsUpdate = true;
+    pulse();
+  };
+
+  /* ---- Interaction: orbit ---- */
+  let yaw = 0.55, pitch = 0.3, dist = 8;
+  let tYaw = yaw, tPitch = pitch, tDist = dist;
+  let spinning = !reduceMotion;
+  const spinBtn = document.getElementById("spin");
+  spinBtn.setAttribute("aria-pressed", String(spinning));
+  const hint = document.getElementById("hint");
+  let dragging = false, lastX = 0, lastY = 0, pinch = null;
+  const pointers = new Map();
+
+  function setSpin(on) {
+    spinning = on;
+    spinBtn.setAttribute("aria-pressed", String(on));
+  }
+  function clearViews() {
+    document.querySelectorAll("[data-view]").forEach(b => b.setAttribute("aria-pressed", "false"));
+  }
+
+  stage.addEventListener("pointerdown", e => {
+    if (e.target.closest("button")) return;
+    pointers.set(e.pointerId, e);
+    stage.setPointerCapture(e.pointerId);
+    dragging = true; lastX = e.clientX; lastY = e.clientY;
+    setSpin(false); clearViews();
+    hint.classList.add("gone");
+  });
+  stage.addEventListener("pointermove", e => {
+    if (!pointers.has(e.pointerId)) return;
+    pointers.set(e.pointerId, e);
+    if (pointers.size === 2) {
+      const [p1, p2] = [...pointers.values()];
+      const d = Math.hypot(p1.clientX - p2.clientX, p1.clientY - p2.clientY);
+      if (pinch) tDist = THREE.MathUtils.clamp(tDist * (pinch / d), 4.2, 12);
+      pinch = d;
+      return;
+    }
+    if (!dragging) return;
+    tYaw -= (e.clientX - lastX) * 0.008;
+    tPitch = THREE.MathUtils.clamp(tPitch + (e.clientY - lastY) * 0.006, -1.2, 1.45);
+    lastX = e.clientX; lastY = e.clientY;
+  });
+  const endPtr = e => {
+    pointers.delete(e.pointerId);
+    if (pointers.size < 2) pinch = null;
+    if (pointers.size === 0) dragging = false;
+  };
+  stage.addEventListener("pointerup", endPtr);
+  stage.addEventListener("pointercancel", endPtr);
+  stage.addEventListener("wheel", e => {
+    e.preventDefault();
+    tDist = THREE.MathUtils.clamp(tDist * (1 + Math.sign(e.deltaY) * 0.08), 4.2, 12);
+  }, { passive: false });
+
+  // Keyboard: arrows rotate when the stage is focused
+  stage.tabIndex = 0;
+  stage.addEventListener("keydown", e => {
+    const map = { ArrowLeft: [0.25, 0], ArrowRight: [-0.25, 0], ArrowUp: [0, 0.15], ArrowDown: [0, -0.15] };
+    if (map[e.key]) {
+      e.preventDefault(); setSpin(false); clearViews();
+      tYaw += map[e.key][0];
+      tPitch = THREE.MathUtils.clamp(tPitch + map[e.key][1], -1.2, 1.45);
+      hint.classList.add("gone");
+    }
+  });
+
+  const VIEWS = { side: [0, 0.1], top: [0, 1.42], sole: [0, -1.15] };
+  document.querySelectorAll("[data-view]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      setSpin(false); clearViews();
+      btn.setAttribute("aria-pressed", "true");
+      const [y, p] = VIEWS[btn.dataset.view];
+      // shortest path in yaw
+      const twoPi = Math.PI * 2;
+      let d = ((y - tYaw) % twoPi + twoPi * 1.5) % twoPi - Math.PI;
+      tYaw += d; tPitch = p;
+      hint.classList.add("gone");
+    });
+  });
+  spinBtn.addEventListener("click", () => { clearViews(); setSpin(!spinning); if (spinning && tPitch < -0.2) tPitch = 0.32; });
+
+  // A small hop when an option changes: draws the eye to the shoe
+  let hop = 0;
+  function pulse() { if (!reduceMotion) hop = 1; }
+
+  function resize() {
+    const w = stage.clientWidth, h = stage.clientHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    // pull back a touch on narrow screens so the whole shoe fits
+    camera.fov = w / h < 0.9 ? 38 : 32;
+    camera.updateProjectionMatrix();
+  }
+  new ResizeObserver(resize).observe(stage);
+  resize();
+
+  const target = new THREE.Vector3(0, 0.75, 0);
+  let last = performance.now();
+  function frame(now) {
+    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    if (spinning) tYaw += dt * 0.35;
+    const k = 1 - Math.pow(0.0015, dt);
+    yaw += (tYaw - yaw) * k;
+    pitch += (tPitch - pitch) * k;
+    dist += (tDist - dist) * k;
+
+    hop = Math.max(0, hop - dt * 2.6);
+    const hopY = Math.sin((1 - hop) * Math.PI) * 0.18 * (hop > 0 ? 1 : 0);
+    shoe.position.y = hopY;
+    floor.material.opacity = 0.18 - hopY * 0.3;
+
+    camera.position.set(
+      target.x + dist * Math.cos(pitch) * Math.sin(yaw),
+      target.y + dist * Math.sin(pitch),
+      target.z + dist * Math.cos(pitch) * Math.cos(yaw)
+    );
+    camera.lookAt(target);
+    // hide the floor shadow when looking from below
+    floor.visible = pitch > -0.05;
+    renderer.render(scene, camera);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+  window.__stridewell = { state, total };
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "eval_name": "pastry-chef-photographer",
+  "prompt": "I'm Nadia Rahman. I spent 7 years as a pastry chef \u2014 Sugar & Salt in Lahore (2014\u20132018), then head pastry chef at Maison Lumi\u00e8re in Dubai (2018\u20132021). Since 2021 I've been a food photographer. I shot the cookbook \"Flour Moons\" (2023, 120 recipes) and Gulf Food Magazine put me in their \"30 to Watch\" list in 2024.\n\nSome things clients said:\n\"Nadia makes bread look like a sunrise.\" \u2014 Omar Farooq, owner, Crumb Bakery\n\"She understands food because she's made it.\" \u2014 Leila Haddad, editor, Flour Moons\n\"Every single shot was usable.\" \u2014 Sami Khan, marketing lead, Karak House\n\nI love early morning light in a kitchen. Build my portfolio, surprise me.",
+  "assertions": [
+    "The final site is one self-contained index.html that loads in headless Chromium with no console errors",
+    "The site has real light and depth (WebGL 3D or a lit canvas scene with shadows), not a flat or CSS-only layout",
+    "Every role, project, award, talk and degree given in the prompt has its own object, place or section in the site",
+    "The site has a visible discovery game or tracker whose finds are mostly story pieces, with a reward for finding everything",
+    "The site has at least three hidden Easter eggs, each with a touch-device trigger",
+    "The site has a light or mood control with at least two presets",
+    "The site has sound with a visible on/off toggle",
+    "The site has a plain, readable fallback page containing all the person's content",
+    "The site invents no achievement, number, quote, employer or credential that the prompt did not give",
+    "At 390x844 the site has no horizontal scroll and its controls fit on screen",
+    "The run's notes report a flicker audit with under 0.05% flagged pixels in every audited view",
+    "The run's notes report a real-visitor walkthrough with real mouse/keyboard/touch input, all steps passing",
+    "The run's notes report a wow-review score of at least 15/18",
+    "All three testimonials appear word for word with the exact name, role and company given",
+    "Hover/touch effects suit their materials (e.g. dough, flour, paper prints, liquid), per the run's notes and screenshots"
+  ]
+}

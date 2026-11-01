@@ -1,0 +1,9 @@
+{
+  "eval_name": "bare-trigger-asks-one-question",
+  "prompt": "Make me a 3D portfolio.",
+  "assertions": [
+    "The first reply asks exactly one question",
+    "The first reply does not ask the user to pick a theme, metaphor, concept or category",
+    "The first reply does not start building or propose worlds yet"
+  ]
+}

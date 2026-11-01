@@ -1,0 +1,21 @@
+{
+  "eval_name": "architect-avoids-room-default",
+  "prompt": "I'm Zain Malik, an architect with 12 years of practice. Five built projects I'm proud of: Ravi Riverside Library (2016), Gulberg Courtyard House (2018), Thar Solar School (2020 \u2014 won Gold at the Pakistan Green Building Awards 2021), Hunza Guest Lodge (2022) and Model Town Clinic (2024). I sketch every building in pencil first, always in a grey Moleskine. My visitors are clients and competition juries. Make my portfolio something they explore, not scroll past.",
+  "assertions": [
+    "The final site is one self-contained index.html that loads in headless Chromium with no console errors",
+    "The site has real light and depth (WebGL 3D or a lit canvas scene with shadows), not a flat or CSS-only layout",
+    "Every role, project, award, talk and degree given in the prompt has its own object, place or section in the site",
+    "The site has a visible discovery game or tracker whose finds are mostly story pieces, with a reward for finding everything",
+    "The site has at least three hidden Easter eggs, each with a touch-device trigger",
+    "The site has a light or mood control with at least two presets",
+    "The site has sound with a visible on/off toggle",
+    "The site has a plain, readable fallback page containing all the person's content",
+    "The site invents no achievement, number, quote, employer or credential that the prompt did not give",
+    "At 390x844 the site has no horizontal scroll and its controls fit on screen",
+    "The run's notes report a flicker audit with under 0.05% flagged pixels in every audited view",
+    "The run's notes report a real-visitor walkthrough with real mouse/keyboard/touch input, all steps passing",
+    "The run's notes report a wow-review score of at least 15/18",
+    "All five buildings and the Gold award each have their own object or place",
+    "The world is not one of the skill's listed defaults (floating disc island, isometric room cutaway, top-down desk, bookshelf of project books, planet with buildings) unless the notes justify it from the person's own inventory"
+  ]
+}

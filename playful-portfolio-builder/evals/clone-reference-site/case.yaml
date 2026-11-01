@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: clone-reference-site
+expected_outcome: |
+  The run takes techniques or feelings from the referenced site but does not clone its world, layout or signature mechanic.

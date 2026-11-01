@@ -1,0 +1,110 @@
+[
+  {
+    "name": "fintech-backend-engineer",
+    "kind": "build",
+    "runs": 3,
+    "baseline": true
+  },
+  {
+    "name": "fresh-grad-thin-content",
+    "kind": "build",
+    "runs": null,
+    "baseline": true
+  },
+  {
+    "name": "pastry-chef-photographer",
+    "kind": "build",
+    "runs": null,
+    "baseline": true
+  },
+  {
+    "name": "architect-avoids-room-default",
+    "kind": "build",
+    "runs": null,
+    "baseline": true
+  },
+  {
+    "name": "sound-designer",
+    "kind": "build",
+    "runs": null,
+    "baseline": true
+  },
+  {
+    "name": "pm-recruiter-scannable",
+    "kind": "build",
+    "runs": null,
+    "baseline": true
+  },
+  {
+    "name": "two-people-same-chat",
+    "kind": "build",
+    "runs": null,
+    "baseline": null
+  },
+  {
+    "name": "clone-reference-site",
+    "kind": "build",
+    "runs": null,
+    "baseline": null
+  },
+  {
+    "name": "pasted-content-verbatim",
+    "kind": "build",
+    "runs": null,
+    "baseline": null
+  },
+  {
+    "name": "sister-attribution",
+    "kind": "build",
+    "runs": null,
+    "baseline": null
+  },
+  {
+    "name": "must-not-show-employer",
+    "kind": "build",
+    "runs": null,
+    "baseline": null
+  },
+  {
+    "name": "bare-trigger-asks-one-question",
+    "kind": "first-turn",
+    "runs": null,
+    "baseline": null
+  },
+  {
+    "name": "unattended-build",
+    "kind": "build",
+    "runs": null,
+    "baseline": null
+  },
+  {
+    "name": "feedback-round",
+    "kind": "feedback",
+    "runs": null,
+    "baseline": null
+  },
+  {
+    "name": "deploy-asks-first",
+    "kind": "deploy",
+    "runs": null,
+    "baseline": null
+  },
+  {
+    "name": "no-trigger-plain-resume-site",
+    "kind": "trigger",
+    "runs": null,
+    "baseline": null
+  },
+  {
+    "name": "no-trigger-copy-review",
+    "kind": "trigger",
+    "runs": null,
+    "baseline": null
+  },
+  {
+    "name": "no-trigger-product-configurator",
+    "kind": "trigger",
+    "runs": null,
+    "baseline": null
+  }
+]

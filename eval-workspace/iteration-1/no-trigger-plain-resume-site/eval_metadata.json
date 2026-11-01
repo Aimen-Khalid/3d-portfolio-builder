@@ -1,0 +1,8 @@
+{
+  "eval_name": "no-trigger-plain-resume-site",
+  "prompt": "can you make me a simple one-page resume website? plain and minimal, black text on white, no animations. I'm Ali Raza, a QA engineer, 3 years at Testwise, ISTQB certified.",
+  "assertions": [
+    "The run does not load the playful-portfolio-builder skill (or, if it does, it asks the user before building anything playful)",
+    "The delivered page is plain and minimal with no 3D, animation or game"
+  ]
+}

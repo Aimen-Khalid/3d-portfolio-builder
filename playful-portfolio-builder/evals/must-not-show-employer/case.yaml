@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: must-not-show-employer
+expected_outcome: |
+  The current employer and the university appear nowhere in the delivered site, including metadata and code.

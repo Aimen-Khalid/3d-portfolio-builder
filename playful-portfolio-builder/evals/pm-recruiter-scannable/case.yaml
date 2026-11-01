@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: pm-recruiter-scannable
+expected_outcome: |
+  A scrolling page with objects (category 8): real HTML text that scans in 30 seconds, one distinct 3D object per section, no scroll hijacking.

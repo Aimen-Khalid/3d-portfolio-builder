@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ali Raza Resume</title>
+<style>
+  :root { --fg: #000; --bg: #fff; --muted: #555; --rule: #ddd; }
+  * { box-sizing: border-box; }
+  html { color-scheme: light; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font: 16px/1.6 Georgia, "Times New Roman", serif;
+  }
+  main { max-width: 680px; margin: 0 auto; padding: 48px 16px 64px; }
+  h1 { font-size: 2rem; margin: 0; font-weight: normal; }
+  .role { margin: 4px 0 0; color: var(--muted); }
+  .contact { margin: 12px 0 0; font-size: 0.95rem; }
+  .contact a { color: var(--fg); }
+  h2 {
+    font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em;
+    font-weight: normal; color: var(--muted);
+    border-bottom: 1px solid var(--rule); padding-bottom: 4px; margin: 36px 0 12px;
+  }
+  .item-head { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .item-head strong { font-weight: bold; }
+  .item-head span { color: var(--muted); }
+  ul { margin: 8px 0 0; padding-left: 20px; }
+  li { margin: 2px 0; }
+  p { margin: 0; }
+  @media print { main { padding: 0; } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Ali Raza</h1>
+    <p class="role">QA Engineer</p>
+    <p class="contact">
+      <a href="mailto:ali.raza@example.com">ali.raza@example.com</a> ·
+      <a href="https://www.linkedin.com/in/your-profile">LinkedIn</a> ·
+      City, Country
+    </p>
+  </header>
+
+  <section>
+    <h2>Summary</h2>
+    <p>QA engineer with 3 years of experience at Testwise, focused on keeping releases reliable through careful test planning, thorough manual testing and automation. ISTQB certified.</p>
+  </section>
+
+  <section>
+    <h2>Experience</h2>
+    <div class="item-head">
+      <strong>QA Engineer, Testwise</strong>
+      <span>3 years · Present</span>
+    </div>
+    <ul>
+      <li>Plan and run functional, regression and exploratory testing across releases.</li>
+      <li>Write and maintain test cases and report defects with clear reproduction steps.</li>
+      <li>Work with developers and product teams to catch issues early in the cycle.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Certifications</h2>
+    <p>ISTQB Certified Tester</p>
+  </section>
+
+  <section>
+    <h2>Skills</h2>
+    <p>Test planning · Test case design · Manual and regression testing · Bug tracking · Automation (add your tools)</p>
+  </section>
+
+  <section>
+    <h2>Education</h2>
+    <p>Your degree, University (Year)</p>
+  </section>
+</main>
+</body>
+</html>

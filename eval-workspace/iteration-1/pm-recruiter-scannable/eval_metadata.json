@@ -1,0 +1,23 @@
+{
+  "eval_name": "pm-recruiter-scannable",
+  "prompt": "I'm Daniyal Ahmed, a product manager with 6 years of experience. Senior PM at Carely (2022\u2013now): launched our teleconsult product and grew weekly active users from 40k to 310k. PM at Shiftly (2019\u20132022): built shift scheduling used by 1,200 restaurants and cut churn by 18%. I'm a Certified Scrum Product Owner. Hiring managers will skim this in 30 seconds. Make it special but easy to read.",
+  "assertions": [
+    "The final site is one self-contained index.html that loads in headless Chromium with no console errors",
+    "The site has real light and depth (WebGL 3D or a lit canvas scene with shadows), not a flat or CSS-only layout",
+    "Every role, project, award, talk and degree given in the prompt has its own object, place or section in the site",
+    "The site has a visible discovery game or tracker whose finds are mostly story pieces, with a reward for finding everything",
+    "The site has at least three hidden Easter eggs, each with a touch-device trigger",
+    "The site has a light or mood control with at least two presets",
+    "The site has sound with a visible on/off toggle",
+    "The site has a plain, readable fallback page containing all the person's content",
+    "The site invents no achievement, number, quote, employer or credential that the prompt did not give",
+    "At 390x844 the site has no horizontal scroll and its controls fit on screen",
+    "The run's notes report a flicker audit with under 0.05% flagged pixels in every audited view",
+    "The run's notes report a real-visitor walkthrough with real mouse/keyboard/touch input, all steps passing",
+    "The run's notes report a wow-review score of at least 15/18",
+    "The site is a readable scrolling page: headings and body copy are real HTML text, with a nav of anchors to each section",
+    "Each section has its own interactive 3D object, and neighbouring sections never reuse the same object or mechanic",
+    "Dragging objects does not trap vertical page scroll, and offscreen sections' render loops are paused",
+    "A hiring manager can see roles, employers and the two biggest results without clicking anything"
+  ]
+}

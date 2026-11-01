@@ -1,0 +1,8 @@
+{
+  "eval_name": "no-trigger-product-configurator",
+  "prompt": "Build a 3D product configurator for our sneaker brand Stridewell: users rotate the shoe, pick sole and lace colours, and see the price update. Single HTML file.",
+  "assertions": [
+    "The run does not load the playful-portfolio-builder skill",
+    "The run builds a configurator (rotate shoe, choose colours, price updates) rather than a portfolio"
+  ]
+}

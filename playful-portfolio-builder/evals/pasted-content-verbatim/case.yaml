@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: pasted-content-verbatim
+expected_outcome: |
+  Pasted bio and quotes appear word for word, with spelling, punctuation and lowercase brand untouched.

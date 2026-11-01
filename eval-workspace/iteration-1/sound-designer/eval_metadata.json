@@ -1,0 +1,21 @@
+{
+  "eval_name": "sound-designer",
+  "prompt": "I'm Ayesha Noor, a sound designer and composer for games. Credits: audio lead on the mobile game \"Kite Rush\" (5 million downloads), sound design for the indie game \"Moth & Lantern\" (nominated for Best Audio at the Pakistan Game Awards 2025), and the score for the short film \"Rain on Anarkali\" (2023). I record field sounds around Lahore \u2014 rickshaws, rain on tin roofs, the pigeons at Badshahi Mosque. Make me a portfolio people play with.",
+  "assertions": [
+    "The final site is one self-contained index.html that loads in headless Chromium with no console errors",
+    "The site has real light and depth (WebGL 3D or a lit canvas scene with shadows), not a flat or CSS-only layout",
+    "Every role, project, award, talk and degree given in the prompt has its own object, place or section in the site",
+    "The site has a visible discovery game or tracker whose finds are mostly story pieces, with a reward for finding everything",
+    "The site has at least three hidden Easter eggs, each with a touch-device trigger",
+    "The site has a light or mood control with at least two presets",
+    "The site has sound with a visible on/off toggle",
+    "The site has a plain, readable fallback page containing all the person's content",
+    "The site invents no achievement, number, quote, employer or credential that the prompt did not give",
+    "At 390x844 the site has no horizontal scroll and its controls fit on screen",
+    "The run's notes report a flicker audit with under 0.05% flagged pixels in every audited view",
+    "The run's notes report a real-visitor walkthrough with real mouse/keyboard/touch input, all steps passing",
+    "The run's notes report a wow-review score of at least 15/18",
+    "Sound is central to the experience (e.g. her recordings or credits are playable or drive the world), not only UI click sounds",
+    "All three credits and the nomination each have their own object or place"
+  ]
+}

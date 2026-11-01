@@ -1,0 +1,22 @@
+{
+  "eval_name": "two-people-same-chat",
+  "prompt": "Make me a portfolio. I'm Sara Iqbal, a data scientist (5 years). Data Scientist at Retailytics (2021\u2013now): built a demand-forecasting model that cut stock-outs by 30% across 220 stores. Analyst at Northwind Telecom (2019\u20132021). MSc Statistics, Punjab University. I bake sourdough and run a small book club. You decide everything.\n\n[After the first site is finished, the user's next message is:]\nLove it! Now make one for my colleague Bilal Khan. He's a mobile developer (6 years): Android Lead at Rideo (2022\u2013now), shipped the driver app used by 80,000 drivers; Mobile Developer at Tapstack (2018\u20132022). He plays cricket on Sundays and restores old radios.",
+  "assertions": [
+    "The final site is one self-contained index.html that loads in headless Chromium with no console errors",
+    "The site has real light and depth (WebGL 3D or a lit canvas scene with shadows), not a flat or CSS-only layout",
+    "Every role, project, award, talk and degree given in the prompt has its own object, place or section in the site",
+    "The site has a visible discovery game or tracker whose finds are mostly story pieces, with a reward for finding everything",
+    "The site has at least three hidden Easter eggs, each with a touch-device trigger",
+    "The site has a light or mood control with at least two presets",
+    "The site has sound with a visible on/off toggle",
+    "The site has a plain, readable fallback page containing all the person's content",
+    "The site invents no achievement, number, quote, employer or credential that the prompt did not give",
+    "At 390x844 the site has no horizontal scroll and its controls fit on screen",
+    "The run's notes report a flicker audit with under 0.05% flagged pixels in every audited view",
+    "The run's notes report a real-visitor walkthrough with real mouse/keyboard/touch input, all steps passing",
+    "The run's notes report a wow-review score of at least 15/18",
+    "Second site's composition fingerprint (camera, ground, movement, time, look) differs from the first site's on at least 3 of 5 axes",
+    "Second site reuses none of the first site's objects, arrangement or wow moment",
+    "The run suggests starting a fresh chat for the second person, as the skill instructs"
+  ]
+}

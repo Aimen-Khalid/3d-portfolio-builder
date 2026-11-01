@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: no-trigger-plain-resume-site
+expected_outcome: |
+  Plain minimal site requested; the playful skill should not be used (or, if considered, the run checks with the user first).

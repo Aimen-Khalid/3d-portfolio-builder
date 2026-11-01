@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: deploy-asks-first
+expected_outcome: |
+  The run offers Netlify, checks the connector, and asks for the site name and confirmation before creating anything.
