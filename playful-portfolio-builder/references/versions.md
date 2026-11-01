@@ -2,7 +2,9 @@
 
 Read this **after** the person has picked a world (Step 3, before the concept sheet) or when you are stuck on how to make something feel physical. Do **not** read it while proposing worlds in Step 2: knowing these builds too early pulls every proposal toward a desk, a room or a cupboard.
 
-All four were built for one person (Aimen Khalid, an engineering manager in Lahore) as her own portfolio. They show the quality bar and the techniques. **Their worlds, objects, palettes, layouts and payoffs belong to her. Never reuse them for anyone else**, even someone with a similar job or city. Learn the lesson, not the look.
+All four were built for one person (Aimen Khalid, an engineering manager in Lahore) as her own portfolio. They show the quality bar and the techniques. **Their identities belong to her: never reskin them for anyone else**, even someone with a similar job or city. Learn the lesson, not the look.
+
+Sharing a category or a technique is fine and expected (a lit surface seen from above, light through a window, objects that lift and turn over, a game tracker). What isn't fine is reusing a build's specific objects, their arrangement, or its wow moment with new labels on top. The test: with the person's name removed, could the site still only belong to them?
 
 | Build | Live | Category |
 |---|---|---|
@@ -25,7 +27,7 @@ A top-down desk under one low sun falling through a carved lattice screen. The t
 - **The payoff gathers the world.** The scene shakes, every object arcs into a container, it wobbles, the résumé rises out with Download and Put it back, and Put it back sends everything home.
 - **The game:** 10 things to find, 3 secrets (type the name / tap every flower on touch, knock five times for a time-lapse through the day, clink the glass three times), and a polaroid reward.
 
-**Do not reuse:** the walnut desk, block-printed runner, chai glass, jasmine garland, lattice screen, picnic basket, prayer-time presets, or any of her objects and their arrangement.
+**Her identity, not to be reskinned:** the walnut desk with block-printed runner, chai glass and jasmine garland, her carved lattice, the picnic-basket payoff, the prayer-time presets, and her objects and their arrangement. (Light through a window or screen, a basket or box payoff built around someone else's story, or time-based light presets that mean something to another person are all techniques, and fine.)
 
 ## Badge rail: tactile playground
 
@@ -37,7 +39,7 @@ Lanyard badges hanging on a rail, one per milestone.
 - **A visitor object you personalise** (your own badge), which makes the visitor part of the world.
 - **A payoff that packs everything into one container** that shakes and pops out the résumé.
 
-**Do not reuse:** lanyard badges on a rail, the kalimba melody, her event badges.
+**Her identity, not to be reskinned:** lanyard badges on a rail, the kalimba melody, her event badges.
 
 ## Cozy room: walk-in space
 
@@ -48,7 +50,7 @@ An orbitable 3D room where each piece of furniture is a section: a desk with a l
 - **Small 3D props carry personality** (a DNA model, a stack of records, a sleeping cat).
 - **A payoff that shakes the whole room** and then puts it back.
 
-**Do not reuse:** the isometric room layout, corkboard, record player, wardrobe, shelf of trophies.
+**Her identity, not to be reskinned:** her isometric room with its corkboard, record player, wardrobe and trophy shelf.
 
 ## Cupboard: walk-in space
 
@@ -59,7 +61,7 @@ A chest of drawers you open, with a companion cat.
 - **A companion with personality** that watches the cursor and causes mischief the visitor fixes.
 - **A lamp that relights everything** (night mode where brass catches the light), and **tilt** from the mouse or the phone's motion.
 
-**Do not reuse:** the chest of drawers, the cat and its tricks.
+**Her identity, not to be reskinned:** her chest of drawers and the cat with its tricks.
 
 ## The common thread
 

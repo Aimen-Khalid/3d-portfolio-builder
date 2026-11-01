@@ -1,6 +1,6 @@
 # Lift to the centre and turn over
 
-Read this when building **depth on click**: an object rises toward the visitor, settles at the centre of the screen, and turns over (or opens) on a second click. Every site needs this, in some form that fits its world.
+Read this when building **depth when you open something**. The proven default: an object rises toward the visitor, settles at the centre of the screen, and turns over (or opens) on a second click. Every site needs depth on opening, in whatever form fits its world: the camera flying in, an object unfolding, a container unpacking, or this lift-and-turn.
 
 ## Holding (2D lit scenes)
 
@@ -48,6 +48,6 @@ In Three.js: on click, tween the object (or the camera) so the object sits at th
 
 ## Captions and controls
 
-- Details live **on the object** first; the caption panel adds context. Desktop: a glass panel on the right. Portrait: a bottom sheet. The held object is fitted to the space left over.
+- Details live **on the object** first; a caption can add context. A layout that works well: a glass panel on the right on desktop, a bottom sheet on phones, with the held object fitted to the space left over. Design what suits the world.
 - Close with a button, Escape or a click outside. A visible "← Back" pill while something is held.
 - `prefers-reduced-motion`: jump to the end state with a short fade.

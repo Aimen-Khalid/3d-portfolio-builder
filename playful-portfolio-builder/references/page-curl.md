@@ -4,7 +4,7 @@ Read this when the world has anything with pages (books, notebooks, scrapbooks, 
 
 ## Idea
 
-The turning page is a grid mesh rebuilt on the CPU every frame of the turn and drawn **into the same G-buffer** as everything else, so the scene's light catches it, a gobo pattern slides over it and it casts a real shadow. The front face shows the old page, the back face the new one. While the curl runs, the flat book keeps showing the old page on the turning side.
+The turning page is a grid mesh rebuilt on the CPU every frame of the turn. In a lit scene it is drawn **into the same G-buffer** as everything else, so the scene's light catches it, a gobo pattern slides over it and it casts a real shadow. In Three.js, use the same vertex math on a `BufferGeometry` with a double-sided material and shadows on. Any approach is fine as long as the page really bends and is lit. The front face shows the old page, the back face the new one. While the curl runs, the flat book keeps showing the old page on the turning side.
 
 ## Mesh
 

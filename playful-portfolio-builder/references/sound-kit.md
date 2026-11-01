@@ -5,7 +5,8 @@ Read this when adding sound. Every action gets a sound that matches what physica
 ## Rules
 
 - Oscillators plus shaped, filtered noise for physical sounds. Short envelopes, no constant hiss, everything through a compressor.
-- Musical tones for UI and discoveries (chimes, a small fanfare for rewards). A pentatonic theme (kalimba, marimba, music box) turns repeated interactions into a melody.
+- Musical tones for UI and discoveries (chimes, a small fanfare for rewards). A pentatonic theme (kalimba, marimba, music box) is one good way to turn repeated interactions into a melody; pick a sound palette that suits the world.
+- The recipes below are tuned starting points; change them freely.
 - Schedule slightly ahead (~10-30 ms). Throttle rapid sounds (typing scratch: one per 40 ms).
 - Start the AudioContext on the first gesture. A visible toggle, remembered per visitor in localStorage (try/catch).
 - Animal sounds must be believable: a short pitch-bent meow beats a fake purr.

@@ -1,11 +1,14 @@
 # Game tracker, secrets and reward
 
-Read this when building the game loop: the "✦ n of N found" tracker, its checklist dropdown, the Easter eggs and the reward.
+Read this when building the reason to keep exploring: a way to track progress, the Easter eggs and the reward.
 
-## Shape
+This is a proven default, not the only shape. Any mechanic that suits the world works (stamps filling a passport, stars lighting up in a sky, pages filling a scrapbook, buildings lighting up in a town), as long as progress is visible, the things to find are mostly the person's story, and finishing pays off.
 
-- A glass pill top-left: `✦ 3 of 10 found` (compact `3/10` on phones), with `· 1 secret` once any secret is found.
-- Clicking it opens a dropdown with two lists: **Things to find** (one per object or action, written as what the visitor did: "Turned the ID badge over") and **Secrets** (cryptic hints shown as `?` until found, then replaced by what was found).
+## The default shape
+
+- A glass pill (top-left works well): `✦ 3 of 10 found` (compact `3/10` on phones), with `· 1 secret` once any secret is found.
+- Clicking it opens a dropdown with two lists: **Things to find** and **Secrets** (cryptic hints shown as `?` until found, then replaced by what was found).
+- **Things to find are mostly the story pieces** (each role, project, award, talk, degree), written as what the visitor did: "Read about the onboarding redesign", "Turned the ID badge over". Finishing the list should mean the visitor has seen the whole career. Pure-fun finds belong in Secrets.
 - Each discovery: a chime, the star bumps, and a toast `✦ Found <what> · n of N`.
 - Finding every main item plays the **reward** once (a polaroid that drops onto the scene with a thank-you, an unlocked light mode, a hidden room, a song). Choose a reward that is personal to the site's owner.
 - Progress is remembered per visitor in localStorage, inside try/catch.
