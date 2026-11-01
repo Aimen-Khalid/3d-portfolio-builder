@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: scroll-page-for-recruiters
+expected_outcome: |
+  A single self-contained index.html that is a scrolling page with sections and a nav,
+  not a single full-screen scene. The hero carries the signature interactive 3D object,
+  and each section below has its own, different interactive object made for its content,
+  with headings and body text as real HTML. All content comes from the prompt, with no
+  invented achievements, and nothing from the reference builds (lanyard badges, card stack,
+  case-file drawer, visitor badge) is reused.

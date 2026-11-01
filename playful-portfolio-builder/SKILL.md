@@ -1,11 +1,11 @@
 ---
 name: "playful-portfolio-builder"
-description: "Build a full-screen, interactive, physical-feeling portfolio website (a lit desk, a walk-in space, a miniature world, a book...) that people play with instead of read. Use when someone wants a playful, explorable, wow-factor portfolio rather than a standard scrolling site."
+description: "Build an interactive, physical-feeling portfolio website that people play with instead of just read: a full-screen world (a lit desk, a walk-in space, a miniature world, a book...) or a scrolling page where the hero and every section carry their own real 3D object. Use when someone wants a playful, explorable, wow-factor portfolio rather than a flat, templated site."
 ---
 
 # Playful Portfolio Builder
 
-Build a portfolio that people *play with* instead of read: a full-screen, physical-feeling world where every object holds a piece of the person's story, with real light, sound, a game to complete, hidden secrets and a big payoff moment. Anyone can use this skill: the person gives their own story and content, and you design and build a world that could only be theirs.
+Build a portfolio that people *play with* instead of read: a physical-feeling world, either one full-screen scene or a scrolling page of lit 3D objects, where every object holds a piece of the person's story, with real light, sound, a game to complete, hidden secrets and a big payoff moment. Anyone can use this skill: the person gives their own story and content, and you design and build a world that could only be theirs.
 
 The goal: every visitor goes "wow" in the first five seconds and keeps exploring for five minutes.
 
@@ -99,15 +99,17 @@ Only now propose concepts. Do not read `references/versions.md` or the quality-b
 1. **Lit flat-lay** - any scene seen from above under real, changing light: a desk, a picnic, a kitchen counter, a workbench, a vanity, a travel map table.
 2. **Walk-in spaces** - any 3D place you explore: a room, a studio, a café, a library, a greenhouse, a train carriage, a spaceship, a cupboard.
 3. **Miniature worlds** - tiny scenes you look down into: an island, a town, a planet, a board game, a snow globe. Each building or landmark is a project.
-4. **Scroll-driven stories** - scrolling drives the story: a product being made, a river journey, day turning to night, a rocket launch, a hero object transforming.
+4. **Scroll-driven stories** - scrolling drives one continuous story: a product being made, a river journey, day turning to night, a rocket launch, a hero object transforming.
 5. **Tactile playground** - physics and squish: jelly, balloons, magnets, pinball, things on strings, badges on a rail.
 6. **Paper and print** - books in every form plus scrapbooks, zines, passports, comics, letters, postcards. Real page curls are required.
 7. **Elemental worlds** - built from a medium rather than objects: underwater, night sky and constellations, clouds, deep space.
+8. **Scrolling page with objects** - a readable scrolling site (nav, sections, real HTML text) where the hero holds the signature 3D piece and every section has its own interactive 3D object made for that content: a stack of cards to flip through for kind words, a drawer of files for projects, a shelf of trophies for awards, a printer that makes the visitor a badge for contact. Unlike a scroll-driven story, each section is its own object rather than one story that transforms. It suits people whose visitors (recruiters, clients) want to scan fast, and anyone who says they want something special but still easy to read. Read "Scrolling page with objects" under Step 4.
 
 These are starting points, not a closed list. If a person needs a mode that isn't here, invent it.
 
 How to propose:
 - Suggest **2-3 worlds built from what they told you**, each labelled with its category. Give each a short name, a one-line pitch, how their content maps to objects, the lighting idea, the wow moment, and *why it fits them* ("because you said you collect film cameras...").
+- Spread the proposals across categories rather than offering three versions of one scene. When the person's visitors need to scan quickly (recruiters, clients) or there is a lot of content, make one of the proposals a scrolling page with objects.
 - Then ask, as its own question: **"Would you like a different category, a mix, or something specific of your own?"**
 - **Mixing:** usually one main category with one accent works best (e.g. a walk-in space with jelly objects, a flat-lay with a curling book); more tends to muddy the experience, so only go further when the idea clearly holds together.
 - Do not default to the reference builds' worlds (a desk, a cupboard, a room, a badge rail) unless they genuinely fit this person, and even then make the world unmistakably theirs.
@@ -122,7 +124,7 @@ Now read `references/versions.md` to understand the bar (techniques only, never 
 
 Then write a short sheet and get a yes:
 - World + category (+ accent) + one-line pitch
-- What the visitor sees first, and how they move around
+- What the visitor sees first, and how they move around (for a scrolling page: the hero object, then each section in order with its object)
 - Object → content map: one visible object per key part of the story (each role, major project, award, talk, degree). A book, folder or drawer can hold extra detail, but the headlines are easy to see and reach (from the opening view, or early in a scroll story).
 - The signature wow moment (the payoff)
 - The game loop: the list of things to find (mostly the story pieces themselves) and the reward
@@ -164,6 +166,19 @@ The person should watch their site come to life, not wait for a finished file.
 8. **Companions (when they fit).** A cat, dog, robot or plant that reacts: pet it, it gets startled during big events, it causes mischief the visitor fixes. Keep it charming (no growing in size, no black speech boxes); it faces the way it moves and passes in front of/behind objects correctly.
 9. **A plain page.** An accessible, readable fallback with all the content, plus a WebGL-failure fallback.
 
+### Scrolling page with objects
+
+When the world is a scrolling page (category 8, or any mix that scrolls through sections), everything above still applies, section by section. What changes:
+
+- **The hero is the signature.** The first screen carries the biggest, best-lit, most interactive object, with the person's name and role as real HTML beside it. It must earn the "wow in five seconds" on its own.
+- **One object per section, each different.** Every section gets its own 3D object built for its content, with its own interaction (flip through, pull out, spin, stack, print). Neighbouring sections never reuse the same object or mechanic. A plain text block between two objects is fine; a section with no object of its own is not.
+- **Text stays real HTML.** Headings, captions and body copy sit beside or over the canvas as DOM, so the page reads and scans without touching anything. The objects hold the depth: open a file to read the full case, flip a card to see who said it.
+- **The page has one look.** One palette, one type system, one lighting language across every section's scene, so it reads as one world rather than a set of demos. Light can still change across the page (morning at the top, night at the footer) as long as it moves smoothly with the scroll or the light control.
+- **Several scenes, one budget.** Browsers cap live WebGL contexts (often around 8-16) and every scene costs battery. Prefer one shared renderer drawing each section's scene into its own region (scissor/viewport), or one renderer per section that is created when the section nears the viewport and paused when it leaves (IntersectionObserver). Never run every scene's loop at once.
+- **Nothing hijacks the scroll.** Dragging an object must not trap the page: use horizontal drags or a clear handle for objects, let vertical swipes scroll on touch, and drive card stacks and carousels with explicit buttons, keys and index state.
+- **The game and the wow moment span the page.** The tracker stays visible as the visitor scrolls (a small fixed pill), finds come from every section, and the wow moment can gather objects from the whole page into one place, then Put it back returns each to its own section.
+- **Navigation is real.** A plain nav with anchors to each section, so a visitor can jump straight to projects.
+
 ### HTML-in-Canvas (make it a signature)
 
 Render real HTML content into the scene so it is lit, shadowed and distorted like a physical surface, while staying real DOM for selection, typing, links and screen readers. Then go beyond static text with effects true to the surface's material. Read `references/html-in-canvas.md` and `references/material-effects.md`.
@@ -182,7 +197,7 @@ People will share references (Instagram posts, X posts, sites). **They are inspi
 
 **Format**
 - A single self-contained HTML file: inline CSS/JS, fonts and images as data URIs, pinned CDN versions if a library is used. Easy to publish as an artifact or drop on any static host.
-- The scene is the site: usually a full-screen canvas (100vw x 100dvh), or a full-bleed scroll for scroll-driven stories. Keep the person's name and role always visible. A layout that works well: small glass controls top-right (light, sound, plain page, links to other versions) and the tracker top-left; design the UI to suit the world.
+- The scene is the site: a full-screen canvas (100vw x 100dvh) for a single world, a full-bleed scroll for scroll-driven stories, or a scrolling page of sections each with its own 3D object. Keep the person's name and role always visible (on a scrolling page, in the hero and a small fixed header). A layout that works well: small glass controls top-right (light, sound, plain page, links to other versions) and the tracker top-left; design the UI to suit the world.
 
 **Objects and content**
 - Details live on the objects (flip the badge, open the letter, curl the page). Any caption or panel closes with a button, Escape or clicking outside.
@@ -222,7 +237,7 @@ Flicker is the fastest way to make a polished world feel broken, and it gets wor
 
 ## Step 5 - Verify before handing over
 
-- Headless Chromium (Playwright, SwiftShader WebGL) at 1440x900 and 390x844. Screenshot the default view, every light preset, each opened and flipped object, the wow sequence (mid-flight and after Put it back), the tracker menu, each Easter egg, and every hover effect.
+- Headless Chromium (Playwright, SwiftShader WebGL) at 1440x900 and 390x844. Screenshot the default view (on a scrolling page, every section as it sits in the viewport, plus one full-page shot), every light preset, each opened and flipped object, the wow sequence (mid-flight and after Put it back), the tracker menu, each Easter egg, and every hover effect.
 - SwiftShader is slow: if animations don't reach the state you need, slow the page's clock (wrap `performance.now`) rather than just waiting longer, and expose a small debug API (`window.__site.focus(id)`, `.flip(id)`, `.light(key)`, `.pause(true)`, `.step(dt, n)`, ...) to reach states directly. Pause the live render loop while screenshotting so the page isn't busy rendering.
 - **The debug API calls the same functions real input calls** (the same click handler, the same `found()`), so counters and state match. It is only a way to reach states for screenshots, never proof that something works.
 - Look at every screenshot critically: overlaps, overflowing text, flat-looking areas, controls crowding on mobile, effects that don't suit their material, object backs that don't look real.
@@ -240,7 +255,8 @@ Debug shortcuts can hide a site that ignores every click (it happened in testing
 6. **Trigger every Easter egg** by its real input (keys on desktop, taps on touch) and screenshot each one.
 7. **Run the wow moment** and **Put it back**; the scene is restored exactly.
 8. **Repeat on a 390x844 touch context** with taps: at least one object of each kind, the controls, one secret and the wow moment.
-9. Watch the console the whole time.
+9. **On a scrolling page:** scroll from top to bottom with the mouse wheel and with touch swipes. Each section's object wakes up as it arrives and pauses after it leaves (log the number of live render loops and WebGL contexts at each section), dragging an object never traps the page scroll, every nav link lands on its section, and the tracker stays reachable the whole way down.
+10. Watch the console the whole time.
 
 Log each step with pass or fail in your notes. Fix every failure and walk through again until all steps pass.
 
@@ -252,7 +268,7 @@ Finally, go back through this file and check the site against it, item by item: 
 
 Screenshots can't show flicker, so audit for it directly with the core below inside `page.evaluate`. It freezes the scene's clock, then renders the same view many times while nudging the camera by sub-millimetre steps. Smooth motion changes a pixel in one direction; **z-fighting and transparent-sort popping make a pixel flip back and forth.** It flags pixels that reverse direction three or more times, names the meshes under them with a raycast, and saves a red heatmap per view. Fix those meshes and re-run until clean.
 
-- Run it on: the default overview in day and night light, every close-up or flown-to view, and (if the site has a walk or first-person mode) at least six spots in that mode, including next to every building with signs, doors, windows or inner surfaces.
+- Run it on: the default overview in day and night light (on a scrolling page, every section's scene), every close-up or flown-to view, and (if the site has a walk or first-person mode) at least six spots in that mode, including next to every building with signs, doors, windows or inner surfaces.
 - For Three.js sites, expose `window.__site` with `pause(bool)`, `step(dt, n)`, `light(key)` and `_three()` returning `{ renderer, scene, camera, THREE }` (plus `walk(bool)` and `player`/`walk` state for walk modes).
 - **Scale the nudge with distance.** The nudge in the code suits overview distances. For close-ups and held objects, scale it to about 0.0005 x the camera's distance to the target, or text and edges register as parallax rather than flicker.
 - **Pass:** under 0.05% of pixels flagged in every view and no named mesh with a cluster of hits. A few scattered pixels on silhouette edges are anti-aliasing, not flicker. Any cluster on a surface (a sign, a door, a box top, a decal) is a failure: fix it with the No-flicker build rules and re-audit.

@@ -9,7 +9,7 @@ Sharing a category or a technique is fine and expected (a lit surface seen from 
 | Build | Live | Category |
 |---|---|---|
 | The Desk (the main bar) | https://aimenkhalid.netlify.app/v4/ | Lit flat-lay |
-| Badge rail | https://aimenkhalid.netlify.app/ | Tactile playground |
+| The cards page | https://aimenkhalid.netlify.app/ | Scrolling page with objects (tactile accent) |
 | Cozy room | https://aimenkhalid.netlify.app/v2/ | Walk-in space |
 | Cupboard | https://aimenkhalid.netlify.app/v3/ | Walk-in space |
 
@@ -29,17 +29,19 @@ A top-down desk under one low sun falling through a carved lattice screen. The t
 
 **Her identity, not to be reskinned:** the walnut desk with block-printed runner, chai glass and jasmine garland, her carved lattice, the picnic-basket payoff, the prayer-time presets, and her objects and their arrangement. (Light through a window or screen, a basket or box payoff built around someone else's story, or time-based light presets that mean something to another person are all techniques, and fine.)
 
-## Badge rail: tactile playground
+## The cards page: scrolling page with objects
 
-Lanyard badges hanging on a rail, one per milestone.
+A normal scrolling site with a nav (Journey, Kind words, Projects, Contact) where every section carries its own 3D object. The hero is a rail of lanyard badges, one per milestone, that you brush through and pick off the rail. Below it: a stack of kind-words cards you flip through with filters by company, a drawer of case files that slide out onto a desk and open, and a visitor badge the visitor prints with their own name. The close gathers it all and hands over the résumé.
 
 **What it teaches**
+- **A scrolling page can be a world.** The page reads and scans like a normal site (real headings, nav, text), yet every section is something to touch. The hero object gets the most effort and carries the first five seconds.
+- **A different object and mechanic per section,** each made for its content: swinging badges for milestones, a card stack for quotes, a drawer for projects, a printer for the visitor.
 - **Physics as delight.** Things swing when brushed, collide and settle; every touch plays a note, so idle play becomes a melody.
 - **A collectible that lifts and flips**, carrying the detail on its own back.
 - **A visitor object you personalise** (your own badge), which makes the visitor part of the world.
 - **A payoff that packs everything into one container** that shakes and pops out the résumé.
 
-**Her identity, not to be reskinned:** lanyard badges on a rail, the kalimba melody, her event badges.
+**Her identity, not to be reskinned:** lanyard badges on a rail, the kalimba melody, her event badges, the kind-words card stack, the case-file drawer, the visitor badge and their order on the page. (A scrolling page with a hero object and a different object per section is a category, and fine for anyone.)
 
 ## Cozy room: walk-in space
 

@@ -2,7 +2,7 @@
 
 **A Claude skill that builds a portfolio people play with instead of read.** By [Aimen Khalid](https://aimenkhalid.netlify.app/).
 
-Give it your story and it builds you a full-screen world. It might be a lit desk, a room you walk into, a tiny town, or a book that turns its pages. Every object in it holds a piece of your work. The world has real light that changes through the day, sound, a little game to finish, hidden secrets, and one big "wow" moment. The goal: visitors go "wow" in the first five seconds and keep exploring for five minutes.
+Give it your story and it builds you a world. It might be a lit desk, a room you walk into, a tiny town, a book that turns its pages, or a scrolling page where every section has its own 3D object to play with. Every object in it holds a piece of your work. The world has real light that changes through the day, sound, a little game to finish, hidden secrets, and one big "wow" moment. The goal: visitors go "wow" in the first five seconds and keep exploring for five minutes.
 
 ![Arbisoft Town, a site built with this skill](docs/arbisoft-town-hero.jpg)
 
@@ -33,7 +33,7 @@ The result is a single self-contained `index.html` you can host anywhere.
 
 | # | Site | Kind of world | Link |
 |---|---|---|---|
-| 1 | Badge rail: lanyard badges that swing, flip and play notes | Tactile playground | [aimenkhalid.netlify.app](https://aimenkhalid.netlify.app/) |
+| 1 | The cards page: a scrolling site with a 3D object in every section, from a hero rail of swinging lanyard badges to a stack of kind-words cards and a drawer of case files | Scrolling page with objects | [aimenkhalid.netlify.app](https://aimenkhalid.netlify.app/) |
 | 2 | Cozy room: an orbitable room where each piece of furniture is a section | Walk-in space | [aimenkhalid.netlify.app/v2](https://aimenkhalid.netlify.app/v2/) |
 | 3 | Cupboard: drawers you open, with a mischievous cat | Walk-in space | [aimenkhalid.netlify.app/v3](https://aimenkhalid.netlify.app/v3/) |
 | 4 | Aimen's Desk: a top-down desk under low sun through a carved lattice | Lit flat-lay | [aimenkhalid.netlify.app/v4](https://aimenkhalid.netlify.app/v4/) |
