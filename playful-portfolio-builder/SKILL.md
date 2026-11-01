@@ -29,6 +29,7 @@ Long code and examples live in reference files so this file stays lean. Read onl
 
 | File | Read it when |
 |---|---|
+| `scripts/deal.mjs` | Step 2, before proposing worlds: deals composition hands (`node scripts/deal.mjs`). |
 | `references/versions.md` | After the person picks a world (Step 3), or when stuck on making something feel physical. **Never in Step 2** while proposing worlds. |
 | `references/engine-lighting.md` | Building a lit scene from a fixed camera (flat-lay, wall, shelf, board): albedo + height maps, G-buffer, lighting pass, light presets. Also for light-preset ideas in any world. |
 | `references/html-in-canvas.md` | Any content that lives on an object (pages, letters, cards, screens, forms): native `drawElementImage`, SVG `foreignObject` fallback, DOM proxy. |
@@ -86,11 +87,27 @@ Then ask, as its own question: **Is there anything that must NOT appear on the s
 
 Summarise what you learned in a few lines before moving on.
 
+**Then write the person's inventory in your notes:** 8-12 things that belong to this person and to no one else. Their routes (the road to their campus, the ride to work), places (their street, their city's light, a room they work in), objects they keep, rituals and hours, numbers from their story, the printed things of their world (a ticket, a timetable, a certificate). Specific beats general: "the 7:40 bus past Liberty roundabout" is inventory, "Lahore" is not. The world's shape will come from this list in Step 2.
+
 If the user is unattended, make sensible choices, state them at the top, and proceed.
 
 ## Step 2 - Suggest tailored worlds, each in a category
 
 Only now propose concepts. Do not read `references/versions.md` or the quality-bar crops yet.
+
+**Why this step deals cards first.** Asked to invent a world, a model reaches for the same few layouts every time: a round island town seen from above with a ring road and a plaza, an isometric room cut open, a desk from above. Two different people would both get a disc town. Nothing here works by remembering earlier sites (no list of them could ever be complete); it works by taking that default choice away.
+
+**1. Deal the composition.** Run `node scripts/deal.mjs` (from this skill's folder). It deals three hands, each a different camera, ground, way of moving, change over time and material look. If you cannot run scripts, roll your own: pick each axis from `node scripts/deal.mjs --list`'s table by a number you did not choose (the seconds of the current time, say), never by preference. Record the seed.
+
+**2. Find the idea in the person, not the category.** For each hand, try to complete this sentence from the inventory (Step 1):
+
+> For [person], **[something only they have]** becomes **[the hand's ground and movement]**.
+
+Example: a student who takes the same bus to college every morning, with the hand *line + vehicle*: "For Sana, the 7:40 bus to college becomes a road you ride, with a stop for every part of her story." **The test:** put another person in the sentence. If it still works unchanged, the idea belongs to the category, not to them; try a different inventory item or the next hand. Propose only worlds that pass.
+
+**3. Avoid the defaults unless the story calls for them.** These layouts are where models land when nobody chooses: a floating disc island with buildings round the edge and a ring road around a plaza; an isometric room cutaway seen from a high corner; a desk or table straight from above; a bookshelf of project books; a planet with buildings stuck on it. Each is allowed only when the person's own inventory demands it (they really do work at that desk, their town really is an island), and then say why in one line. The dealer already deals these rarely.
+
+**4. Earlier builds are techniques, never layouts.** Anything already built in this conversation, in the user's other projects or in `references/versions.md` may lend techniques (lighting, page curls, physics), but not its camera, ground, layout or signature moment. If the user is making sites for several people, suggest a fresh chat for each, so the last one does not become the template.
 
 **Separate the world from the category.** The *world* is what the site is (their desk in their city, a darkroom, a grandmother's kitchen). The *category* is the broad mode it's built in. Categories are broad on purpose, with lots of variety inside each; never treat a category as one fixed object.
 
@@ -108,7 +125,7 @@ Only now propose concepts. Do not read `references/versions.md` or the quality-b
 These are starting points, not a closed list. If a person needs a mode that isn't here, invent it.
 
 How to propose:
-- Suggest **2-3 worlds built from what they told you**, each labelled with its category. Give each a short name, a one-line pitch, how their content maps to objects, the lighting idea, the wow moment, and *why it fits them* ("because you said you collect film cameras...").
+- Suggest **2-3 worlds built from what they told you**, each built on a different dealt hand and labelled with its category. Give each a short name, the idea sentence, a one-line pitch, how their content maps to objects, the lighting idea, the wow moment, and *why it fits them* ("because you said you collect film cameras...").
 - Spread the proposals across categories rather than offering three versions of one scene. When the person's visitors need to scan quickly (recruiters, clients) or there is a lot of content, make one of the proposals a scrolling page with objects.
 - Then ask, as its own question: **"Would you like a different category, a mix, or something specific of your own?"**
 - **Mixing:** usually one main category with one accent works best (e.g. a walk-in space with jelly objects, a flat-lay with a curling book); more tends to muddy the experience, so only go further when the idea clearly holds together.
@@ -120,10 +137,11 @@ Once they pick, ask a few follow-ups one at a time: sound feel (on by default wi
 
 Now read `references/versions.md` to understand the bar (techniques only, never identities).
 
-**Reskin check, before building.** Sharing a category or a technique with a reference build is fine and expected: a lit surface seen from above, window light, objects that lift and turn over, a game tracker. What isn't fine is reusing a reference's identity: its specific objects, its arrangement of items, or its wow moment with new labels on top. The test: take the person's name off the site. Could it still only belong to them? If yes, it passes, however familiar the camera angle is. If it could belong to anyone, or it reads as a reference build with new labels, make it theirs before building.
+**Reskin check, before building.** Sharing a category or a technique with a reference build is fine and expected: a lit surface seen from above, window light, objects that lift and turn over, a game tracker. What isn't fine is reusing a reference's identity (its specific objects, its arrangement of items, or its wow moment with new labels on top) or any earlier build's composition. **Composition fingerprint:** write down this world's camera, ground, movement, time and look (the dealt hand, as built). Compare it with every earlier build you can see: the references, anything built earlier in this conversation, anything the user showed you. It must differ on at least three of the five; new objects on the same layout do not count. The test: take the person's name off the site. Could it still only belong to them? If it could belong to anyone, or it reads as an earlier build with new labels, make it theirs before building.
 
 Then write a short sheet and get a yes:
 - World + category (+ accent) + one-line pitch
+- The dealt hand (seed, any redraw and why), the idea sentence, and the composition fingerprint
 - What the visitor sees first, and how they move around (for a scrolling page: the hero object, then each section in order with its object)
 - Object → content map: one visible object per key part of the story (each role, major project, award, talk, degree). A book, folder or drawer can hold extra detail, but the headlines are easy to see and reach (from the opening view, or early in a scroll story).
 - The signature wow moment (the payoff)
@@ -316,7 +334,7 @@ After the site works, judge it as a first-time visitor would, and improve it bef
    - **Personal:** could this only be this person's site?
    - **Story (the recruiter test):** in 60 seconds, without hunting, could a hiring manager say who this person is, where they've worked and their two biggest results? Does every role, project, award, talk and degree have its own object, place or chapter?
    - **Polish:** no overlaps, overflow, flat spots, jank, flicker (the flicker audit passed) or broken mobile layout.
-   - **Originality:** it passes the reskin check: with the name removed, it could still only be this person's site, and it reuses no reference build's specific objects, arrangement or wow moment.
+   - **Originality:** it passes the reskin check: with the name removed, it could still only be this person's site; it reuses no earlier build's objects, arrangement, wow moment or composition (the fingerprint differs on three of five axes); and if it is one of the defaults in Step 2, the person's inventory demands it.
 3. **Iterate.** If any item scores 0, or the total is under 15 of 18, write down the weakest two items and a concrete improvement for each, build them, re-screenshot and score again. **Always do at least one more round aimed at the signature moment, even when it passes.** Stop after three rounds and report what you'd still improve.
 4. After any change from the review, re-run the real-visitor walkthrough for what you touched.
 5. Republish the artifact and tell the person briefly what the review found and what you changed, then go to Step 7.

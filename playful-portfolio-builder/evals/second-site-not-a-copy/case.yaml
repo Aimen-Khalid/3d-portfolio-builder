@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: second-site-not-a-copy
+expected_outcome: |
+  A world for Hafsa whose composition comes from her own life (the old city walls she sketches,
+  her cycle, her sketchbook, the Saturday art class), not from the category default or from the
+  company site described in the prompt. The run deals composition hands with scripts/deal.mjs,
+  writes an idea sentence that would not work for another person, and records a composition
+  fingerprint that differs from the round island town on at least three of camera, ground,
+  movement, time and look. All content comes from the prompt.
