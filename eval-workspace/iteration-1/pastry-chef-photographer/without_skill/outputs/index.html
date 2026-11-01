@@ -388,7 +388,8 @@ const sky=new THREE.Mesh(new THREE.PlaneGeometry(26,14),skyMat);sky.position.set
 // counter
 const counter=new THREE.Mesh(new THREE.BoxGeometry(12,0.12,3.3),std({map:marbleTex,roughness:.28,metalness:0}));
 counter.position.set(0,-0.06,0.05);counter.receiveShadow=true;scene.add(counter);
-const cab=new THREE.Mesh(new THREE.BoxGeometry(12,2,0.1),std({color:0x6e7f6a,roughness:.7}));cab.position.set(0,-1.13,1.68);scene.add(cab);
+const cab=new THREE.Mesh(new THREE.BoxGeometry(12,2,0.1),std({color:0x8c9c86,roughness:.6}));cab.position.set(0,-1.13,1.68);cab.receiveShadow=true;scene.add(cab);
+for(let i=-5;i<=5;i++){const h=new THREE.Mesh(new THREE.BoxGeometry(0.5,0.03,0.04),std({color:0xc9b08a,metalness:.8,roughness:.3}));h.position.set(i*1.1,-0.35,1.75);scene.add(h);}
 
 /* ---------- pendant lamp (on before sunrise) ---------- */
 const lamp=new THREE.Group();scene.add(lamp);
@@ -680,9 +681,9 @@ function resize(){
   camera.updateProjectionMatrix();
   // fit ~6.4 wide of counter horizontally
   const hfov=2*Math.atan(Math.tan(THREE.MathUtils.degToRad(camera.fov/2))*camera.aspect);
-  const want=isMobile?4.4:6.6;
+  const want=isMobile?3.6:6.6;
   const dist=Math.max(5.2,(want/2)/Math.tan(hfov/2));
-  if(isMobile){rig.home.pos.set(0.15,2.0+dist*0.12,dist*0.95);rig.home.look.set(0.15,0.65,-0.3);}
+  if(isMobile){rig.home.pos.set(0.2,3.6,dist*0.72);rig.home.look.set(0.2,1.05,-0.6);}
   else {rig.home.pos.set(0.4,1.9,dist);rig.home.look.set(0.35,0.95,-0.4);}
   if(!focusKey){rig.pos.copy(rig.home.pos);rig.look.copy(rig.home.look);}
 }

@@ -754,7 +754,7 @@ function initSurfaces(){
   slateSurface = surface(400, 270, () => { const v = $('#slateIn').value.toUpperCase(); const empty = !v;
     return `<div class="sl" xmlns="http://www.w3.org/1999/xhtml"><div class="s">sign ← text</div><h4>Type a word. The hand signs it.</h4><div class="fld ${empty?'ph':''}">${empty ? (slateFocused && slateCaret ? '|' : '') + 'your word' : v.replace(/</g,'') + (slateFocused && slateCaret ? '|' : '')}</div><div class="note">ASL handshapes, roughly, in clay</div><div class="btn">Sign it ↵</div></div>`; }, SLATE_CSS);
   const fm = OBJ.slate.faceMat; fm.map = slateSurface.tex; fm.needsUpdate = true; }
-setInterval(() => { if(slateFocused){ slateCaret = !slateCaret; slateSurface && slateSurface.render(); } }, 530);
+setInterval(() => { if(slateFocused && !seq && !document.hidden){ slateCaret = !slateCaret; slateSurface && slateSurface.render(); } }, 530);
 const slateIn = $('#slateIn'), slateProxy = $('#slateProxy');
 slateIn.addEventListener('input', () => { slateIn.value = slateIn.value.replace(/[^a-zA-Z]/g,'').slice(0,10); SND.scratch(); slateSurface.render(); });
 slateIn.addEventListener('keydown', e => { if(e.key==='Enter'){ e.preventDefault(); signWord(slateIn.value); } if(e.key==='Escape'){ slateIn.blur(); closeHeld(); } e.stopPropagation(); });
@@ -765,7 +765,7 @@ function placeSlateProxy(){ const o = OBJ.slate; if(!slateProxy.classList.contai
   const hw = o.faceW/2, hd = o.faceD/2, y = .172; const pts = [[-hw,y,-hd],[hw,y,-hd],[-hw,y,hd]].map(p => new THREE.Vector3(...p).applyMatrix4(o.g.matrixWorld).project(camera)).map(v => [(v.x+1)/2*VW, (1-v.y)/2*VH]);
   const [a,b,c] = pts, w = 400, h = 270; slateProxy.style.width = w+'px'; slateProxy.style.height = h+'px';
   slateProxy.style.transform = `matrix(${(b[0]-a[0])/w},${(b[1]-a[1])/w},${(c[0]-a[0])/h},${(c[1]-a[1])/h},${a[0]},${a[1]})`; }
-function signWord(w){ w = (w||'').toUpperCase().replace(/[^A-Z]/g,'').slice(0,10); if(!w || seq) return;
+function signWord(w){ w = (w||'').toUpperCase().replace(/[^A-Z]/g,'').slice(0,10); if(!w || seq) return; slateIn.blur();
   if(frozen){ frozenScene(false); crumbs.forEach(c => { c.v.set(0,0,0); c.rest=null; }); pawn.hopT=0; pawn.from.copy(PAWN.position); nodePos(0,pawn.to); pawn.node=0; }
   tiles.forEach(T => { T.kT = 0; T.m.visible=false; T.k=0; }); handLiftT = 1; typed=''; detected='';
   runSeq('spell', [ ...spellSteps(w, .2, .9), [ .2 + w.length*.9 + .3, () => { found('slate'); beadPulse = .6; SND.chime(); } ], [ .2 + w.length*.9 + 2.4, () => { setPose('rest'); handLiftT = 0; tiles.forEach(T => T.kT = 0); putBtn.classList.add('on'); } ] ]); }
@@ -914,7 +914,7 @@ function update(dt){
 let drumT = 0; const par = { x:0, y:0, tx:0, ty:0 };
 addEventListener('pointermove', e => { if(reduceMotion) return; par.tx = (e.clientX/VW - .5); par.ty = (e.clientY/VH - .5); });
 let __fc=0,__ft=performance.now(); function frame(now){ requestAnimationFrame(frame); __fc++; if(now-__ft>1000){ window.__fps=__fc*1000/(now-__ft); __fc=0; __ft=now; } if(paused || extPause || document.hidden) { last = now; return; }
-  const dt = Math.min(.05, (now - last)/1000); last = now; par.x += (par.tx - par.x)*.05; par.y += (par.ty - par.y)*.05; update(dt); renderer.render(scene, camera); }
+  let dt = Math.min(1.0, (now - last)/1000); last = now; par.x += (par.tx - par.x)*.05; par.y += (par.ty - par.y)*.05; while(dt > 1e-4){ const h = Math.min(1/30, dt); update(h); dt -= h; } renderer.render(scene, camera); }
 
 /* ---------------- boot ---------------- */
 addEventListener('resize', () => { layout(); renderQuest(); if(held) showCaption(held.id); });
