@@ -7,8 +7,8 @@ Iteration 1, started 2026-11-01. Builds use the light verification rules (`execu
 | fintech-backend-engineer (x3 runs) | run-1 finishing; runs 2-3 queued | done (~10 min) |
 | fresh-grad-thin-content | finishing | done (~6 min) |
 | pastry-chef-photographer | finishing | done (~28 min) |
-| architect-avoids-room-default | running | queued |
-| sound-designer | queued | queued |
+| architect-avoids-room-default | running | running |
+| sound-designer | running | running |
 | pm-recruiter-scannable | done (17/18 self-score, flicker 0.0021%, ~116 min) | done (~3.5 min) |
 | two-people-same-chat | queued | n/a |
 | clone-reference-site | queued | n/a |
