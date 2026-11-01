@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Zain Malik, Architect</title>
+<meta name="description" content="The grey Moleskine of architect Zain Malik: five built projects from 2016 to 2024, each drawn in pencil and turnable in your hand.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+<style>
+:root{
+  --desk:#cfcac1; --desk-2:#bdb7ac;
+  --cover:#6b6d6f; --cover-dark:#4d4f51;
+  --paper:#f4efe4; --paper-edge:#e6dfd0;
+  --graphite:#2f3134; --graphite-soft:rgba(47,49,52,.55); --graphite-faint:rgba(47,49,52,.22);
+  --red:#a8432f; --gold:#a9822e;
+  --serif:"Instrument Serif", Georgia, serif;
+  --mono:"IBM Plex Mono", ui-monospace, monospace;
+  --hand:"Nanum Pen Script", "Comic Sans MS", cursive;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{
+  background:var(--desk);
+  background-image:
+    radial-gradient(ellipse at 30% 20%, rgba(255,255,255,.35), transparent 60%),
+    radial-gradient(ellipse at 80% 90%, rgba(0,0,0,.12), transparent 55%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.3 0 0 0 0 0.3 0 0 0 0 0.3 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  color:var(--graphite);font-family:var(--mono);
+  cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cpath d='M3 25 L5 18 L21 2 L26 7 L10 23 Z' fill='%23d9b44a' stroke='%232f3134' stroke-width='1.2'/%3E%3Cpath d='M3 25 L5 18 L10 23 Z' fill='%23e9d8b5' stroke='%232f3134' stroke-width='1'/%3E%3Cpath d='M3 25 L4 21.5 L6.5 24 Z' fill='%232f3134'/%3E%3C/svg%3E") 2 26, auto;
+  -webkit-font-smoothing:antialiased;
+}
+button{font:inherit;color:inherit;background:none;border:0;cursor:inherit}
+:focus-visible{outline:2px dashed var(--red);outline-offset:3px}
+
+/* ---------- desk props ---------- */
+.prop{position:absolute;pointer-events:none}
+.pencil{width:min(34vw,420px);height:16px;right:1vw;bottom:5vh;transform:rotate(-14deg);
+  background:linear-gradient(90deg,#2f3134 0 2%,#e9d8b5 2% 9%,#d9b44a 9% 88%,#b9b3a6 88% 92%,#d98b7c 92%);
+  border-radius:2px 6px 6px 2px;box-shadow:0 6px 10px rgba(0,0,0,.22);
+  clip-path:polygon(0 50%,9% 0,100% 0,100% 100%,9% 100%)}
+.eraser{width:64px;height:30px;left:3vw;top:7vh;background:#efe9df;border-radius:4px;transform:rotate(18deg);box-shadow:0 5px 8px rgba(0,0,0,.18)}
+.eraser::after{content:"";position:absolute;inset:0 0 0 55%;background:#2d4d78;border-radius:0 4px 4px 0}
+.shavings{left:6vw;bottom:9vh;width:90px;height:50px}
+
+/* ---------- stage ---------- */
+.stage{position:fixed;inset:0;display:grid;place-items:center;perspective:2400px}
+.book{
+  --bw:min(92vw, 112vh, 1180px);
+  width:var(--bw);height:calc(var(--bw) / 1.3);
+  position:relative;transform-style:preserve-3d;
+}
+.covers{position:absolute;inset:-1.2% -1.4%;background:var(--cover-dark);border-radius:10px 10px 10px 10px;
+  box-shadow:0 30px 60px rgba(30,28,24,.38),0 8px 16px rgba(30,28,24,.25)}
+.pages{position:absolute;inset:0;display:flex;background:var(--paper);border-radius:4px;overflow:hidden}
+.pages::before{ /* gutter shadow */
+  content:"";position:absolute;left:50%;top:0;bottom:0;width:12%;transform:translateX(-50%);z-index:5;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(60,50,30,.10) 40%,rgba(60,50,30,.28) 50%,rgba(60,50,30,.10) 60%,transparent)}
+.pages::after{ /* paper grain */
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:6;mix-blend-mode:multiply;opacity:.55;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .5 0 0 0 0 .4 0 0 0 .18 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E")}
+.band{position:absolute;top:-1.2%;bottom:-1.2%;right:7%;width:9px;background:linear-gradient(90deg,#26282a,#3c3f42,#26282a);z-index:8;border-radius:2px;box-shadow:2px 0 4px rgba(0,0,0,.25);transition:opacity .6s}
+.book.open .band{opacity:0}
+.ribbon{position:absolute;left:calc(50% + 14px);top:-1%;width:12px;height:calc(100% + 4.5%);background:linear-gradient(90deg,#7c2a22,#96392d 50%,#7c2a22);z-index:7;clip-path:polygon(0 0,100% 0,100% 100%,50% 96%,0 100%);opacity:.92;pointer-events:none}
+
+/* front cover that swings open */
+.cover{position:absolute;top:-1.2%;bottom:-1.2%;right:-1.4%;width:51.4%;transform-origin:left center;transform-style:preserve-3d;z-index:20;
+  transition:transform 1.5s cubic-bezier(.6,.02,.2,1)}
+.cover .face{position:absolute;inset:0;backface-visibility:hidden;border-radius:0 10px 10px 0}
+.cover .front{background:var(--cover);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='l'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.4' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23l)'/%3E%3C/svg%3E"),linear-gradient(90deg,rgba(0,0,0,.25),transparent 6%);
+  display:flex;flex-direction:column;justify-content:flex-end;padding:9%;color:rgba(255,255,255,.55)}
+.cover .front h1{font-family:var(--serif);font-weight:400;font-size:calc(var(--bw) * .055);letter-spacing:.01em;color:rgba(20,20,22,.55);text-shadow:0 1px 0 rgba(255,255,255,.18)}
+.cover .front p{font-size:calc(var(--bw) * .011);letter-spacing:.3em;text-transform:uppercase;color:rgba(20,20,22,.5);margin-top:.6em}
+.cover .back{transform:rotateY(180deg);background:#e9e2d2;border-radius:10px 0 0 10px}
+.book.open .cover{transform:rotateY(-179.5deg)}
+.book.open .cover{pointer-events:none}
+.book.opened .cover{visibility:hidden}
+.open-hint{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:30;font-family:var(--hand);font-size:28px;color:#f1ece2;opacity:.8;transition:opacity .4s}
+.book.open .open-hint{opacity:0;pointer-events:none}
+
+/* ---------- spreads ---------- */
+.spread{position:absolute;inset:0;display:none}
+.spread.on{display:flex}
+.page{position:relative;flex:1 1 50%;padding:4.2% 5% 7.5% 5%;min-width:0;display:flex;flex-direction:column}
+.page.left{padding-right:6.5%}
+.page.right{padding-left:6.5%}
+.page-no{position:absolute;bottom:3%;font-size:10px;letter-spacing:.2em;color:var(--graphite-soft)}
+.left .page-no{left:5%} .right .page-no{right:5%}
+.grid-bg{background-image:radial-gradient(circle,rgba(47,49,52,.13) .9px,transparent 1.2px);background-size:calc(var(--bw)*.0175) calc(var(--bw)*.0175);background-position:center}
+
+.kicker{font-size:calc(var(--bw)*.0095);letter-spacing:.24em;text-transform:uppercase;color:var(--graphite-soft)}
+.display{font-family:var(--serif);font-weight:400;line-height:.95;letter-spacing:-.01em}
+.hand{font-family:var(--hand);color:var(--graphite);line-height:1}
+
+/* index left */
+.name{font-size:calc(var(--bw)*.085);margin:.18em 0 .05em}
+.name em{font-style:italic;color:var(--graphite-soft)}
+.lede{font-family:var(--serif);font-size:calc(var(--bw)*.019);line-height:1.3;max-width:26em;color:#45474a;margin-top:.6em}
+.toc{list-style:none;margin-top:auto;border-top:1px solid var(--graphite-faint)}
+.toc li{border-bottom:1px solid var(--graphite-faint)}
+.toc button{display:flex;align-items:baseline;gap:.9em;width:100%;padding:.62em .2em;text-align:left;font-size:calc(var(--bw)*.0118);transition:background .2s,padding .25s}
+.toc button:hover,.toc button:focus-visible{background:rgba(47,49,52,.05);padding-left:.8em}
+.toc .n{color:var(--graphite-soft);width:2em}
+.toc .t{font-family:var(--serif);font-size:1.55em;flex:1}
+.toc .y{color:var(--graphite-soft)}
+.toc .medal{color:var(--gold);font-size:.9em;margin-left:.4em}
+.hint-line{margin-top:1.1em;font-size:calc(var(--bw)*.022)}
+
+/* map */
+.map-wrap{position:relative;flex:1;min-height:0}
+.map-wrap svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.pin{cursor:inherit}
+.pin .hit{fill:transparent}
+.pin:hover .pin-label,.pin:focus .pin-label{fill:var(--red)}
+.pin:hover .pin-mark,.pin:focus .pin-mark{stroke:var(--red)}
+.pin.hidden{opacity:0;pointer-events:none}
+.pin{transition:opacity .5s}
+.draw{stroke-dasharray:var(--len,1000);stroke-dashoffset:var(--len,1000);animation:drawin 2.2s cubic-bezier(.5,0,.3,1) forwards;animation-delay:var(--d,0s)}
+@keyframes drawin{to{stroke-dashoffset:0}}
+.timeline{display:flex;align-items:center;gap:12px;margin-top:8px;font-size:calc(var(--bw)*.0095)}
+.timeline input{flex:1;accent-color:#96392d}
+.timeline output{font-family:var(--hand);font-size:calc(var(--bw)*.022);width:3em;text-align:right}
+
+/* project spread */
+.sheet{position:relative;flex:1;min-height:0;border:1px solid var(--graphite-faint)}
+.sheet canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab}
+.sheet canvas:active{cursor:grabbing}
+.titleblock{position:absolute;right:-1px;bottom:-1px;display:grid;grid-template-columns:auto auto;border:1px solid var(--graphite-faint);background:rgba(244,239,228,.85);font-size:calc(var(--bw)*.0078);letter-spacing:.08em;text-transform:uppercase}
+.titleblock div{padding:.45em .8em;border-left:1px solid var(--graphite-faint);border-top:1px solid var(--graphite-faint)}
+.titleblock div:nth-child(-n+2){border-top:0}
+.titleblock div:nth-child(odd){border-left:0;color:var(--graphite-soft)}
+.drag-note{position:absolute;left:3%;top:3%;font-family:var(--hand);font-size:calc(var(--bw)*.02);color:var(--graphite-soft);pointer-events:none;transition:opacity .6s}
+.controls{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin-top:12px;font-size:calc(var(--bw)*.0095)}
+.seg{display:inline-flex;border:1px solid var(--graphite);border-radius:999px;overflow:hidden}
+.seg button{padding:.45em 1.1em;letter-spacing:.12em;text-transform:uppercase;font-size:.95em}
+.seg button[aria-pressed="true"]{background:var(--graphite);color:var(--paper)}
+.btn-line{letter-spacing:.12em;text-transform:uppercase;border-bottom:1px solid currentColor;padding:2px 0;font-size:.95em}
+.btn-line:hover{color:var(--red)}
+.sun{display:flex;align-items:center;gap:8px;flex:1;min-width:180px}
+.sun input{flex:1;accent-color:#a9822e}
+.sun output{width:3.4em;text-align:right}
+
+.pnum{font-family:var(--serif);font-size:calc(var(--bw)*.14);line-height:.8;color:transparent;-webkit-text-stroke:1px var(--graphite-soft)}
+.ptitle{font-size:calc(var(--bw)*.052);margin:.25em 0 .3em}
+.facts{width:100%;border-collapse:collapse;font-size:calc(var(--bw)*.0105);margin-top:.6em}
+.facts th,.facts td{text-align:left;padding:.65em 0;border-bottom:1px solid var(--graphite-faint);vertical-align:top}
+.facts th{color:var(--graphite-soft);font-weight:400;letter-spacing:.14em;text-transform:uppercase;width:38%}
+.margin-note{font-size:calc(var(--bw)*.022);color:#55575a;margin-top:1.1em;transform:rotate(-1.2deg);max-width:18em}
+.seal{position:absolute;right:9%;top:7%;width:calc(var(--bw)*.115);height:calc(var(--bw)*.115);transform:rotate(9deg)}
+.pnav{margin-top:auto;padding-right:7%;display:flex;justify-content:space-between;align-items:center;font-size:calc(var(--bw)*.0098);letter-spacing:.12em;text-transform:uppercase}
+.pnav button:hover{color:var(--red)}
+.locator{width:calc(var(--bw)*.075);height:calc(var(--bw)*.09);position:absolute;right:6%;bottom:12%;opacity:.85}
+
+/* closing */
+.strip{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:auto;align-items:end}
+.strip figure{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:inherit}
+.strip canvas{width:100%;aspect-ratio:1/1}
+.strip figcaption{font-size:calc(var(--bw)*.0085);color:var(--graphite-soft);letter-spacing:.1em}
+.strip figure:hover figcaption{color:var(--red)}
+.axis{height:1px;background:var(--graphite);margin-top:6px;position:relative}
+.blank{display:flex;gap:1em;align-items:baseline;padding:.9em 0;border-bottom:1px solid var(--graphite-faint);font-size:calc(var(--bw)*.0105)}
+.blank span:first-child{width:7em;color:var(--graphite-soft);letter-spacing:.14em;text-transform:uppercase}
+.blank .todo{color:rgba(47,49,52,.35);font-style:italic}
+
+/* turning leaf */
+.leaf{position:absolute;top:0;bottom:0;width:50%;z-index:15;transform-style:preserve-3d;pointer-events:none;display:none}
+.leaf .lf{position:absolute;inset:0;backface-visibility:hidden;background:var(--paper)}
+.leaf .lf.f{background:linear-gradient(90deg,rgba(0,0,0,.08),var(--paper) 18%,var(--paper) 85%,rgba(0,0,0,.06))}
+.leaf .lf.b{transform:rotateY(180deg);background:linear-gradient(270deg,rgba(0,0,0,.08),var(--paper) 18%,var(--paper) 85%,rgba(0,0,0,.06))}
+.leaf.fwd{left:50%;transform-origin:left center;display:block;animation:turnF .75s cubic-bezier(.55,.05,.3,1) forwards}
+.leaf.back{left:0;transform-origin:right center;display:block;animation:turnB .75s cubic-bezier(.55,.05,.3,1) forwards}
+@keyframes turnF{from{transform:rotateY(0)}to{transform:rotateY(-180deg)}}
+@keyframes turnB{from{transform:rotateY(0)}to{transform:rotateY(180deg)}}
+
+.corner{position:absolute;bottom:0;width:7%;aspect-ratio:1;z-index:9;opacity:.0;transition:opacity .25s}
+.corner.r{right:0;background:linear-gradient(315deg,transparent 48%,rgba(0,0,0,.12) 50%,var(--paper-edge) 52%)}
+.corner.l{left:0;background:linear-gradient(45deg,transparent 48%,rgba(0,0,0,.12) 50%,var(--paper-edge) 52%)}
+.book.open .corner{opacity:.9}
+.corner:hover{opacity:1;width:8.5%}
+
+.foot{position:fixed;left:0;right:0;bottom:1.6vh;text-align:center;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(47,49,52,.6);pointer-events:none}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* ---------- phone: one page at a time, pages flow vertically inside the notebook ---------- */
+@media (max-width: 760px){
+  .book{--bw:calc(100vw * 2.05);width:calc(100vw - 24px);height:calc(100dvh - 64px);margin-top:-18px}
+  .covers{inset:-6px}
+  .cover{width:calc(100% + 6px);right:-6px;top:-6px;bottom:-6px}
+  .pages::before{display:none}
+  .ribbon{left:auto;right:22px;height:110px}
+  .band{right:14%}
+  .spread.on{flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .page{flex:0 0 auto;padding:22px 18px 18px!important}
+  .page-no{display:none}
+  .name{font-size:58px}
+  .lede{font-size:17px}
+  .toc button{font-size:12px}
+  .hint-line{font-size:22px}
+  .map-wrap{height:115vw}
+  .kicker{font-size:10px}
+  .sheet{height:96vw;flex:0 0 auto}
+  .controls{font-size:11px}
+  .ptitle{font-size:40px}
+  .pnum{font-size:80px}
+  .facts{font-size:12px}
+  .margin-note{font-size:22px}
+  .seal{width:84px;height:84px;right:16px;top:18px}
+  .locator{display:none}
+  .titleblock{font-size:8px}
+  .drag-note{font-size:20px}
+  .timeline{font-size:10px}.timeline output{font-size:22px}
+  .strip figcaption{font-size:9px}
+  .blank{font-size:12px}
+  .corner{display:none}
+  .leaf{display:none!important}
+  .foot{bottom:10px;font-size:9px}
+  .pencil,.eraser,.shavings{display:none}
+  .spread.on{animation:fadein .45s ease}
+  @keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+}
+@media (prefers-reduced-motion: reduce){
+  .cover,.leaf{transition:none!important;animation-duration:.01s!important}
+  .draw{animation-duration:.01s}
+}
+</style>
+</head>
+<body>
+<div class="prop eraser" aria-hidden="true"></div>
+<div class="prop pencil" aria-hidden="true"></div>
+<svg class="prop shavings" viewBox="0 0 90 50" aria-hidden="true"><g fill="none" stroke="#b58f4a" stroke-width="1.3"><path d="M10 30 q8 -14 18 -2 q-6 10 -18 2z" fill="#e2c891"/><path d="M40 38 q10 -10 16 2 q-8 6 -16 -2z" fill="#e2c891"/></g><circle cx="62" cy="20" r="1.6" fill="#2f3134"/><circle cx="30" cy="12" r="1" fill="#2f3134"/></svg>
+
+<main class="stage">
+  <div class="book" id="book" aria-label="Zain Malik's sketchbook portfolio">
+    <div class="covers"></div>
+    <div class="pages" id="pages">
+      <!-- spreads injected -->
+      <div class="leaf" id="leaf"><div class="lf f"></div><div class="lf b"></div></div>
+      <button class="corner l" id="cornerL" aria-label="Previous page"></button>
+      <button class="corner r" id="cornerR" aria-label="Next page"></button>
+    </div>
+    <div class="ribbon" aria-hidden="true"></div>
+    <div class="band" aria-hidden="true"></div>
+    <button class="cover" id="cover" aria-label="Open the sketchbook">
+      <div class="face front"><h1>Zain Malik</h1><p>Architect · Sketchbook</p></div>
+      <div class="face back"></div>
+    </button>
+    <div class="open-hint hand" aria-hidden="true">tap to open</div>
+  </div>
+</main>
+<div class="foot" id="foot">Turn pages with ← → · drag a building to turn it · slide the sun</div>
+
+<script>
+/* ===================================================================
+   CONTENT — only facts Zain gave. Add notes/brief text per project in `note`.
+   =================================================================== */
+const PROJECTS = [
+  {id:"ravi",   name:"Ravi Riverside Library", year:2016, type:"Library", place:"Lahore · on the Ravi",       note:""},
+  {id:"gulberg",name:"Gulberg Courtyard House",year:2018, type:"House",   place:"Gulberg, Lahore",            note:""},
+  {id:"thar",   name:"Thar Solar School",      year:2020, type:"School",  place:"Thar, Sindh",                note:"",
+     award:"Gold — Pakistan Green Building Awards 2021"},
+  {id:"hunza",  name:"Hunza Guest Lodge",      year:2022, type:"Guest lodge", place:"Hunza, Gilgit-Baltistan", note:""},
+  {id:"model",  name:"Model Town Clinic",      year:2024, type:"Clinic",  place:"Model Town, Lahore",         note:""},
+];
+const CONTACT = {email:"", phone:"", studio:""}; // to be filled by Zain
+
+/* ===================================================================
+   PENCIL AXONOMETRIC ENGINE
+   boxes: [x,y,z,w,d,h, material, layer]
+   lines: world polylines [[x,y,z],...] (ground drawings, drawn first)
+   =================================================================== */
+const MAT = {
+  brick:"#b4664c", lime:"#ebe4d6", mud:"#caa77b", panel:"#3e4956", stone:"#9d958a",
+  timber:"#8b5c3c", cream:"#ddd6c7", fin:"#6e6b64", steel:"#7b7f84", plinth:"#c9c1b2", glass:"#8fa3ad"
+};
+function B(x,y,z,w,d,h,m="plinth",layer=0){return {x,y,z,w,d,h,m,layer}}
+function wave(y0,x0,x1,amp=0.35,step=1.2,z=0){const p=[];for(let x=x0;x<=x1;x+=step)p.push([x,y0+Math.sin(x*1.3+y0)*amp,z]);return p}
+function circ(cx,cy,r,z=0,n=14){const p=[];for(let i=0;i<=n;i++){const a=i/n*Math.PI*2;p.push([cx+Math.cos(a)*r*(1+.12*Math.sin(i*2.7)),cy+Math.sin(a)*r*(1+.12*Math.cos(i*1.9)),z])}return p}
+function tree(cx,cy,r,h){ // scribbled canopy on a trunk
+  const L=[[[cx,cy,0],[cx,cy,h*0.55]]];
+  for(let k=0;k<3;k++){const p=[];for(let i=0;i<=16;i++){const a=i/16*Math.PI*2;p.push([cx+Math.cos(a)*r*(.75+.1*k),cy+Math.sin(a)*r*(.75+.1*k),h*0.55+r*.9+Math.sin(a*3+k)*r*.35+k*.25])}L.push(p)}
+  return L;
+}
+function poplar(cx,cy,h){const p=[];for(let i=0;i<=10;i++){const t=i/10;p.push([cx+Math.sin(i*2.1)*.35*(1-t),cy+Math.cos(i*2.1)*.35*(1-t),1+t*h])}return [[[cx,cy,0],[cx,cy,1]],p]}
+
+const MODELS = {
+  ravi:(()=>{const b=[],l=[];
+    b.push(B(-14,-6,0,28,10,.6,"plinth"));
+    b.push(B(-12,-4.5,.6,22,6.5,3.8,"brick"));
+    b.push(B(-5,-6.5,4.4,17,8.5,3.2,"brick"));           // cantilevered reading room
+    b.push(B(-5.2,-6.7,7.6,17.4,8.9,.35,"steel"));
+    for(let i=0;i<4;i++)b.push(B(-12,4+i*1.3,0,24,1.3,.45-i*.1,"plinth"));  // ghats stepping to water
+    for(let i=0;i<5;i++)b.push(B(-3.6+i*3.4,1.4,0.6,.35,.35,3.8,"steel"));
+    for(let k=0;k<5;k++)l.push(wave(10.5+k*1.1,-17,17,.3,1.1));
+    l.push(...tree(-16,-3,1.8,4),...tree(15,-4,1.6,3.6),...tree(15,1,1.3,3));
+    return {b,l,label:"Library on the riverbank"}})(),
+  gulberg:(()=>{const b=[],l=[];
+    b.push(B(-8,-8,0,16,5,3.4,"lime"));
+    b.push(B(-8,3,0,16,5,3.4,"lime"));
+    b.push(B(-8,-3,0,5,6,3.4,"lime"));
+    b.push(B(3,-3,0,5,6,3.4,"lime"));
+    b.push(B(-8,-8,3.4,9,5,3.1,"lime"));
+    b.push(B(-8.3,-8.3,6.5,9.6,5.6,.3,"steel"));
+    b.push(B(-11,9.6,0,22,.45,2,"brick"));
+    b.push(B(-11,-11,0,.45,21,2,"brick"));
+    l.push(circ(0,0,2.2,0,12));
+    l.push(...tree(0,0,1.9,4.6));
+    for(let i=-2;i<=2;i++)l.push([[i*1.2,-2.8,0],[i*1.2,2.8,0]]);
+    return {b,l,label:"Rooms around a courtyard"}})(),
+  thar:(()=>{const b=[],l=[];
+    b.push(B(-12,-5,0,6.5,10,3,"mud"));
+    b.push(B(-3.25,-5,0,6.5,10,3,"mud"));
+    b.push(B(5.5,-5,0,6.5,10,3,"mud"));
+    [[-15,-8],[-15,7.6],[0,-8],[0,7.6],[14.6,-8],[14.6,7.6]].forEach(([x,y])=>b.push(B(x,y,0,.4,.4,5.4,"steel")));
+    b.push(B(-15.5,-8.5,5.4,31,17,.35,"panel",1));      // solar canopy
+    const z=5.76;for(let x=-15.5+3.1;x<15.5;x+=3.1)l.push({top:true,p:[[x,-8.5,z],[x,8.5,z]]});
+    for(let y=-8.5+4.25;y<8.5;y+=4.25)l.push({top:true,p:[[-15.5,y,z],[15.5,y,z]]});
+    for(let k=0;k<4;k++){const p=[];for(let x=-19;x<=19;x+=1.4)p.push([x,12+k*1.8+Math.sin(x*.35+k)*1.1,0]);l.push(p)}
+    for(let k=0;k<2;k++){const p=[];for(let x=-19;x<=19;x+=1.4)p.push([x,-12-k*1.8+Math.sin(x*.3+k)*1.1,0]);l.push(p)}
+    l.push(...tree(17,0,1.5,3.2));
+    return {b,l,label:"Classrooms under a solar roof"}})(),
+  hunza:(()=>{const b=[],l=[];
+    b.push(B(-12,-9,0,24,7,6,"stone"));
+    b.push(B(-12,-2,0,24,5,3.4,"stone"));
+    b.push(B(-12,3,0,24,5,1,"stone"));
+    b.push(B(-10,-8.2,6,8,4.6,3,"timber")); b.push(B(-10.5,-8.7,9,9,5.6,.35,"steel"));
+    b.push(B(2,-8.2,6,8,4.6,3,"timber"));   b.push(B(1.5,-8.7,9,9,5.6,.35,"steel"));
+    b.push(B(-8,-1.4,3.4,7,3.8,2.8,"timber")); b.push(B(-8.5,-1.9,6.2,8,4.8,.3,"steel"));
+    b.push(B(3,-1.4,3.4,7,3.8,2.8,"timber"));  b.push(B(2.5,-1.9,6.2,8,4.8,.3,"steel"));
+    // mountains behind
+    const m=[];const pk=[[-20,0],[-15,9],[-11,5],[-6,14],[-1,8],[4,16],[9,7],[13,11],[18,3],[21,0]];
+    pk.forEach(([x,h])=>m.push([x,-16,h]));l.push(m);
+    l.push([[-6,-16,14],[-4.5,-16,10.5],[-3,-16,11.8]]);l.push([[4,-16,16],[6,-16,12],[7.5,-16,12.8]]);
+    l.push(...poplar(-14,6,6),...poplar(-15.5,4,5),...poplar(14,6,6.5),...poplar(15.6,4.2,5.2));
+    for(let k=0;k<3;k++)l.push(wave(10+k*1.4,-15,15,.6,1.5));
+    return {b,l,label:"Terraces stepping down the slope"}})(),
+  model:(()=>{const b=[],l=[];
+    b.push(B(-10,-5.5,0,20,10,7.2,"cream"));
+    b.push(B(-10.3,-5.8,7.2,20.6,10.6,.4,"steel"));
+    for(let x=-9.4;x<=9.2;x+=1.15)b.push(B(x,4.9,.35,.22,1,6.6,"fin"));
+    b.push(B(-3.5,5.9,3,7,3.4,.3,"steel",0));
+    b.push(B(-3.3,8.9,0,.25,.25,3,"steel"));b.push(B(3,8.9,0,.25,.25,3,"steel"));
+    l.push([[-10,4.5,3.6],[10,4.5,3.6]]);
+    l.push(...tree(-13,6,1.6,3.6),...tree(13,6,1.6,3.6),...tree(-13,-2,1.3,3),...tree(13.4,-2.5,1.4,3.2));
+    l.push([[-14,11.5,0],[14,11.5,0]],[[-1.5,9.4,0],[-1.5,13,0]],[[1.5,9.4,0],[1.5,13,0]]);
+    return {b,l,label:"Clinic behind a screen of fins"}})(),
+};
+
+function hash(n){n=Math.sin(n*127.1+311.7)*43758.5453;return n-Math.floor(n)}
+function hexToRgb(h){const v=parseInt(h.slice(1),16);return [(v>>16)&255,(v>>8)&255,v&255]}
+function shadeHex(h,k){const [r,g,b]=hexToRgb(h);return `rgb(${Math.round(r*k)},${Math.round(g*k)},${Math.round(b*k)})`}
+
+class Sketch {
+  constructor(canvas, modelKey, opts={}){
+    this.c=canvas; this.ctx=canvas.getContext("2d"); this.m=MODELS[modelKey];
+    this.theta=opts.theta ?? -0.35; this.mode="sketch"; this.sun=opts.sun ?? 0.38;
+    this.progress=0; this.small=!!opts.small; this.pad=opts.pad ?? 0.05;
+    this.computeRadius(); this.resize();
+  }
+  computeRadius(){
+    let R=0, zmax=0;
+    const pts=[]; this.m.b.forEach(b=>{pts.push([b.x,b.y],[b.x+b.w,b.y+b.d]);[b.x,b.x+b.w].forEach(x=>[b.y,b.y+b.d].forEach(y=>pts.push([x,y])));zmax=Math.max(zmax,b.z+b.h)});
+    this.m.l.forEach(L=>{(L.p||L).forEach(p=>{pts.push([p[0],p[1]]);zmax=Math.max(zmax,p[2])})});
+    pts.forEach(([x,y])=>R=Math.max(R,Math.hypot(x,y)));
+    this.R=R; this.zmax=zmax;
+  }
+  resize(){
+    const r=this.c.getBoundingClientRect(), dpr=Math.min(window.devicePixelRatio||1,2);
+    if(!r.width) return;
+    this.W=r.width; this.H=r.height; this.c.width=r.width*dpr; this.c.height=r.height*dpr;
+    this.ctx.setTransform(dpr,0,0,dpr,0,0);
+    // fit: horizontal extent 2R*.866*2? projected x = (xr-yr)*.866 -> max R*1.2247; y range: (xr+yr)*.5 -> ±R*.707 minus z
+    // tight fit: projected bounds over a full turn so the scale stays stable while dragging
+    if(!this.ext){let xm=0,ym0=0,ym1=0;const pts=[];
+      this.m.b.forEach(b=>[b.x,b.x+b.w].forEach(x=>[b.y,b.y+b.d].forEach(y=>[b.z,b.z+b.h].forEach(z=>pts.push([x,y,z])))));
+      this.m.l.forEach(L=>(L.p||L).forEach(p=>pts.push(p)));
+      for(let a=0;a<9;a++){const t=this.theta-0.4+a*0.1,c=Math.cos(t),s=Math.sin(t);
+        pts.forEach(([x,y,z])=>{const xr=x*c-y*s,yr=x*s+y*c;xm=Math.max(xm,Math.abs((xr-yr)*.866));const py=(xr+yr)*.5-z;ym0=Math.min(ym0,py);ym1=Math.max(ym1,py)})}
+      this.ext={xm,ym0,ym1}}
+    const e=this.ext;
+    const sx=(this.W*(1-this.pad*2))/(2*e.xm), sy=(this.H*(1-this.pad*2))/(e.ym1-e.ym0);
+    this.s=Math.min(sx,sy)*1.12;
+    this.ox=this.W/2; this.oy=this.H/2-((e.ym0+e.ym1)/2)*this.s;
+    this.draw();
+  }
+  proj(x,y,z){const c=Math.cos(this.theta),s=Math.sin(this.theta);const xr=x*c-y*s, yr=x*s+y*c;
+    return [this.ox+(xr-yr)*.8660*this.s, this.oy+((xr+yr)*.5-z)*this.s, xr+yr]}
+  sunVec(){const t=this.sun; const az=Math.PI*(0.15+t*0.7); const el=0.35+Math.sin(Math.PI*t)*0.85;
+    // world: sun travels from east (+x) across south (+y side? we take -y as north) to west
+    return [Math.cos(az), Math.sin(az)*0.6+0.25, el]}
+  pencil(a,b,seed,alpha=1,w=1){
+    const ctx=this.ctx; const dx=b[0]-a[0], dy=b[1]-a[1]; const L=Math.hypot(dx,dy)||1;
+    const ux=dx/L, uy=dy/L; const os=this.small?0.6:1.0;
+    for(let pass=0;pass<2;pass++){
+      const o1=(1.5+hash(seed+pass)*3)*os, o2=(1.5+hash(seed+pass+9)*3)*os;
+      const j=(hash(seed*3+pass)-.5)*1.4*os;
+      const ax=a[0]-ux*o1+(-uy)*j*.4, ay=a[1]-uy*o1+ux*j*.4;
+      const bx=b[0]+ux*o2+(-uy)*j*.3, by=b[1]+uy*o2+ux*j*.3;
+      const bow=(hash(seed+pass*7)-.5)*Math.min(L*.02,2.2);
+      ctx.beginPath(); ctx.moveTo(ax,ay);
+      ctx.quadraticCurveTo((ax+bx)/2+(-uy)*bow,(ay+by)/2+ux*bow,bx,by);
+      ctx.strokeStyle=`rgba(40,42,46,${(pass?0.32:0.78)*alpha})`; ctx.lineWidth=(pass?0.7:1.05)*w*(this.small?.8:1);
+      ctx.stroke();
+    }
+  }
+  polyline(P,seed,alpha,w){for(let i=0;i<P.length-1;i++)this.pencil(P[i],P[i+1],seed+i*1.37,alpha,w)}
+  boxFaces(b){
+    const X0=b.x,X1=b.x+b.w,Y0=b.y,Y1=b.y+b.d,Z0=b.z,Z1=b.z+b.h;
+    return [
+      {n:[0,0,1], p:[[X0,Y0,Z1],[X1,Y0,Z1],[X1,Y1,Z1],[X0,Y1,Z1]]},
+      {n:[1,0,0], p:[[X1,Y0,Z0],[X1,Y1,Z0],[X1,Y1,Z1],[X1,Y0,Z1]]},
+      {n:[-1,0,0],p:[[X0,Y1,Z0],[X0,Y0,Z0],[X0,Y0,Z1],[X0,Y1,Z1]]},
+      {n:[0,1,0], p:[[X1,Y1,Z0],[X0,Y1,Z0],[X0,Y1,Z1],[X1,Y1,Z1]]},
+      {n:[0,-1,0],p:[[X0,Y0,Z0],[X1,Y0,Z0],[X1,Y0,Z1],[X0,Y0,Z1]]},
+    ];
+  }
+  visible(n){if(n[2]>0)return true;const c=Math.cos(this.theta),s=Math.sin(this.theta);return (n[0]*c-n[1]*s)+(n[0]*s+n[1]*c)>0.001}
+  shadowPoly(b,sv){
+    const pts=[];[b.x,b.x+b.w].forEach(x=>[b.y,b.y+b.d].forEach(y=>[b.z,b.z+b.h].forEach(z=>{
+      const k=z/sv[2]; pts.push(this.proj(x-sv[0]*k,y-sv[1]*k,0))})));
+    return hull(pts);
+  }
+  draw(){
+    if(!this.W) return;
+    const ctx=this.ctx; ctx.clearRect(0,0,this.W,this.H);
+    const built=this.mode==="built", sv=this.sunVec(), slen=Math.hypot(...sv);
+    const lines=this.m.l.filter(L=>!L.top).map(L=>L.p||L), tops=this.m.l.filter(L=>L.top).map(L=>L.p);
+    // order boxes (painter)
+    const c=Math.cos(this.theta),s=Math.sin(this.theta);
+    const order=this.m.b.map((b,i)=>{const cx=b.x+b.w/2,cy=b.y+b.d/2;
+      const corners=[[b.x,b.y],[b.x+b.w,b.y],[b.x,b.y+b.d],[b.x+b.w,b.y+b.d]].map(([x,y])=>(x*c-y*s)+(x*s+y*c));
+      const near=Math.max(...corners), far=Math.min(...corners);
+      return {b,i,key:b.layer*1e6+(near*0.35+far*0.65)+b.z*0.9+(b.z+b.h)*0.05}}).sort((a,b)=>a.key-b.key);
+    // count strokes for progress
+    let total=lines.reduce((a,L)=>a+L.length-1,0); const boxEdges=[];
+    order.forEach(o=>{const faces=this.boxFaces(o.b).filter(f=>this.visible(f.n)); const E=new Map();
+      faces.forEach(f=>{for(let k=0;k<4;k++){const a=f.p[k],bb=f.p[(k+1)%4];const key=[a,bb].map(p=>p.join(",")).sort().join("|");if(!E.has(key))E.set(key,[a,bb])}});
+      o.faces=faces; o.edges=[...E.values()]; total+=o.edges.length});
+    total+=tops.reduce((a,L)=>a+L.length-1,0);
+    let budget=this.progress*total;
+    const P=(p)=>this.proj(p[0],p[1],p[2]);
+
+    // shadows first (fade in with progress)
+    const shA=Math.min(1,this.progress*1.6);
+    if(shA>0){
+      ctx.fillStyle=built?`rgba(55,48,40,${0.20*shA})`:`rgba(47,49,52,${0.07*shA})`;
+      order.forEach(o=>{if(o.b.layer===1||o.b.z<3 || true){const h=this.shadowPoly(o.b,sv);ctx.beginPath();h.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.closePath();ctx.fill()}});
+      if(!built){ // hatch shadow zone lightly
+      }
+    }
+    // ground lines
+    lines.forEach((L,li)=>{const n=L.length-1;const take=Math.max(0,Math.min(n,Math.floor(budget)));budget-=n;
+      const Pp=L.map(P); for(let i=0;i<take;i++)this.pencil(Pp[i],Pp[i+1],li*31+i,built?.45:.6,.85)});
+    // boxes
+    order.forEach((o,oi)=>{
+      if(budget<=0)return;
+      const b=o.b;
+      o.faces.forEach((f,fi)=>{
+        const pp=f.p.map(P); ctx.beginPath(); pp.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1])); ctx.closePath();
+        const lam=Math.max(0,(f.n[0]*sv[0]+f.n[1]*sv[1]+f.n[2]*sv[2])/slen);
+        if(built){ ctx.fillStyle=shadeHex(MAT[b.m]||MAT.plinth,0.58+lam*0.5); ctx.fill(); }
+        else { ctx.fillStyle="#f4efe4"; ctx.fill();
+          if(lam<0.42 && budget>o.edges.length){ // graphite hatching on faces turned from the sun
+            ctx.save(); ctx.clip(); const xs=pp.map(p=>p[0]),ys=pp.map(p=>p[1]);
+            const x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
+            const gap=this.small?2.6:(lam<.15?3.2:4.6); ctx.strokeStyle=`rgba(47,49,52,${lam<.15?.42:.28})`; ctx.lineWidth=this.small?.5:.7;
+            ctx.beginPath(); for(let x=x0-(y1-y0);x<x1;x+=gap){const j=(hash(x+oi)-.5)*1.2;ctx.moveTo(x+j,y1);ctx.lineTo(x+(y1-y0)+j,y0)} ctx.stroke(); ctx.restore();
+          }
+        }
+      });
+      const take=Math.max(0,Math.min(o.edges.length,Math.ceil(budget))); budget-=o.edges.length;
+      for(let k=0;k<take;k++){const [a,bb]=o.edges[k]; this.pencil(P(a),P(bb),o.i*97+k*13,built?.55:1,1)}
+      if(b.layer===1 && budget>0){tops.forEach((L,li)=>{const Pp=L.map(P);for(let i=0;i<Pp.length-1;i++)this.pencil(Pp[i],Pp[i+1],500+li*7+i,built?.5:.7,.7)})}
+    });
+    if(!this.m.b.some(b=>b.layer===1) && budget>0) tops.forEach((L,li)=>this.polyline(L.map(P),500+li,.7,.7));
+  }
+  animate(dur=2400){
+    cancelAnimationFrame(this._raf); const t0=performance.now();
+    const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches; if(reduce){this.progress=1;this.draw();return}
+    const step=(t)=>{const k=Math.min(1,(t-t0)/dur); this.progress=1-Math.pow(1-k,2.2); this.draw(); if(k<1)this._raf=requestAnimationFrame(step)};
+    this._raf=requestAnimationFrame(step);
+  }
+}
+function R_X(R){return R*1.2247}
+function hull(pts){pts=pts.map(p=>[p[0],p[1]]).sort((a,b)=>a[0]-b[0]||a[1]-b[1]);
+  const cr=(o,a,b)=>(a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0]);const lo=[],up=[];
+  for(const p of pts){while(lo.length>=2&&cr(lo[lo.length-2],lo[lo.length-1],p)<=0)lo.pop();lo.push(p)}
+  for(const p of pts.slice().reverse()){while(up.length>=2&&cr(up[up.length-2],up[up.length-1],p)<=0)up.pop();up.push(p)}
+  return lo.slice(0,-1).concat(up.slice(0,-1))}
+
+/* ===================================================================
+   MAP (pencil, schematic) — lon/lat → page coords
+   =================================================================== */
+const K=40; const MX=(lon)=>(lon-66)*K, MY=(lat)=>(37.5-lat)*K;
+const pt=(lat,lon)=>[MX(lon),MY(lat)];
+function pathFrom(pts){return pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ")}
+function smooth(pts){let d=`M${pts[0][0]} ${pts[0][1]}`;for(let i=1;i<pts.length-1;i++){const xc=(pts[i][0]+pts[i+1][0])/2,yc=(pts[i][1]+pts[i+1][1])/2;d+=` Q${pts[i][0]} ${pts[i][1]} ${xc} ${yc}`}const l=pts[pts.length-1];return d+` L${l[0]} ${l[1]}`}
+const INDUS=[[35.3,75.9],[35.7,74.9],[35.6,74.0],[35.1,73.3],[34.1,72.8],[33.4,71.9],[32.3,71.4],[31.2,70.9],[29.8,70.7],[28.9,70.5],[27.7,68.9],[26.6,68.2],[25.4,68.35],[24.6,68.0],[24.0,67.4]];
+const RAVI=[[32.5,75.6],[31.75,74.55],[31.62,74.27],[31.1,73.4],[30.6,72.6],[30.35,71.9],[29.95,71.4],[29.35,71.03],[28.9,70.5]];
+const CHENAB=[[32.9,74.6],[32.3,73.6],[31.6,72.8],[30.9,72.2],[30.2,71.5]];
+const JHELUM=[[34.1,73.6],[33.2,73.6],[32.7,73.3],[32.0,72.6],[31.2,72.2]];
+const SITES={ hunza:pt(36.32,74.65), thar:pt(24.75,69.8), lahore:pt(31.55,74.34) };
+
+function buildMap(){
+  const L=SITES.lahore, inset={x:398,y:372,r:86};
+  const dunes=[]; for(let i=0;i<5;i++){const y=470+i*14, x0=120+i*6; dunes.push(`M${x0} ${y} q14 -9 28 0 t28 0 t28 0`)}
+  const peaks=[]; for(let i=0;i<9;i++){const x=200+i*26, y=40+((i*37)%22); peaks.push(`M${x-12} ${y+14} L${x} ${y-4} L${x+12} ${y+14}`)}
+  const sea=[0,1,2].map(i=>`M${30-i*5} ${560+i*12} q12 -6 24 0 t24 0 t24 0 t24 0`).join(" ");
+  const pinGlyph=(x,y)=>`<path class="pin-mark draw" style="--len:60" d="M${x-7} ${y} l7 -4 l7 4 l-7 4 z M${x-7} ${y} v-9 l7 -4 l7 4 v9 M${x} ${y+4} v-9 M${x-7} ${y-9} l7 4 l7 -4" fill="#f4efe4" stroke="#2f3134" stroke-width="1.1" stroke-linejoin="round"/>`;
+  const pin=(id,x,y,lx,ly,anchor="start")=>{const p=PROJECTS.findIndex(q=>q.id===id),P=PROJECTS[p];
+    return `<g class="pin" data-go="${p+1}" data-year="${P.year}" tabindex="0" role="button" aria-label="Open ${P.name}, ${P.year}">
+      <circle class="hit" cx="${x}" cy="${y-4}" r="22"/>${pinGlyph(x,y)}
+      <text class="pin-label" x="${lx}" y="${ly}" text-anchor="${anchor}" font-family="Nanum Pen Script" font-size="25" fill="#2f3134">${P.name.replace(/ (Library|House|School|Lodge|Clinic)$/,"")}</text>
+      <text x="${lx}" y="${ly+15}" text-anchor="${anchor}" font-family="IBM Plex Mono" font-size="10" letter-spacing="1.5" fill="rgba(47,49,52,.6)">${String(p+1).padStart(2,"0")} · ${P.year}${P.award?"  ★ GOLD":""}</text></g>`};
+  // Lahore inset geometry (schematic, not to scale)
+  const ix=inset.x, iy=inset.y;
+  const raviIn=`M${ix-80} ${iy-52} C ${ix-50} ${iy-40}, ${ix-40} ${iy-20}, ${ix-58} ${iy+10} S ${ix-70} ${iy+50}, ${ix-40} ${iy+76}`;
+  return `<svg viewBox="-10 -10 580 610" preserveAspectRatio="xMidYMid meet" aria-label="Schematic pencil map of Pakistan with five project sites">
+    <defs><filter id="wob"><feTurbulence baseFrequency=".035" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="2.4"/></filter>
+    <clipPath id="ic"><circle cx="${ix}" cy="${iy}" r="${inset.r}"/></clipPath></defs>
+    <g filter="url(#wob)" fill="none" stroke="#2f3134" stroke-linecap="round">
+      <path class="draw" style="--len:900;--d:.1s" d="${smooth(INDUS.map(([a,b])=>pt(a,b)))}" stroke-width="2.2" opacity=".75"/>
+      <path class="draw" style="--len:500;--d:.4s" d="${smooth(RAVI.map(([a,b])=>pt(a,b)))}" stroke-width="1.3" opacity=".6"/>
+      <path class="draw" style="--len:400;--d:.5s" d="${smooth(CHENAB.map(([a,b])=>pt(a,b)))}" stroke-width="1.1" opacity=".45"/>
+      <path class="draw" style="--len:400;--d:.55s" d="${smooth(JHELUM.map(([a,b])=>pt(a,b)))}" stroke-width="1.1" opacity=".45"/>
+      <path class="draw" style="--len:700;--d:.6s" d="${peaks.join(" ")}" stroke-width="1" opacity=".55"/>
+      <path class="draw" style="--len:600;--d:.7s" d="${dunes.join(" ")}" stroke-width="1" opacity=".5"/>
+      <path class="draw" style="--len:600;--d:.8s" d="${sea}" stroke-width="1" opacity=".45"/>
+      <circle class="draw" style="--len:560;--d:.9s" cx="${ix}" cy="${iy}" r="${inset.r}" stroke-width="1.2" stroke-dasharray="3 4" opacity=".7"/>
+      <path class="draw" style="--len:200;--d:1s" d="M${L[0]+4} ${L[1]+3} L${ix-inset.r*.55} ${iy-inset.r*.84}" stroke-width=".8" opacity=".5"/>
+      <circle cx="${L[0]}" cy="${L[1]}" r="3.4" fill="#2f3134"/>
+      <g clip-path="url(#ic)"><path class="draw" style="--len:300;--d:1.1s" d="${raviIn}" stroke-width="7" opacity=".14"/><path class="draw" style="--len:300;--d:1.1s" d="${raviIn}" stroke-width="1" opacity=".6"/>
+        <path d="M${ix-30} ${iy-70} L${ix+40} ${iy+80} M${ix-86} ${iy+20} L${ix+86} ${iy-10}" stroke-width=".7" opacity=".25" stroke-dasharray="6 5"/></g>
+    </g>
+    <g font-family="IBM Plex Mono" font-size="9.5" letter-spacing="2.4" fill="rgba(47,49,52,.55)">
+      <text x="${pt(30.4,70.95)[0]-6}" y="${pt(30.4,70.95)[1]}" text-anchor="end" transform="rotate(-78 ${pt(30.4,70.95)[0]-6} ${pt(30.4,70.95)[1]})">INDUS</text>
+      <text x="${ix}" y="${iy+inset.r+18}" text-anchor="middle">LAHORE · ENLARGED</text>
+      <text x="${pt(31.4,74.0)[0]-20}" y="${pt(31.4,74.0)[1]+8}" text-anchor="end">RAVI</text>
+      <text x="30" y="600">ARABIAN SEA</text>
+      <text x="300" y="-2" text-anchor="middle">KARAKORAM</text>
+      <text x="505" y="12" text-anchor="end">N ↑</text>
+    </g>
+    ${pin("hunza",SITES.hunza[0],SITES.hunza[1],SITES.hunza[0]+18,SITES.hunza[1]+30)}
+    ${pin("thar",SITES.thar[0],SITES.thar[1],SITES.thar[0]+20,SITES.thar[1]-30)}
+    ${pin("ravi",ix-46,iy-28,ix+6,iy-58)}
+    ${pin("gulberg",ix+6,iy+6,ix+22,iy+2)}
+    ${pin("model",ix+24,iy+50,ix+38,iy+52)}
+  </svg>`;
+}
+
+/* ===================================================================
+   SPREADS
+   =================================================================== */
+const pagesEl=document.getElementById("pages");
+const spreads=[];
+function el(html){const t=document.createElement("template");t.innerHTML=html.trim();return t.content.firstElementChild}
+
+// 0 — index
+spreads.push(el(`<section class="spread" data-i="0" aria-label="Contents">
+  <div class="page left">
+    <div class="kicker">Sketchbook · 2016 — 2024</div>
+    <h2 class="display name">Zain Malik<br><em>Architect</em></h2>
+    <p class="lede">Twelve years of practice. Five built projects. Every one of them was drawn in pencil first, in a grey Moleskine like this one.</p>
+    <p class="hand hint-line">Pick a building — or tap a pin on the map →</p>
+    <ol class="toc">${PROJECTS.map((p,i)=>`<li><button data-go="${i+1}"><span class="n">${String(i+1).padStart(2,"0")}</span><span class="t">${p.name}${p.award?'<span class="medal" title="'+p.award+'">★</span>':""}</span><span class="y">${p.year}</span></button></li>`).join("")}</ol>
+    <span class="page-no">i</span>
+  </div>
+  <div class="page right grid-bg">
+    <div class="kicker">Sites · drawn from memory, not to scale</div>
+    <div class="map-wrap" id="map">${buildMap()}</div>
+    <label class="timeline"><span>2016</span><input id="yr" type="range" min="2016" max="2024" step="1" value="2024" aria-label="Show buildings completed up to year"><span>2024</span><output id="yrOut">2024</output></label>
+    <span class="page-no">ii</span>
+  </div></section>`));
+
+// 1..5 — projects
+PROJECTS.forEach((p,i)=>{
+  const loc = p.id==="hunza"?SITES.hunza:p.id==="thar"?SITES.thar:SITES.lahore;
+  spreads.push(el(`<section class="spread" data-i="${i+1}" aria-label="${p.name}">
+  <div class="page left grid-bg">
+    <div class="sheet"><canvas aria-label="Pencil axonometric of ${p.name}. Drag to rotate."></canvas>
+      <div class="drag-note">← drag to turn it →</div>
+      <div class="titleblock"><div>Sheet</div><div>${String(i+1).padStart(2,"0")} / 05</div><div>Drawn</div><div>Pencil · Moleskine</div></div>
+    </div>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Drawing mode"><button data-mode="sketch" aria-pressed="true">Pencil</button><button data-mode="built" aria-pressed="false">Built</button></div>
+      <label class="sun"><span aria-hidden="true">☀</span><input type="range" min="0" max="1" step="0.005" value="0.38" aria-label="Move the sun through the day"><output>10:00</output></label>
+      <button class="btn-line redraw">Redraw</button>
+    </div>
+    <span class="page-no">${(i+1)*2+1}</span>
+  </div>
+  <div class="page right">
+    ${p.award?`<svg class="seal" viewBox="0 0 120 120" aria-label="${p.award}"><defs><path id="sc${i}" d="M60 60 m-44 0 a44 44 0 1 1 88 0 a44 44 0 1 1 -88 0"/></defs>
+      <circle cx="60" cy="60" r="56" fill="none" stroke="#a9822e" stroke-width="2"/><circle cx="60" cy="60" r="34" fill="rgba(169,130,46,.10)" stroke="#a9822e" stroke-width="1.2"/>
+      <text font-family="IBM Plex Mono" font-size="8.6" letter-spacing="2.2" fill="#8a6a22"><textPath href="#sc${i}">PAKISTAN GREEN BUILDING AWARDS · 2021 ·</textPath></text>
+      <text x="60" y="58" text-anchor="middle" font-family="Instrument Serif" font-size="22" fill="#8a6a22">Gold</text><text x="60" y="73" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" letter-spacing="1.5" fill="#8a6a22">2021</text></svg>`:""}
+    <div class="pnum">${String(i+1).padStart(2,"0")}</div>
+    <h2 class="display ptitle">${p.name}</h2>
+    <div class="kicker">${MODELS[p.id].label} · massing sketch</div>
+    <table class="facts">
+      <tr><th>Completed</th><td>${p.year}</td></tr>
+      <tr><th>Type</th><td>${p.type}</td></tr>
+      <tr><th>Place</th><td>${p.place}</td></tr>
+      ${p.award?`<tr><th>Recognition</th><td>${p.award}</td></tr>`:""}
+    </table>
+    ${p.note?`<p class="hand margin-note">${p.note}</p>`:`<p class="hand margin-note">Turn it. Move the sun. Switch between the pencil line and the built thing.</p>`}
+    <svg class="locator" viewBox="0 0 120 150" aria-hidden="true"><path d="${smooth(INDUS.map(([a,b])=>pt(a,b)).map(([x,y])=>[x*.22+8,y*.22+8]))}" fill="none" stroke="#2f3134" stroke-width="1" opacity=".45"/><circle cx="${loc[0]*.22+8}" cy="${loc[1]*.22+8}" r="4" fill="#a8432f"/><circle cx="${loc[0]*.22+8}" cy="${loc[1]*.22+8}" r="9" fill="none" stroke="#a8432f" stroke-width=".8"/></svg>
+    <nav class="pnav"><button data-go="${i}">← ${i===0?"Contents":PROJECTS[i-1].name.split(" ")[0]}</button><button data-go="0">Contents</button><button data-go="${i+2}">${i===4?"Contact":PROJECTS[i+1].name.split(" ")[0]} →</button></nav>
+    <span class="page-no">${(i+1)*2+2}</span>
+  </div></section>`));
+});
+
+// 6 — closing
+spreads.push(el(`<section class="spread" data-i="6" aria-label="Contact">
+  <div class="page left grid-bg">
+    <div class="kicker">2016 — 2024</div>
+    <h2 class="display ptitle" style="margin-top:.4em">Five buildings,<br><em style="color:var(--graphite-soft)">one pencil.</em></h2>
+    <div class="strip">${PROJECTS.map((p,i)=>`<figure data-go="${i+1}" tabindex="0" role="button" aria-label="${p.name}"><canvas data-model="${p.id}"></canvas><figcaption>${p.year}</figcaption></figure>`).join("")}</div>
+    <div class="axis"></div>
+    <span class="page-no">13</span>
+  </div>
+  <div class="page right">
+    <div class="kicker">For clients &amp; competition juries</div>
+    <h2 class="display ptitle" style="margin-top:.4em">Start with<br>a sketch.</h2>
+    <p class="lede" style="margin-bottom:1.2em">Commissions, competitions and site visits.</p>
+    ${["email","phone","studio"].map(k=>`<div class="blank"><span>${k}</span>${CONTACT[k]?`<span>${CONTACT[k]}</span>`:`<span class="todo">to be added</span>`}</div>`).join("")}
+    <nav class="pnav"><button data-go="5">← ${PROJECTS[4].name.split(" ")[0]}</button><button data-go="0">Back to contents</button></nav>
+    <span class="page-no">14</span>
+  </div></section>`));
+
+const leaf=document.getElementById("leaf");
+spreads.forEach(s=>pagesEl.insertBefore(s,leaf));
+
+/* sketches */
+const sketches={};
+spreads.slice(1,6).forEach((s,i)=>{
+  const p=PROJECTS[i]; const cv=s.querySelector(".sheet canvas");
+  const sk=new Sketch(cv,p.id,{theta:-0.35}); sketches[i+1]=sk;
+  let drag=null;
+  cv.addEventListener("pointerdown",e=>{drag={x:e.clientX,t:sk.theta};cv.setPointerCapture(e.pointerId);sk.progress=1;cancelAnimationFrame(sk._raf);s.querySelector(".drag-note").style.opacity=0});
+  cv.addEventListener("pointermove",e=>{if(!drag)return;sk.theta=drag.t+(e.clientX-drag.x)*0.008;sk.draw()});
+  cv.addEventListener("pointerup",()=>drag=null);cv.addEventListener("pointercancel",()=>drag=null);
+  cv.addEventListener("dblclick",()=>sk.animate());
+  cv.addEventListener("keydown",e=>{if(e.key==="ArrowUp"||e.key==="ArrowDown"){sk.theta+=e.key==="ArrowUp"?.1:-.1;sk.draw();e.preventDefault()}});
+  s.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click",()=>{
+    s.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-pressed",x===b));
+    sk.mode=b.dataset.mode; if(sk.progress<1){sk.draw()} else sk.draw();}));
+  const sun=s.querySelector(".sun input"), out=s.querySelector(".sun output");
+  const fmt=v=>{const h=7+v*11;const hh=Math.floor(h),mm=Math.round((h-hh)*60/15)*15%60;return `${String(hh).padStart(2,"0")}:${String(mm).padStart(2,"0")}`};
+  sun.addEventListener("input",()=>{sk.sun=+sun.value;out.textContent=fmt(sk.sun);sk.draw()});
+  out.textContent=fmt(+sun.value);
+  s.querySelector(".redraw").addEventListener("click",()=>sk.animate());
+});
+const minis=[];
+
+/* navigation */
+let cur=0, busy=false;
+const book=document.getElementById("book");
+const isPhone=()=>matchMedia("(max-width:760px)").matches;
+function show(i,first){
+  spreads.forEach((s,k)=>s.classList.toggle("on",k===i)); cur=i;
+  if(sketches[i]){sketches[i].resize();sketches[i].progress=0;sketches[i].draw();sketches[i].animate(first?2600:2200)}
+  if(i===6){spreads[6].querySelectorAll("canvas").forEach((cv,k)=>{if(!minis[k])minis[k]=new Sketch(cv,cv.dataset.model,{small:true,pad:.04,theta:-0.35});minis[k].resize();minis[k].animate(1600+k*250)})}
+  if(i===0){spreads[0].querySelectorAll(".draw").forEach(p=>{p.style.animation="none";p.getBoundingClientRect();p.style.animation=""})}
+  document.getElementById("cornerL").style.visibility=i>0?"visible":"hidden";
+  document.getElementById("cornerR").style.visibility=i<spreads.length-1?"visible":"hidden";
+  if(isPhone())spreads[i].scrollTop=0;
+}
+function go(i){
+  i=Math.max(0,Math.min(spreads.length-1,i)); if(i===cur||busy)return;
+  if(!book.classList.contains("open")){openBook();setTimeout(()=>go(i),900);return}
+  if(isPhone()||matchMedia("(prefers-reduced-motion: reduce)").matches){show(i);return}
+  busy=true; const fwd=i>cur; leaf.className="leaf "+(fwd?"fwd":"back");
+  setTimeout(()=>show(i),340);
+  setTimeout(()=>{leaf.className="leaf";busy=false},760);
+}
+function openBook(){if(book.classList.contains("open"))return;book.classList.add("open");setTimeout(()=>book.classList.add("opened"),matchMedia("(prefers-reduced-motion: reduce)").matches?0:1500);document.getElementById("cover").setAttribute("aria-hidden","true");document.getElementById("cover").tabIndex=-1}
+document.getElementById("cover").addEventListener("click",openBook);
+document.addEventListener("click",e=>{const t=e.target.closest("[data-go]");if(t){go(+t.dataset.go)}});
+document.addEventListener("keydown",e=>{
+  if(e.target.matches("input"))return;
+  if((e.key==="Enter"||e.key===" ")&&e.target.matches("[data-go][tabindex]")){go(+e.target.dataset.go);e.preventDefault();return}
+  if(e.key==="ArrowRight"){openBook();go(cur+1)} if(e.key==="ArrowLeft")go(cur-1);
+  if(e.key==="Escape"||e.key==="Home")go(0);
+});
+document.getElementById("cornerR").addEventListener("click",()=>go(cur+1));
+document.getElementById("cornerL").addEventListener("click",()=>go(cur-1));
+// swipe on phone (outside canvases)
+let sx=null;pagesEl.addEventListener("touchstart",e=>{if(e.target.closest("canvas,input"))return;sx=[e.touches[0].clientX,e.touches[0].clientY]},{passive:true});
+pagesEl.addEventListener("touchend",e=>{if(!sx)return;const dx=e.changedTouches[0].clientX-sx[0],dy=e.changedTouches[0].clientY-sx[1];if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)go(cur+(dx<0?1:-1));sx=null},{passive:true});
+
+/* year ribbon */
+const yr=document.getElementById("yr"), yrOut=document.getElementById("yrOut");
+yr.addEventListener("input",()=>{yrOut.textContent=yr.value;document.querySelectorAll(".pin").forEach(p=>p.classList.toggle("hidden",+p.dataset.year>+yr.value))});
+
+window.addEventListener("resize",()=>{Object.values(sketches).forEach(s=>s.resize());minis.forEach(m=>m&&m.resize())});
+show(0,true);
+const params=new URLSearchParams(location.search);
+if(params.has("p")){openBook();show(+params.get("p"));}
+else setTimeout(openBook, matchMedia("(prefers-reduced-motion: reduce)").matches?0:700);
+document.fonts && document.fonts.ready.then(()=>Object.values(sketches).forEach(s=>s.resize()));
+</script>
+</body>
+</html>

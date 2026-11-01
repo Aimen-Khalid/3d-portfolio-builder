@@ -1086,7 +1086,7 @@ function step(dt){
   ['top','mid','hor','sunC','hemiS','hemiG','fog','sunDisc'].forEach(n => cur[n].lerp(LT[n], k));
   ['sunY','sunI','sunH','sunK','hemiI','lamp','exp','fillI'].forEach(n => cur[n] += (LT[n]-cur[n])*k);
   // ride
-  if(BIKE.target != null){ const d = BIKE.target - BIKE.x; const sp = Math.sign(d) * Math.min(Math.abs(d)*2.6 + .4, 16); BIKE.v = sp; if(Math.abs(d) < .03){ BIKE.x = BIKE.target; BIKE.v = 0; BIKE.target = null; const f = BIKE.then; BIKE.then = null; f && setTimeout(f, 60); } }
+  if(BIKE.target != null){ const d = BIKE.target - BIKE.x; const sp = Math.sign(d) * Math.min(Math.abs(d)*2.6 + .4, 16); BIKE.v = sp; if(Math.abs(d) < .03){ BIKE.x = BIKE.target; BIKE.v = 0; BIKE.target = null; const f = BIKE.then; BIKE.then = null; f && f(); } }
   const oldX = BIKE.x;
   if(!WOW.on){ BIKE.x = clamp(BIKE.x + BIKE.v*dt, ROAD_MIN, ROAD_MAX);
     if(BIKE.target == null && !(drag && drag.moved>8)){ BIKE.v *= Math.exp(-dt*2.4); // soft magnetic stops

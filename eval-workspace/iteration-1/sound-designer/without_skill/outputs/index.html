@@ -1,0 +1,697 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Ayesha Noor — Sound</title>
+<meta name="description" content="Ayesha Noor, sound designer and composer for games. A playable Lahore rooftop: touch the rain, the rickshaw, the pigeons and the kite to hear them.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1b1410; --paper:#f3e6cf; --paper2:#e8d5b3; --rust:#b4532a; --teal:#2f6f6a;
+  --amber:#f2a541; --night:#141627; --muted:#7a6a58;
+  --mono:"JetBrains Mono",ui-monospace,monospace; --serif:"Fraunces",Georgia,serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--night);color:var(--paper);font-family:var(--serif);-webkit-font-smoothing:antialiased}
+body{overflow-x:hidden}
+#stage{position:relative;height:100vh;height:100svh;min-height:520px;width:100%;overflow:hidden;touch-action:none;cursor:default}
+#scene{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hud{position:absolute;left:24px;top:22px;z-index:3;pointer-events:none;max-width:min(520px,calc(100% - 48px))}
+.hud h1{font-weight:600;font-size:clamp(30px,4.4vw,58px);line-height:.95;letter-spacing:-.02em;color:var(--paper);text-shadow:0 2px 18px rgba(0,0,0,.35)}
+.hud h1 em{font-style:italic;font-weight:400;color:var(--amber)}
+.hud p{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-top:10px;color:rgba(243,230,207,.85)}
+.chip{position:absolute;z-index:4;right:20px;top:20px;font-family:var(--mono);font-size:12px;letter-spacing:.05em;background:rgba(27,20,16,.62);border:1px solid rgba(243,230,207,.28);color:var(--paper);padding:9px 13px;border-radius:999px;backdrop-filter:blur(6px);cursor:pointer;display:flex;gap:8px;align-items:center}
+.chip .dot{width:8px;height:8px;border-radius:50%;background:#d0463b;box-shadow:0 0 0 3px rgba(208,70,59,.25)}
+.chip.on .dot{background:#6fd08c;box-shadow:0 0 0 3px rgba(111,208,140,.25)}
+.hint{position:absolute;left:50%;transform:translateX(-50%);bottom:122px;z-index:3;font-family:var(--mono);font-size:12px;color:var(--paper);background:rgba(27,20,16,.55);padding:8px 14px;border-radius:999px;pointer-events:none;transition:opacity .6s;white-space:nowrap}
+/* tape deck */
+.deck{position:absolute;left:0;right:0;bottom:0;z-index:5;height:118px;background:linear-gradient(#2a211b,#1b1410);border-top:1px solid #4a3a2e;display:flex;align-items:center;gap:16px;padding:0 20px;font-family:var(--mono);font-size:11px;color:var(--paper2)}
+.deck .reel{width:46px;height:46px;border-radius:50%;border:2px solid #6b5848;position:relative;flex:none;background:radial-gradient(circle,#1b1410 0 7px,#3a2e25 8px 100%)}
+.deck .reel::after{content:"";position:absolute;inset:6px;border-radius:50%;border:2px dashed #8a7360}
+.deck.spin .reel::after{animation:spin 2.4s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.deck canvas{flex:1;min-width:0;height:64px;background:#120d0a;border-radius:6px;border:1px solid #3a2e25}
+.deck .label{flex:none;width:170px;line-height:1.5}
+.deck .label b{display:block;color:var(--amber);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.seq{flex:none;display:grid;grid-template-columns:auto repeat(8,16px);gap:3px;align-items:center}
+.seq span{font-size:9px;color:var(--muted);padding-right:4px;text-transform:uppercase;letter-spacing:.04em}
+.seq button{width:16px;height:16px;border-radius:3px;border:1px solid #4a3a2e;background:#241b15;cursor:pointer;padding:0}
+.seq button.on{background:var(--amber);border-color:var(--amber)}
+.seq button.now{outline:1px solid var(--paper)}
+.seqwrap{display:flex;flex-direction:column;gap:5px;flex:none}
+.seqwrap .t{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.seqwrap .t button{font-family:var(--mono);font-size:10px;background:none;color:var(--paper);border:1px solid #6b5848;border-radius:4px;padding:2px 8px;cursor:pointer}
+/* liner notes */
+.notes{background:var(--paper);color:var(--ink);padding:80px 24px 60px}
+.notes .inner{max-width:1080px;margin:0 auto}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--rust)}
+.notes h2{font-size:clamp(30px,4vw,48px);line-height:1.05;margin:10px 0 18px;font-weight:600;letter-spacing:-.015em}
+.notes .lede{font-size:20px;line-height:1.5;max-width:680px;color:#3a2e25}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:48px}
+.card{background:#fbf3e3;border:1px solid #d9c4a0;border-radius:4px;padding:22px 22px 20px;position:relative;box-shadow:0 1px 0 #d9c4a0,0 14px 30px -18px rgba(60,40,20,.35);transition:transform .25s}
+.card:hover{transform:translateY(-4px) rotate(-.4deg)}
+.card::before{content:"";position:absolute;left:22px;right:22px;top:0;height:6px;background:repeating-linear-gradient(90deg,var(--rust) 0 10px,transparent 10px 14px);opacity:.7}
+.card .side{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-top:6px}
+.card h3{font-size:26px;margin:10px 0 4px;font-weight:600}
+.card .role{font-family:var(--mono);font-size:12px;color:var(--teal);text-transform:uppercase;letter-spacing:.05em}
+.card p{margin-top:12px;line-height:1.5;color:#3a2e25}
+.card .stat{margin-top:16px;font-family:var(--mono);font-size:12px;border-top:1px dashed #cbb48c;padding-top:12px;color:var(--ink)}
+.card button{margin-top:14px;font-family:var(--mono);font-size:12px;background:var(--ink);color:var(--paper);border:0;border-radius:999px;padding:8px 14px;cursor:pointer}
+.field{margin-top:70px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+.field ul{list-style:none;font-family:var(--mono);font-size:13px}
+.field li{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px dashed #cbb48c}
+.field li button{background:none;border:1px solid var(--ink);border-radius:999px;font-family:var(--mono);font-size:11px;padding:3px 10px;cursor:pointer;color:var(--ink)}
+.field p{font-size:18px;line-height:1.55;color:#3a2e25}
+.contact{margin-top:70px;padding-top:30px;border-top:2px solid var(--ink);display:flex;flex-wrap:wrap;justify-content:space-between;gap:20px;align-items:baseline}
+.contact a{color:var(--rust);font-size:clamp(22px,3vw,34px);text-decoration:none;border-bottom:2px solid currentColor}
+.small{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:30px;line-height:1.6}
+@media (max-width:860px){
+  .cards{grid-template-columns:1fr}
+  .field{grid-template-columns:1fr}
+  .deck{height:auto;flex-wrap:wrap;padding:10px 16px;gap:10px}
+  .deck .label{width:auto;flex:1}
+  .deck canvas{flex-basis:100%;order:3;height:40px}
+  .deck .reel{width:34px;height:34px}
+  .seqwrap{display:none}
+  .hint{display:none}
+  .hud{left:16px;top:16px}
+  .chip{right:auto;left:16px;top:118px;font-size:11px;padding:7px 11px}
+  .notes{padding:56px 16px 40px}
+}
+@media (prefers-reduced-motion:reduce){.deck.spin .reel::after{animation:none}}
+</style>
+</head>
+<body>
+<section id="stage" aria-label="Interactive Lahore rooftop soundscape">
+  <canvas id="scene" aria-hidden="true"></canvas>
+  <div class="hud">
+    <h1>Ayesha Noor<br><em>listens to Lahore.</em></h1>
+    <p>Sound design &amp; music for games · Lahore</p>
+  </div>
+  <button class="chip" id="soundBtn" aria-pressed="false"><span class="dot"></span><span id="soundTxt">Sound off · tap to wake the roof</span></button>
+  <div class="hint" id="hint">Drag the cloud · tap the rickshaw, pigeons, kite, lantern, radio</div>
+  <div class="deck" id="deck">
+    <div class="reel"></div>
+    <div class="label"><span>NOW PLAYING</span><b id="now">— silence —</b><span id="nowSub">field recorder idle</span></div>
+    <canvas id="scope" aria-hidden="true"></canvas>
+    <div class="seqwrap">
+      <div class="t"><span>MAKE A LAHORE LOOP</span><button id="seqPlay">▶ play</button></div>
+      <div class="seq" id="seq"></div>
+    </div>
+    <div class="reel"></div>
+  </div>
+</section>
+
+<section class="notes" id="notes">
+  <div class="inner">
+    <div class="kicker">Liner notes</div>
+    <h2>Sound for games, films, and the city in between.</h2>
+    <p class="lede">I'm Ayesha Noor, a sound designer and composer for games. Everything on the roof above is a credit you can touch. Here it is again, written down.</p>
+
+    <div class="cards">
+      <article class="card">
+        <div class="side">Side A · Track 1</div>
+        <h3>Kite Rush</h3>
+        <div class="role">Audio lead · mobile</div>
+        <p>Led audio on the mobile game <i>Kite Rush</i>.</p>
+        <div class="stat">5 million downloads</div>
+        <button data-play="kite">▶ hear the kite</button>
+      </article>
+      <article class="card">
+        <div class="side">Side A · Track 2</div>
+        <h3>Moth &amp; Lantern</h3>
+        <div class="role">Sound design · indie</div>
+        <p>Sound design for the indie game <i>Moth &amp; Lantern</i>.</p>
+        <div class="stat">Nominated, Best Audio — Pakistan Game Awards 2025</div>
+        <button data-play="moth">▶ hear the moth</button>
+      </article>
+      <article class="card">
+        <div class="side">Side B · Track 1</div>
+        <h3>Rain on Anarkali</h3>
+        <div class="role">Score · short film · 2023</div>
+        <p>Composed the score for the short film <i>Rain on Anarkali</i>.</p>
+        <div class="stat">Original score, 2023</div>
+        <button data-play="radio">▶ hear a sketch</button>
+      </article>
+    </div>
+
+    <div class="field">
+      <div>
+        <div class="kicker">Field recordings</div>
+        <h2>Out with the recorder.</h2>
+        <p>I record field sounds around Lahore — rickshaws, rain on tin roofs, the pigeons at Badshahi Mosque.</p>
+      </div>
+      <ul>
+        <li><span>Rickshaw, passing</span><button data-play="rickshaw">▶</button></li>
+        <li><span>Rain on a tin roof</span><button data-play="rain">▶</button></li>
+        <li><span>Pigeons, Badshahi Mosque</span><button data-play="pigeons">▶</button></li>
+      </ul>
+    </div>
+
+    <div class="contact">
+      <div><div class="kicker">Work with me</div><h2 style="margin-bottom:0">Need a world to sound alive?</h2></div>
+      <a href="mailto:hello@example.com" id="mail">hello@example.com</a>
+    </div>
+    <p class="small">Every sound on this page is synthesized live in your browser as a stand-in sketch — not the original recordings or the original score. Swap in real clips by setting the <code>src</code> fields in the SOUNDS table at the top of the script in this file.</p>
+  </div>
+</section>
+
+<script>
+(()=>{
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* ============ optional real clips: set src to an audio URL to replace a synth ============ */
+const SOUNDS = {
+  rain:{title:'Rain on a tin roof',sub:'field recording · Lahore',src:''},
+  rickshaw:{title:'Rickshaw, passing',sub:'field recording · Lahore',src:''},
+  pigeons:{title:'Pigeons, Badshahi Mosque',sub:'field recording · Lahore',src:''},
+  kite:{title:'Kite Rush',sub:'audio lead · 5M downloads',src:''},
+  moth:{title:'Moth & Lantern',sub:'sound design · Best Audio nominee, PGA 2025',src:''},
+  radio:{title:'Rain on Anarkali',sub:'score · short film, 2023 (synth sketch)',src:''},
+};
+
+/* ================= AUDIO ================= */
+let ac=null, master, analyser, verb, noiseBuf;
+function ensureAudio(){
+  if(ac){ if(ac.state==='suspended') ac.resume(); return true; }
+  const C = window.AudioContext||window.webkitAudioContext; if(!C) return false;
+  ac = new C();
+  master = ac.createGain(); master.gain.value=.8;
+  const comp = ac.createDynamicsCompressor(); comp.threshold.value=-14; comp.ratio.value=4;
+  analyser = ac.createAnalyser(); analyser.fftSize=1024;
+  master.connect(comp); comp.connect(analyser); analyser.connect(ac.destination);
+  // simple reverb (rooftop slapback + tail)
+  verb = ac.createConvolver();
+  const len = ac.sampleRate*2.2, ir = ac.createBuffer(2,len,ac.sampleRate);
+  for(let c=0;c<2;c++){const d=ir.getChannelData(c);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,3.2)}
+  verb.buffer=ir; const vg=ac.createGain(); vg.gain.value=.35; verb.connect(vg); vg.connect(master);
+  noiseBuf = ac.createBuffer(1,ac.sampleRate*2,ac.sampleRate);
+  const nd=noiseBuf.getChannelData(0); for(let i=0;i<nd.length;i++) nd[i]=Math.random()*2-1;
+  setSoundUI(true);
+  return true;
+}
+function out(pan=0,wet=.3){
+  const g=ac.createGain(), p=ac.createStereoPanner?ac.createStereoPanner():null;
+  if(p){p.pan.value=Math.max(-1,Math.min(1,pan)); g.connect(p); p.connect(master); if(wet){const s=ac.createGain();s.gain.value=wet;p.connect(s);s.connect(verb);} }
+  else { g.connect(master); }
+  return g;
+}
+function noise(){const s=ac.createBufferSource(); s.buffer=noiseBuf; s.loop=true; s.loopStart=Math.random(); return s;}
+const T=()=>ac.currentTime;
+const clipCache={};
+function tryClip(key,pan){
+  const src=SOUNDS[key]&&SOUNDS[key].src; if(!src) return false;
+  let a=clipCache[key]; if(!a){a=new Audio(src); a.crossOrigin='anonymous'; clipCache[key]=a; try{ac.createMediaElementSource(a).connect(out(pan,.1));}catch(e){} }
+  a.currentTime=0; a.play(); return true;
+}
+
+// tin-roof ping (pitch from x position)
+function ping(x01, vel=1){
+  if(!ac) return;
+  const t=T(), base=900+ x01*1800 + Math.random()*300;
+  const o=ac.createOscillator(), o2=ac.createOscillator(), g=out(x01*1.6-.8,.25);
+  o.type='triangle'; o.frequency.setValueAtTime(base,t); o.frequency.exponentialRampToValueAtTime(base*.92,t+.12);
+  o2.type='sine'; o2.frequency.value=base*2.71;
+  const g2=ac.createGain(); g2.gain.value=.25; o2.connect(g2); g2.connect(g);
+  o.connect(g);
+  g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(.09*vel,t+.002); g.gain.exponentialRampToValueAtTime(.0005,t+.18);
+  o.start(t); o2.start(t); o.stop(t+.2); o2.stop(t+.2);
+}
+// continuous rain hiss
+let rainBed=null;
+function rainOn(level){
+  if(!ac) return;
+  if(!rainBed){
+    const n=noise(), f=ac.createBiquadFilter(), g=out(0,.2); f.type='bandpass'; f.frequency.value=3200; f.Q.value=.5;
+    g.gain.value=0; n.connect(f); f.connect(g); n.start(); rainBed={g,f};
+  }
+  rainBed.g.gain.setTargetAtTime(level*.16,T(),.25);
+}
+// rickshaw: two-stroke putter + horn, panned across
+function rickshawSound(dir=1,dur=4.2){
+  if(!ac) return;
+  const t=T();
+  const o=ac.createOscillator(); o.type='sawtooth'; o.frequency.value=58;
+  const lfo=ac.createOscillator(); lfo.type='square'; lfo.frequency.value=21;
+  const am=ac.createGain(); am.gain.value=0; const lg=ac.createGain(); lg.gain.value=.5;
+  lfo.connect(lg); lg.connect(am.gain);
+  const f=ac.createBiquadFilter(); f.type='lowpass'; f.frequency.value=700; f.Q.value=3;
+  const n=noise(), nf=ac.createBiquadFilter(); nf.type='bandpass'; nf.frequency.value=180; const ng=ac.createGain(); ng.gain.value=.5;
+  n.connect(nf); nf.connect(ng); ng.connect(am);
+  const g=ac.createGain(); const p=ac.createStereoPanner?ac.createStereoPanner():null;
+  o.connect(am); am.connect(f); f.connect(g);
+  if(p){g.connect(p); p.connect(master); p.pan.setValueAtTime(-dir,t); p.pan.linearRampToValueAtTime(dir,t+dur);} else g.connect(master);
+  g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(.32,t+dur*.45); g.gain.linearRampToValueAtTime(.32,t+dur*.55); g.gain.linearRampToValueAtTime(0,t+dur);
+  o.frequency.setValueAtTime(52,t); o.frequency.linearRampToValueAtTime(64,t+dur*.5); o.frequency.linearRampToValueAtTime(50,t+dur); // doppler-ish
+  lfo.frequency.setValueAtTime(19,t); lfo.frequency.linearRampToValueAtTime(24,t+dur*.5); lfo.frequency.linearRampToValueAtTime(18,t+dur);
+  [o,lfo,n].forEach(s=>{s.start(t);s.stop(t+dur+.1)});
+  horn(t+dur*.38, dir*.1); horn(t+dur*.38+.22, dir*.1);
+}
+function horn(t, pan=0){
+  t=t||T();
+  const g=out(pan,.3);
+  [410,520].forEach(fq=>{const o=ac.createOscillator(); o.type='square'; o.frequency.value=fq;
+    const f=ac.createBiquadFilter(); f.type='lowpass'; f.frequency.value=1600; o.connect(f); f.connect(g); o.start(t); o.stop(t+.18);});
+  g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(.07,t+.01); g.gain.setValueAtTime(.07,t+.15); g.gain.linearRampToValueAtTime(0,t+.18);
+}
+// pigeon wing clap
+function flap(pan=0,t){
+  t=t||T();
+  const n=noise(), f=ac.createBiquadFilter(), g=out(pan,.35); f.type='bandpass'; f.frequency.value=900+Math.random()*900; f.Q.value=1.2;
+  n.connect(f); f.connect(g);
+  g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(.35,t+.004); g.gain.exponentialRampToValueAtTime(.001,t+.07);
+  n.start(t); n.stop(t+.08);
+}
+function coo(pan=0,t){
+  t=t||T();
+  const o=ac.createOscillator(), v=ac.createOscillator(), vg=ac.createGain(), g=out(pan,.4), f=ac.createBiquadFilter();
+  o.type='sine'; const b=330+Math.random()*60; o.frequency.setValueAtTime(b,t); o.frequency.linearRampToValueAtTime(b*1.12,t+.18); o.frequency.linearRampToValueAtTime(b*.85,t+.55);
+  v.frequency.value=28; vg.gain.value=14; v.connect(vg); vg.connect(o.frequency);
+  f.type='lowpass'; f.frequency.value=900; o.connect(f); f.connect(g);
+  g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(.12,t+.08); g.gain.setValueAtTime(.12,t+.4); g.gain.linearRampToValueAtTime(0,t+.6);
+  o.start(t); v.start(t); o.stop(t+.65); v.stop(t+.65);
+}
+function pigeonsSound(pan=0){
+  if(!ac) return; const t=T();
+  for(let i=0;i<26;i++) flap(pan+(Math.random()-.5)*.8, t+i*.045+Math.random()*.05);
+  coo(pan-.3,t+1.4); coo(pan+.3,t+2.1);
+}
+// kite: wind whoosh with string zing
+let windBed=null;
+function kiteWind(speed){
+  if(!ac) return;
+  if(!windBed){
+    const n=noise(), f=ac.createBiquadFilter(), g=out(-.4,.25); f.type='bandpass'; f.Q.value=2.2; f.frequency.value=500; g.gain.value=0;
+    n.connect(f); f.connect(g); n.start();
+    const o=ac.createOscillator(); o.type='sine'; o.frequency.value=1200; const og=ac.createGain(); og.gain.value=0; o.connect(og); og.connect(g); o.start();
+    windBed={g,f,o,og};
+  }
+  const s=Math.min(1,speed);
+  windBed.g.gain.setTargetAtTime(.05+s*.35,T(),.08);
+  windBed.f.frequency.setTargetAtTime(380+s*1400,T(),.08);
+  windBed.og.gain.setTargetAtTime(s*.04,T(),.05);
+  windBed.o.frequency.setTargetAtTime(900+s*900,T(),.05);
+}
+function kiteGust(){ if(!ac) return; let k=0; const id=setInterval(()=>{k++; kiteWind(Math.sin(k/12*Math.PI)); if(k>=12){clearInterval(id); kiteWind(0); setTimeout(()=>windBed&&windBed.g.gain.setTargetAtTime(0,T(),.4),200);}},90); }
+// moth: soft wing flutter + lantern hum
+function mothSound(pan=.4){
+  if(!ac) return; const t=T();
+  const hum=ac.createOscillator(); hum.type='sine'; hum.frequency.value=100; const hg=out(pan,.1);
+  const h2=ac.createOscillator(); h2.type='sine'; h2.frequency.value=150; h2.connect(hg);
+  hum.connect(hg); hg.gain.setValueAtTime(0,t); hg.gain.linearRampToValueAtTime(.05,t+.3); hg.gain.linearRampToValueAtTime(0,t+2.4);
+  hum.start(t); h2.start(t); hum.stop(t+2.5); h2.stop(t+2.5);
+  for(let i=0;i<34;i++){
+    const tt=t+i*.06+Math.random()*.02, n=noise(), f=ac.createBiquadFilter(), g=out(pan+Math.sin(i/3)*.3,.3);
+    f.type='highpass'; f.frequency.value=2500; n.connect(f); f.connect(g);
+    const a=.03+.03*Math.sin(i/34*Math.PI);
+    g.gain.setValueAtTime(0,tt); g.gain.linearRampToValueAtTime(a,tt+.008); g.gain.exponentialRampToValueAtTime(.0005,tt+.04);
+    n.start(tt); n.stop(tt+.05);
+  }
+  // little bell-like "glow" chime
+  [1046.5,1568].forEach((fq,i)=>{const o=ac.createOscillator(),g=out(pan,.6);o.frequency.value=fq;o.connect(g);
+    g.gain.setValueAtTime(0,t+.2+i*.25);g.gain.linearRampToValueAtTime(.05,t+.21+i*.25);g.gain.exponentialRampToValueAtTime(.0005,t+1.6+i*.25);o.start(t+.2+i*.25);o.stop(t+1.8+i*.25);});
+}
+// radio: plucked sketch over rain (Bhairavi-flavoured scale) — clearly a stand-in
+function pluck(freq,t,pan=0,vol=.12,dec=1.6){
+  const o=ac.createOscillator(), o2=ac.createOscillator(), g=out(pan,.5), f=ac.createBiquadFilter();
+  o.type='sawtooth'; o2.type='triangle'; o.frequency.value=freq; o2.frequency.value=freq*1.003;
+  f.type='lowpass'; f.frequency.setValueAtTime(freq*6,t); f.frequency.exponentialRampToValueAtTime(freq*1.2,t+dec*.6);
+  o.connect(f); o2.connect(f); f.connect(g);
+  g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+.004); g.gain.exponentialRampToValueAtTime(.0004,t+dec);
+  o.start(t); o2.start(t); o.stop(t+dec+.05); o2.stop(t+dec+.05);
+}
+let radioUntil=0;
+function radioSketch(){
+  if(!ac) return; const t=T(); radioUntil=performance.now()+9000;
+  const sa=220, r=[1,16/15,6/5,4/3,3/2,8/5,9/5,2]; // Bhairavi-ish (komal re, ga, dha, ni)
+  const tune=[0,2,3,4,3,2,1,0, 4,5,4,3,2,1,2,0];
+  const dur=[.5,.5,.5,1,.5,.5,.5,1.5,.5,.5,.5,.5,.5,.5,.5,2];
+  let tt=t+.1;
+  // drone
+  const dg=out(0,.4); dg.gain.setValueAtTime(0,t); dg.gain.linearRampToValueAtTime(.035,t+1); dg.gain.linearRampToValueAtTime(0,t+9);
+  [sa/2,sa*3/4].forEach(fq=>{const o=ac.createOscillator();o.type='sawtooth';o.frequency.value=fq;const f=ac.createBiquadFilter();f.type='lowpass';f.frequency.value=600;o.connect(f);f.connect(dg);o.start(t);o.stop(t+9.1);});
+  tune.forEach((d,i)=>{ pluck(sa*r[d]*2, tt, .1, .1, 1.4); tt+=dur[i]*.55; });
+  for(let i=0;i<60;i++) setTimeout(()=>ping(Math.random(),.5), i*140+Math.random()*80);
+}
+
+/* ================= SCENE ================= */
+const cv=document.getElementById('scene'), cx=cv.getContext('2d');
+let W=0,H=0,DPR=1, groundY=0, streetY=0;
+function resize(){
+  DPR=Math.min(2,devicePixelRatio||1);
+  const r=cv.getBoundingClientRect(); W=r.width; H=r.height;
+  cv.width=W*DPR; cv.height=H*DPR; cx.setTransform(DPR,0,0,DPR,0,0);
+  layout();
+}
+const S={}; // positions of interactive things
+function layout(){
+  const deckH = document.getElementById('deck').offsetHeight;
+  const usable = H-deckH;
+  const mobile = W<700;
+  groundY = usable - Math.max(70, usable*.17);  // top of tin roof
+  streetY = groundY - usable*.08;
+  S.mosque={x: mobile? W*.5 : W*.66, y: streetY-usable*.02, s: Math.min(W,usable*1.4)/1300*(mobile?1.35:1)};
+  S.cloud = S.cloud && S.cloud.user ? S.cloud : {x: mobile? W*.3 : W*.36, y: usable*(mobile?.27:.30), r: mobile?42:62, rain:0};
+  S.kite = S.kite && S.kite.user ? S.kite : {x: mobile? W*.82: W*.13, y: usable*(mobile?.25:.46), vx:0, vy:0, a:0};
+  S.anchor={x: mobile? W*.9 : W*.07, y: groundY+10};
+  S.lantern={x: mobile? W*.22 : W*.5, y: groundY - usable*(mobile?.16:.20)};
+  S.radio={x: mobile? W*.68 : W*.82, y: groundY+ (usable-groundY)*.0 + 6, w: mobile?62:78};
+  S.wire=[{x:-10,y:S.lantern.y-60},{x:W+10,y:S.lantern.y-90}];
+  buildCity(); buildRoof();
+  if(!pigeons.length) makePigeons(); else pigeons.forEach(p=>{p.homeX=S.mosque.x+p.hx*S.mosque.s; p.homeY=S.mosque.y+p.hy*S.mosque.s; if(p.state==='sit'){p.x=p.homeX;p.y=p.homeY;}});
+}
+let city=[], roofSeams=[];
+function rnd(seed){return ()=>{seed=(seed*16807)%2147483647;return (seed-1)/2147483646}}
+function buildCity(){
+  const R=rnd(42); city=[]; let x=-20;
+  while(x<W+40){const w=40+R()*70, h=30+R()*(H*.13); const wins=[];
+    for(let yy=10;yy<h-8;yy+=14) for(let xx=8;xx<w-8;xx+=14) if(R()<.42) wins.push([xx,yy,R()]);
+    city.push({x,w,h,wins,tank:R()<.35,dish:R()<.25}); x+=w-4;}
+}
+function buildRoof(){ roofSeams=[]; for(let x=-10;x<W+20;x+=22) roofSeams.push(x); }
+
+/* time of day: 0..1 over ~120s loop (dusk -> night -> dawn -> day -> dusk) */
+const DAY=120000; let t0=performance.now()- DAY*.22;
+function tod(){return ((performance.now()-t0)%DAY)/DAY}
+function lerp(a,b,t){return a+(b-a)*t}
+function mix(c1,c2,t){return c1.map((v,i)=>Math.round(lerp(v,c2[i],t)))}
+const KEYS=[ // [t, skyTop, skyBottom, light]
+  [0.00,[92,140,190],[236,214,170],1],
+  [0.20,[70,90,150],[245,168,96],.8],
+  [0.30,[38,40,86],[196,96,80],.45],
+  [0.42,[14,16,36],[40,38,72],.1],
+  [0.70,[14,16,36],[44,40,70],.1],
+  [0.82,[60,70,120],[230,150,120],.5],
+  [0.92,[100,150,200],[240,220,180],.95],
+  [1.00,[92,140,190],[236,214,170],1]];
+function skyAt(p){for(let i=0;i<KEYS.length-1;i++){const a=KEYS[i],b=KEYS[i+1]; if(p>=a[0]&&p<=b[0]){const k=(p-a[0])/(b[0]-a[0]); return {top:mix(a[1],b[1],k),bot:mix(a[2],b[2],k),light:lerp(a[3],b[3],k)}}} return {top:KEYS[0][1],bot:KEYS[0][2],light:1}}
+const rgb=(c,a=1)=>`rgba(${c[0]},${c[1]},${c[2]},${a})`;
+
+let drops=[], splashes=[], pigeons=[], rick=null, sparks=[], stars=[];
+for(let i=0;i<90;i++) stars.push([Math.random(),Math.random()*.6,Math.random()]);
+function makePigeons(){
+  const spots=[[-250,-40],[-200,-42],[-120,-45],[-60,-46],[10,-46],[70,-46],[150,-44],[210,-42],[-250,-205],[250,-205],[-20,-165],[30,-165]];
+  pigeons=spots.map(([hx,hy],i)=>({hx,hy,homeX:S.mosque.x+hx*S.mosque.s,homeY:S.mosque.y+hy*S.mosque.s,x:0,y:0,state:'sit',ph:Math.random()*6,vx:0,vy:0,timer:0,face:i%2?1:-1}));
+  pigeons.forEach(p=>{p.x=p.homeX;p.y=p.homeY});
+}
+
+function drawSky(sk,p){
+  const g=cx.createLinearGradient(0,0,0,streetY); g.addColorStop(0,rgb(sk.top)); g.addColorStop(1,rgb(sk.bot));
+  cx.fillStyle=g; cx.fillRect(0,0,W,H);
+  const night=1-sk.light;
+  if(night>.3){cx.fillStyle=`rgba(255,244,220,${(night-.3)*1.2})`; stars.forEach(s=>{const tw=.6+.4*Math.sin(performance.now()/700+s[2]*20); cx.globalAlpha=tw*(night-.3)*1.4; cx.fillRect(s[0]*W,s[1]*streetY,1.4,1.4)}); cx.globalAlpha=1;}
+  // sun / moon on an arc
+  const ang=p*Math.PI*2, cxm=W*.5, cym=streetY+40, rad=Math.max(W*.55,H*.7);
+  const sx=cxm+Math.cos(ang+Math.PI*.5)*rad*.9, sy=cym-Math.sin(ang+Math.PI*.5)*rad*.75; // sun
+  if(sy<streetY){const sg=cx.createRadialGradient(sx,sy,0,sx,sy,90); sg.addColorStop(0,'rgba(255,236,190,.95)'); sg.addColorStop(.18,'rgba(255,214,140,.8)'); sg.addColorStop(1,'rgba(255,200,120,0)'); cx.fillStyle=sg; cx.beginPath(); cx.arc(sx,sy,90,0,7); cx.fill();}
+  const mx=cxm-Math.cos(ang+Math.PI*.5)*rad*.9, my=cym+Math.sin(ang+Math.PI*.5)*rad*.75;
+  if(my<streetY){cx.fillStyle='rgba(250,240,215,.95)'; cx.beginPath(); cx.arc(mx,my,16,0,7); cx.fill(); cx.fillStyle=rgb(sk.top); cx.beginPath(); cx.arc(mx+7,my-4,14,0,7); cx.fill();}
+}
+function drawMosque(sk){
+  const m=S.mosque, s=m.s; cx.save(); cx.translate(m.x,m.y); cx.scale(s,s);
+  const night=1-sk.light;
+  const col= mix([120,52,40],[48,30,44],night); // red sandstone fading to dusk
+  cx.fillStyle=rgb(col);
+  // platform
+  cx.fillRect(-420,-40,840,40);
+  // minarets
+  [[-400,0],[400,0]].forEach(([x])=>{cx.fillRect(x-14,-330,28,300); cx.fillRect(x-22,-345,44,14); cx.fillRect(x-18,-250,36,10); cx.beginPath(); cx.moveTo(x-20,-345); cx.lineTo(x-20,-365); cx.quadraticCurveTo(x,-400,x+20,-365); cx.lineTo(x+20,-345); cx.fill(); cx.fillRect(x-1.5,-410,3,20);});
+  // main hall
+  cx.fillRect(-270,-150,540,110);
+  // central portal
+  cx.fillRect(-70,-200,140,160);
+  // small chhatris
+  [-270,-70,70,270].forEach(x=>{cx.fillRect(x-8,-215,16,65); cx.beginPath(); cx.arc(x,-215,10,Math.PI,0); cx.fill();});
+  // domes (white marble)
+  const dome= mix([246,238,224],[150,150,178],night*.8);
+  cx.fillStyle=rgb(dome);
+  [[-160,-150,52],[0,-200,74],[160,-150,52]].forEach(([x,y,r])=>{cx.beginPath(); cx.moveTo(x-r,y); cx.bezierCurveTo(x-r*1.15,y-r*1.1,x-r*.3,y-r*1.45,x,y-r*1.75); cx.bezierCurveTo(x+r*.3,y-r*1.45,x+r*1.15,y-r*1.1,x+r,y); cx.closePath(); cx.fill(); cx.fillRect(x-r*.9,y-6,r*1.8,8); cx.fillRect(x-1.5,y-r*1.75-14,3,14);});
+  // arches
+  cx.fillStyle=`rgba(20,12,10,${.35+night*.3})`;
+  [-220,-160,-100,100,160,220].forEach(x=>{cx.beginPath(); cx.moveTo(x-16,-50); cx.lineTo(x-16,-100); cx.quadraticCurveTo(x,-128,x+16,-100); cx.lineTo(x+16,-50); cx.fill();});
+  cx.beginPath(); cx.moveTo(-36,-50); cx.lineTo(-36,-140); cx.quadraticCurveTo(0,-185,36,-140); cx.lineTo(36,-50); cx.fill();
+  if(night>.5){cx.fillStyle=`rgba(255,200,120,${(night-.5)*.5})`; cx.beginPath(); cx.moveTo(-30,-50); cx.lineTo(-30,-138); cx.quadraticCurveTo(0,-175,30,-138); cx.lineTo(30,-50); cx.fill();}
+  cx.restore();
+}
+function drawCity(sk){
+  const night=1-sk.light, base=streetY;
+  const c= mix([150,110,90],[30,28,48],night);
+  city.forEach(b=>{cx.fillStyle=rgb(c); cx.fillRect(b.x,base-b.h,b.w,b.h);
+    if(b.tank){cx.fillRect(b.x+b.w*.6,base-b.h-14,16,14);}
+    if(b.dish){cx.beginPath(); cx.arc(b.x+12,base-b.h-6,7,Math.PI*.9,Math.PI*1.9); cx.fill();}
+    b.wins.forEach(([xx,yy,r])=>{ if(night>.35 && r<night*.9){cx.fillStyle=r<.15?'rgba(170,220,255,.7)':'rgba(255,196,110,.85)'; cx.fillRect(b.x+xx,base-b.h+yy,6,7);} else if(night<.35){cx.fillStyle='rgba(60,40,30,.25)'; cx.fillRect(b.x+xx,base-b.h+yy,6,7);} });
+  });
+}
+function drawStreet(sk){
+  const night=1-sk.light, base=streetY;
+  cx.fillStyle=rgb(mix([90,74,62],[24,22,34],night)); cx.fillRect(0,base,W,groundY-base+2);
+  cx.fillStyle=rgb(mix([210,190,150],[90,80,90],night),.5); for(let x=0;x<W;x+=60) cx.fillRect(x,base+(groundY-base)*.55,28,2);
+}
+function drawRickshaw(sk){
+  const night=1-sk.light; const y=streetY+(groundY-streetY)*.55;
+  let x,dir;
+  if(rick){ const k=(performance.now()-rick.t)/rick.dur; if(k>1){rick=null; idleRick.x = rick? idleRick.x : idleRick.x;} else { dir=rick.dir; x= dir>0? lerp(-120,W+120,k) : lerp(W+120,-120,k); idleRick.x=x; idleRick.dir=dir; } }
+  if(!rick){ x=idleRick.x; dir=idleRick.dir; if(x<-60||x>W+60){ x = W*.28; idleRick.x=x; } }
+  S.rick={x,y,w:84,h:62};
+  const bob = rick? Math.sin(performance.now()/40)*1.4 : 0;
+  cx.save(); cx.translate(x,y+bob); cx.scale(dir,1);
+  const s=Math.max(.7,Math.min(1.2,W/1300)); cx.scale(s,s);
+  // body
+  cx.fillStyle='#1f6b4a'; cx.beginPath(); cx.moveTo(-40,-6); cx.lineTo(-40,-34); cx.quadraticCurveTo(-36,-52,-10,-54); cx.lineTo(18,-54); cx.quadraticCurveTo(36,-50,40,-22); cx.lineTo(44,-6); cx.closePath(); cx.fill();
+  cx.fillStyle='#e9c546'; cx.fillRect(-40,-12,84,8);
+  cx.fillStyle='#14110e'; cx.beginPath(); cx.moveTo(-34,-14); cx.lineTo(-34,-32); cx.quadraticCurveTo(-30,-46,-10,-47); cx.lineTo(4,-47); cx.lineTo(4,-14); cx.fill();
+  cx.fillStyle='rgba(180,220,230,.55)'; cx.beginPath(); cx.moveTo(10,-46); cx.lineTo(18,-47); cx.quadraticCurveTo(32,-44,35,-26); cx.lineTo(10,-26); cx.fill();
+  // stripes/art
+  cx.fillStyle='#c4472f'; for(let i=0;i<5;i++) cx.fillRect(-38+i*8,-7,4,3);
+  // wheels
+  cx.fillStyle='#0d0b09'; [[-26,0],[32,0]].forEach(([wx])=>{cx.beginPath(); cx.arc(wx,-2,9,0,7); cx.fill();}); cx.fillStyle='#8a8a8a'; [[-26],[32]].forEach(([wx])=>{cx.beginPath(); cx.arc(wx,-2,3,0,7); cx.fill();});
+  // headlight
+  if(night>.3){const g=cx.createRadialGradient(46,-16,0,46,-16,80); g.addColorStop(0,'rgba(255,230,160,.6)'); g.addColorStop(1,'rgba(255,230,160,0)'); cx.fillStyle=g; cx.beginPath(); cx.moveTo(44,-16); cx.lineTo(130,-40); cx.lineTo(130,10); cx.fill();}
+  cx.fillStyle='#ffe6a0'; cx.fillRect(41,-20,4,5);
+  cx.restore();
+  // exhaust puffs
+  if(rick && Math.random()<.5) sparks.push({x:x-dir*40*s,y:y-4,vx:-dir*(.3+Math.random()*.4),vy:-.3,life:1,kind:'puff'});
+}
+const idleRick={x:0,dir:1};
+function drawRoof(sk){
+  const night=1-sk.light; const y=groundY;
+  const g=cx.createLinearGradient(0,y,0,H); g.addColorStop(0,rgb(mix([168,160,150],[70,72,86],night))); g.addColorStop(1,rgb(mix([110,100,92],[34,34,46],night)));
+  cx.fillStyle=g; cx.fillRect(0,y,W,H-y);
+  // corrugation
+  roofSeams.forEach(x=>{cx.fillStyle=`rgba(255,255,255,${.18-night*.1})`; cx.fillRect(x,y,3,H-y); cx.fillStyle='rgba(0,0,0,.18)'; cx.fillRect(x+9,y,3,H-y);});
+  // rust patches
+  cx.fillStyle='rgba(150,72,36,.25)'; cx.beginPath(); cx.ellipse(W*.18,y+30,60,16,0,0,7); cx.ellipse(W*.74,y+44,80,14,0,0,7); cx.fill();
+  cx.fillStyle='rgba(0,0,0,.35)'; cx.fillRect(0,y,W,3);
+}
+function drawCloud(sk){
+  const c=S.cloud; const night=1-sk.light; const raining=c.rain>0.05;
+  const col= raining? mix([120,124,138],[60,62,80],night) : mix([248,244,238],[120,120,150],night);
+  cx.save(); cx.translate(c.x,c.y);
+  const r=c.r*(1+ (c.hover?0.04:0) + Math.sin(performance.now()/900)*.015);
+  cx.fillStyle=rgb(col,.96);
+  [[-r*.9,r*.15,r*.55],[-r*.35,-r*.25,r*.7],[r*.35,-r*.1,r*.62],[r*.95,r*.18,r*.48],[0,r*.25,r*.6]].forEach(([x,y,rr])=>{cx.beginPath(); cx.arc(x,y,rr,0,7); cx.fill();});
+  cx.restore();
+  // label
+  tag(c.x, c.y+c.r*1.0+8, raining?'raining on tin':'drag me / hold me', sk);
+}
+function drawRain(sk){
+  const c=S.cloud;
+  c.rain = Math.max(0, c.rain + ((c.held? 1 : 0) - c.rain)*.06);
+  if(c.rain>.05){ const n=Math.floor(c.rain*6); for(let i=0;i<n;i++) drops.push({x:c.x+(Math.random()-.5)*c.r*2.2,y:c.y+c.r*.4,v:7+Math.random()*4}); }
+  rainOn(c.rain);
+  cx.strokeStyle=`rgba(200,215,235,.6)`; cx.lineWidth=1.2; cx.beginPath();
+  for(let i=drops.length-1;i>=0;i--){const d=drops[i]; d.y+=d.v; d.x+=.6; cx.moveTo(d.x,d.y); cx.lineTo(d.x-1.5,d.y-10);
+    if(d.y>groundY+6+Math.random()*30){ drops.splice(i,1); splashes.push({x:d.x,y:d.y,l:1}); if(Math.random()<.28) ping(Math.max(0,Math.min(1,d.x/W)),.6+Math.random()*.6); } }
+  cx.stroke();
+  for(let i=splashes.length-1;i>=0;i--){const s=splashes[i]; s.l-=.08; if(s.l<=0){splashes.splice(i,1);continue} cx.strokeStyle=`rgba(220,230,245,${s.l})`; cx.beginPath(); cx.ellipse(s.x,s.y,(1-s.l)*8,(1-s.l)*2.4,0,0,7); cx.stroke();}
+}
+function drawPigeons(sk){
+  const night=1-sk.light; const now=performance.now();
+  pigeons.forEach(p=>{
+    if(p.state==='fly'){ p.timer-=1; p.vy+= (p.timer<0? (p.homeY-p.y)*.0015 : -.02); p.vx+= (p.timer<0? (p.homeX-p.x)*.0015 : Math.sin(now/600+p.ph)*.06);
+      p.vx*=.97; p.vy*=.97; p.x+=p.vx; p.y+=p.vy; p.face=p.vx>0?1:-1;
+      if(p.timer<0 && Math.hypot(p.homeX-p.x,p.homeY-p.y)<6){p.state='sit'; p.x=p.homeX; p.y=p.homeY;}
+      if(Math.random()<.01 && ac) flap((p.x/W)*2-1);
+    }
+    const s=Math.max(.8,S.mosque.s*1.4);
+    cx.save(); cx.translate(p.x,p.y); cx.scale(p.face*s,s);
+    cx.fillStyle=rgb(mix([110,112,124],[60,62,80],night));
+    if(p.state==='sit'){ const bob=Math.sin(now/400+p.ph)>0.95?-2:0;
+      cx.beginPath(); cx.ellipse(0,-5,7,4.5,0,0,7); cx.fill(); cx.beginPath(); cx.arc(5,-9+bob,3,0,7); cx.fill(); cx.fillStyle='#d58b3a'; cx.fillRect(7.5,-9+bob,2,1.2);
+    } else { const w=Math.sin(now/45+p.ph)*7;
+      cx.beginPath(); cx.ellipse(0,0,7,3,0,0,7); cx.fill(); cx.beginPath(); cx.moveTo(-2,0); cx.lineTo(-6,-w); cx.lineTo(3,0); cx.fill(); cx.beginPath(); cx.arc(6,-1,2.6,0,7); cx.fill(); }
+    cx.restore();
+  });
+  const m=S.mosque; tag(m.x, m.y-430*m.s-(W<700?4:26), 'pigeons · Badshahi Mosque', sk);
+}
+function scatterPigeons(){ pigeons.forEach(p=>{ p.state='fly'; p.timer=140+Math.random()*120; p.vx=(Math.random()-.5)*5; p.vy=-2-Math.random()*3; }); pigeonsSound((S.mosque.x/W)*2-1); }
+function drawKite(sk){
+  const k=S.kite, a=S.anchor, now=performance.now();
+  if(!k.drag){ // drift on the wind
+    const tx=k.homeX ?? k.x, ty=k.homeY ?? k.y;
+    k.homeX=tx; k.homeY=ty;
+    const gust = Math.sin(now/1300)*18 + Math.sin(now/530)*6;
+    k.vx += ((tx+gust)-k.x)*.01; k.vy += ((ty+Math.cos(now/900)*10)-k.y)*.01;
+    k.vx*=.92; k.vy*=.92; k.x+=k.vx; k.y+=k.vy;
+  }
+  const sp=Math.hypot(k.vx,k.vy); k.a = lerp(k.a, Math.max(-.6,Math.min(.6,k.vx*.06)),.1);
+  if(k.drag) kiteWind(sp/12);
+  // string
+  cx.strokeStyle='rgba(255,250,235,.55)'; cx.lineWidth=1; cx.beginPath(); cx.moveTo(a.x,a.y);
+  cx.quadraticCurveTo((a.x+k.x)/2+30,(a.y+k.y)/2+60,k.x,k.y+18); cx.stroke();
+  cx.save(); cx.translate(k.x,k.y); cx.rotate(k.a);
+  const s= W<700?.8:1; cx.scale(s,s);
+  // Basant-style patang
+  cx.fillStyle='#d9473a'; cx.beginPath(); cx.moveTo(0,-34); cx.lineTo(30,0); cx.lineTo(0,30); cx.lineTo(-30,0); cx.closePath(); cx.fill();
+  cx.fillStyle='#f2c14e'; cx.beginPath(); cx.moveTo(0,-34); cx.lineTo(30,0); cx.lineTo(0,0); cx.closePath(); cx.fill();
+  cx.fillStyle='#2f6f6a'; cx.beginPath(); cx.moveTo(-30,0); cx.lineTo(0,30); cx.lineTo(0,0); cx.closePath(); cx.fill();
+  cx.strokeStyle='rgba(40,20,10,.6)'; cx.lineWidth=1.2; cx.beginPath(); cx.moveTo(0,-34); cx.lineTo(0,30); cx.moveTo(-30,0); cx.quadraticCurveTo(0,-14,30,0); cx.stroke();
+  cx.fillStyle='#d9473a'; cx.beginPath(); cx.moveTo(0,30); cx.lineTo(-7,42); cx.lineTo(7,42); cx.fill();
+  cx.restore();
+  tag(k.x, k.y+48, 'Kite Rush · audio lead', sk, true);
+}
+function drawLantern(sk){
+  const L=S.lantern, now=performance.now(), night=1-sk.light;
+  // wire
+  const w=S.wire; cx.strokeStyle='rgba(20,14,10,.75)'; cx.lineWidth=1.2; cx.beginPath(); cx.moveTo(w[0].x,w[0].y); cx.quadraticCurveTo(L.x, L.y-30, w[1].x,w[1].y); cx.stroke();
+  const sway=Math.sin(now/1400)*.06; L.glow = Math.max(L.glow||0, 0) * .985;
+  const glow = .35 + night*.5 + (L.glow||0);
+  cx.save(); cx.translate(L.x,L.y-40); cx.rotate(sway);
+  cx.strokeStyle='rgba(20,14,10,.8)'; cx.beginPath(); cx.moveTo(0,0); cx.lineTo(0,26); cx.stroke();
+  const gg=cx.createRadialGradient(0,50,0,0,50,120*glow+20); gg.addColorStop(0,`rgba(255,190,90,${.5*glow})`); gg.addColorStop(1,'rgba(255,190,90,0)');
+  cx.fillStyle=gg; cx.beginPath(); cx.arc(0,50,140,0,7); cx.fill();
+  cx.fillStyle='#2b201a'; cx.fillRect(-12,24,24,6); cx.fillRect(-14,70,28,6);
+  cx.fillStyle=`rgba(255,${200+glow*30|0},120,${.7+glow*.3})`; cx.beginPath(); cx.moveTo(-12,30); cx.lineTo(12,30); cx.lineTo(15,70); cx.lineTo(-15,70); cx.closePath(); cx.fill();
+  cx.strokeStyle='#2b201a'; cx.lineWidth=2; cx.beginPath(); cx.moveTo(0,30); cx.lineTo(0,70); cx.stroke();
+  cx.restore();
+  // moth orbit
+  const speed = L.glow>.2? 3:1; L.ph=(L.ph||0)+.03*speed;
+  const mx=L.x+Math.cos(L.ph)*34+Math.sin(L.ph*2.3)*8, my=L.y+10+Math.sin(L.ph*1.3)*22;
+  const flap=Math.abs(Math.sin(now/(L.glow>.2?25:60)));
+  cx.save(); cx.translate(mx,my); cx.fillStyle='rgba(235,220,190,.95)';
+  cx.beginPath(); cx.ellipse(-5,0,6,6*flap+1,-.5,0,7); cx.ellipse(5,0,6,6*flap+1,.5,0,7); cx.fill(); cx.fillStyle='#4a3a2e'; cx.fillRect(-1,-4,2,8); cx.restore();
+  S.lanternHit={x:L.x,y:L.y+10,r:60};
+  tag(L.x, L.y+52, 'Moth & Lantern · Best Audio nominee', sk, true);
+}
+function drawRadio(sk){
+  const r=S.radio, now=performance.now(); const playing=now<radioUntil;
+  const w=r.w, h=w*.62; const x=r.x-w/2, y=r.y - h + 4;
+  cx.save();
+  if(playing) cx.translate(0, Math.sin(now/90)*.8);
+  cx.fillStyle='#7a3e22'; roundRect(x,y,w,h,8); cx.fill();
+  cx.fillStyle='#e8d5b3'; roundRect(x+6,y+8,w*.55,h-16,4); cx.fill();
+  cx.fillStyle='#7a3e22'; for(let i=0;i<5;i++) cx.fillRect(x+10,y+13+i*(h-24)/5,w*.55-8,1.4);
+  cx.fillStyle='#2b201a'; cx.beginPath(); cx.arc(x+w*.8,y+h*.35,w*.08,0,7); cx.fill(); cx.beginPath(); cx.arc(x+w*.8,y+h*.7,w*.06,0,7); cx.fill();
+  cx.strokeStyle='#2b201a'; cx.lineWidth=2; cx.beginPath(); cx.moveTo(x+w*.85,y); cx.lineTo(x+w*1.05,y-h*.9); cx.stroke();
+  cx.restore();
+  if(playing){ for(let i=0;i<3;i++){ const k=((now/900)+i/3)%1; cx.strokeStyle=`rgba(255,220,150,${1-k})`; cx.lineWidth=1.5; cx.beginPath(); cx.arc(x+w*.3,y+h*.5,w*.4+k*60,-Math.PI*.8,-Math.PI*.2); cx.stroke(); } }
+  S.radioHit={x:x,y:y-h*.9,w:w*1.1,h:h*1.9};
+  tag(r.x, r.y+16, 'Rain on Anarkali · score', sk, true);
+}
+function drawSparks(){ for(let i=sparks.length-1;i>=0;i--){const s=sparks[i]; s.x+=s.vx; s.y+=s.vy; s.life-=.02; if(s.life<=0){sparks.splice(i,1);continue} cx.fillStyle=`rgba(200,190,180,${s.life*.4})`; cx.beginPath(); cx.arc(s.x,s.y,4+(1-s.life)*10,0,7); cx.fill();} }
+function roundRect(x,y,w,h,r){cx.beginPath(); cx.moveTo(x+r,y); cx.arcTo(x+w,y,x+w,y+h,r); cx.arcTo(x+w,y+h,x,y+h,r); cx.arcTo(x,y+h,x,y,r); cx.arcTo(x,y,x+w,y,r); cx.closePath();}
+let hoverKey=null;
+function tag(x,y,text,sk,key){
+  cx.font='600 11px "JetBrains Mono", monospace'; const w=cx.measureText(text).width+14;
+  x=Math.max(w/2+6,Math.min(W-w/2-6,x));
+  cx.fillStyle='rgba(243,230,207,.92)'; roundRect(x-w/2,y,w,20,10); cx.fill();
+  cx.fillStyle='#1b1410'; cx.textAlign='center'; cx.textBaseline='middle'; cx.fillText(text,x,y+10.5);
+}
+
+/* scope */
+const sc=document.getElementById('scope'), sx=sc.getContext('2d'); let scBuf=null;
+function drawScope(){
+  const r=sc.getBoundingClientRect(); if(sc.width!==Math.round(r.width*DPR)){sc.width=r.width*DPR; sc.height=r.height*DPR;}
+  const w=sc.width,h=sc.height; sx.fillStyle='#120d0a'; sx.fillRect(0,0,w,h);
+  sx.strokeStyle='rgba(242,165,65,.18)'; sx.lineWidth=1; for(let x=0;x<w;x+=w/16){sx.beginPath(); sx.moveTo(x,0); sx.lineTo(x,h); sx.stroke();}
+  sx.strokeStyle='#f2a541'; sx.lineWidth=1.6*DPR; sx.beginPath();
+  if(analyser){ if(!scBuf) scBuf=new Uint8Array(analyser.fftSize); analyser.getByteTimeDomainData(scBuf); for(let i=0;i<scBuf.length;i++){const x=i/scBuf.length*w, y=(scBuf[i]/255)*h; i?sx.lineTo(x,y):sx.moveTo(x,y);} }
+  else { const now=performance.now()/1000; for(let x=0;x<=w;x+=3){const y=h/2+Math.sin(x/18+now*2)*h*.05; x?sx.lineTo(x,y):sx.moveTo(x,y);} }
+  sx.stroke();
+}
+
+/* loop */
+function frame(){
+  const p=tod(), sk=skyAt(p);
+  cx.clearRect(0,0,W,H);
+  drawSky(sk,p); drawCity(sk); drawMosque(sk); drawStreet(sk); drawPigeons(sk); drawRickshaw(sk); drawSparks();
+  drawRoof(sk); drawLantern(sk); drawKite(sk); drawRadio(sk); drawCloud(sk); drawRain(sk);
+  drawScope();
+  requestAnimationFrame(frame);
+}
+
+/* ============ interaction ============ */
+const nowEl=document.getElementById('now'), nowSub=document.getElementById('nowSub'), deck=document.getElementById('deck'), hint=document.getElementById('hint');
+let nowTimer=null;
+function show(key){ const s=SOUNDS[key]; nowEl.textContent=s.title; nowSub.textContent=s.sub; deck.classList.add('spin'); clearTimeout(nowTimer); nowTimer=setTimeout(()=>{deck.classList.remove('spin'); nowEl.textContent='— silence —'; nowSub.textContent='field recorder idle';},5000); hint.style.opacity=0; }
+function play(key){
+  if(!ensureAudio()) return; show(key);
+  const pan={rickshaw:0,rain:0,pigeons:.3,kite:-.4,moth:.2,radio:.5}[key]||0;
+  if(tryClip(key,pan)) return;
+  if(key==='rain'){ S.cloud.held=true; setTimeout(()=>S.cloud.held=false,3500); }
+  if(key==='rickshaw'){ startRick(); }
+  if(key==='pigeons'){ scatterPigeons(); }
+  if(key==='kite'){ S.kite.vx+=14; S.kite.vy-=6; kiteGust(); }
+  if(key==='moth'){ S.lantern.glow=1; mothSound(); }
+  if(key==='radio'){ radioSketch(); }
+}
+function startRick(){ if(rick) { horn(); return; } const dir = idleRick.x < W/2 ? 1 : -1; rick={t:performance.now(),dur:4200,dir}; rickshawSound(dir,4.2); }
+function pt(e){const r=cv.getBoundingClientRect(); return {x:e.clientX-r.left,y:e.clientY-r.top}}
+function hit(p){
+  const c=S.cloud; if(Math.hypot(p.x-c.x,p.y-c.y)<c.r*1.3) return 'cloud';
+  const k=S.kite; if(Math.hypot(p.x-k.x,p.y-k.y)<46) return 'kite';
+  const L=S.lanternHit; if(L&&Math.hypot(p.x-L.x,p.y-L.y)<L.r) return 'moth';
+  const R=S.radioHit; if(R&&p.x>R.x-10&&p.x<R.x+R.w+10&&p.y>R.y&&p.y<R.y+R.h+20) return 'radio';
+  const q=S.rick; if(q&&Math.abs(p.x-q.x)<60&&p.y>q.y-70&&p.y<q.y+16) return 'rickshaw';
+  const m=S.mosque; if(Math.abs(p.x-m.x)<430*m.s && p.y<m.y+10 && p.y>m.y-420*m.s) return 'pigeons';
+  return null;
+}
+let drag=null, last=null;
+cv.addEventListener('pointerdown',e=>{
+  const p=pt(e), h=hit(p); ensureAudio(); last={...p,t:performance.now()};
+  if(h==='cloud'){ drag={type:'cloud',ox:p.x-S.cloud.x,oy:p.y-S.cloud.y}; S.cloud.held=true; S.cloud.user=true; show('rain'); cv.setPointerCapture(e.pointerId); }
+  else if(h==='kite'){ drag={type:'kite'}; S.kite.drag=true; S.kite.user=true; show('kite'); cv.setPointerCapture(e.pointerId); }
+  else if(h) play(h);
+  else ping(p.x/W, .9); // tap anywhere on the roof/sky — a single drop
+});
+cv.addEventListener('pointermove',e=>{
+  const p=pt(e);
+  if(drag&&drag.type==='cloud'){ S.cloud.x=Math.max(40,Math.min(W-40,p.x-drag.ox)); S.cloud.y=Math.max(60,Math.min(streetY-80,p.y-drag.oy)); }
+  else if(drag&&drag.type==='kite'){ const k=S.kite, now=performance.now(), dt=Math.max(8,now-last.t); k.vx=(p.x-last.x)/dt*16; k.vy=(p.y-last.y)/dt*16; k.x=p.x; k.y=Math.min(groundY-60,p.y); k.homeX=k.x; k.homeY=k.y; }
+  else { const h=hit(p); cv.style.cursor = h? (h==='cloud'||h==='kite'?'grab':'pointer') : 'default'; S.cloud.hover = h==='cloud'; }
+  last={...p,t:performance.now()};
+});
+const end=()=>{ if(drag){ if(drag.type==='cloud') S.cloud.held=false; if(drag.type==='kite'){ S.kite.drag=false; kiteWind(0); setTimeout(()=>windBed&&windBed.g.gain.setTargetAtTime(0,T(),.3),150);} } drag=null; };
+cv.addEventListener('pointerup',end); cv.addEventListener('pointercancel',end);
+
+document.querySelectorAll('[data-play]').forEach(b=>b.addEventListener('click',()=>{ const k=b.dataset.play; play(k); document.getElementById('stage').scrollIntoView({behavior:reduce?'auto':'smooth'}); }));
+
+/* sound chip */
+const soundBtn=document.getElementById('soundBtn');
+function setSoundUI(on){ soundBtn.classList.toggle('on',on); soundBtn.setAttribute('aria-pressed',on); document.getElementById('soundTxt').textContent= on? 'Sound on · headphones help' : 'Sound off · tap to wake the roof'; }
+soundBtn.addEventListener('click',()=>{ if(!ac){ensureAudio(); ping(.5);} else if(ac.state==='running'){ac.suspend(); setSoundUI(false);} else {ac.resume(); setSoundUI(true);} });
+
+/* sequencer */
+const ROWS=[['tin',()=>ping(.3+Math.random()*.4,1)],['honk',()=>horn()],['coo',()=>coo((Math.random()-.5))],['flap',()=>{flap(-.3);flap(.3,T()+.03)}]];
+const grid=ROWS.map((_,r)=>Array(8).fill(false)); grid[0][0]=grid[0][3]=grid[0][4]=grid[0][6]=true; grid[1][2]=true; grid[2][5]=true; grid[3][7]=true;
+const seqEl=document.getElementById('seq'); const cells=[];
+ROWS.forEach(([name],r)=>{ const l=document.createElement('span'); l.textContent=name; seqEl.appendChild(l); cells[r]=[];
+  for(let c=0;c<8;c++){ const b=document.createElement('button'); b.setAttribute('aria-label',`${name} step ${c+1}`); if(grid[r][c]) b.classList.add('on');
+    b.onclick=()=>{grid[r][c]=!grid[r][c]; b.classList.toggle('on',grid[r][c]); b.setAttribute('aria-pressed',grid[r][c]);}; seqEl.appendChild(b); cells[r][c]=b; } });
+let seqOn=false, step=0, seqId=null; const seqBtn=document.getElementById('seqPlay');
+seqBtn.onclick=()=>{ ensureAudio(); seqOn=!seqOn; seqBtn.textContent=seqOn?'■ stop':'▶ play';
+  if(seqOn){ nowEl.textContent='Your Lahore loop'; nowSub.textContent='96 bpm · 8 steps'; deck.classList.add('spin'); clearTimeout(nowTimer);
+    seqId=setInterval(()=>{ cells.forEach(row=>row.forEach(b=>b.classList.remove('now'))); ROWS.forEach(([,fn],r)=>{ cells[r][step].classList.add('now'); if(grid[r][step]) fn(); }); step=(step+1)%8; }, 60000/96/2);
+  } else { clearInterval(seqId); cells.forEach(row=>row.forEach(b=>b.classList.remove('now'))); deck.classList.remove('spin'); nowEl.textContent='— silence —'; nowSub.textContent='field recorder idle'; } };
+
+/* ambient: an occasional rickshaw passes by itself */
+setInterval(()=>{ if(!rick && Math.random()<.35 && document.visibilityState==='visible'){ const dir=Math.random()<.5?1:-1; rick={t:performance.now(),dur:5200,dir}; if(ac&&ac.state==='running') rickshawSound(dir,5.2); } }, 9000);
+
+addEventListener('resize',resize); resize(); idleRick.x=W*.28;
+requestAnimationFrame(frame);
+window.__scene={S,play,hit,tod:()=>tod()};
+})();
+</script>
+</body>
+</html>
